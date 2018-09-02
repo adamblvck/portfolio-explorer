@@ -1,3 +1,10 @@
+/*
+  Author: Adam Blvck (adamblvck.com)
+  Product: Blockchain Ecosystem Explorer
+  Year: 2018
+  Smartie.be
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
