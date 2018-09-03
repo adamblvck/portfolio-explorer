@@ -17,6 +17,8 @@ class ConceptDetails extends Component {
     };
 
     render() {
+        console.log(this.props);
+
         return (
             <Popper 
                 id="concept-detail-popper" 

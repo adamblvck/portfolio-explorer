@@ -4,7 +4,7 @@ const data = {
         "value": 80,
         "density": {
           "enable": true,
-          "value_area": 800
+          "value_area": 1000
         }
       },
       "color": {
@@ -106,7 +106,7 @@ const data = {
         }
       }
     },
-    "retina_detect": true
+    "retina_detect": false
   }
 
 export default data;

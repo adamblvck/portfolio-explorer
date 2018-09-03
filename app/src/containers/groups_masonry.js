@@ -15,9 +15,14 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
+import Button from '@material-ui/core/Button';
+
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
 import ConceptDetails from './concept_details';
+
+// Forms
+import FormAddConcept from './forms/form_addconcept';
 
 const styles = {
     card: {
@@ -34,7 +39,11 @@ const styles = {
 };
 
 class GroupsMasonry extends Component {
-    componentDidMount(){
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
         this.props.fetchConcepts();
     }
 
@@ -47,7 +56,6 @@ class GroupsMasonry extends Component {
                     className={classes.card} 
                     key={group.id}
                     elevation={3}>
-
                     <CardMedia
                         className={classes.media}
                         image="https://cdn.images.express.co.uk/img/dynamic/22/590x/cryptocurrency-predictions-2018-914087.jpg"
@@ -62,7 +70,12 @@ class GroupsMasonry extends Component {
                             concepts={group.concepts}
                         />
                     </CardContent>
-                </Card>    
+                    
+                    <FormAddConcept
+                        groupId={group.id}
+                        groupName={group.name}
+                    />
+                </Card>
             )
         });
     }

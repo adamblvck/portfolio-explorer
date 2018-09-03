@@ -6,6 +6,26 @@ This is an api for recalling blockchain ecosystem details, used by the blockchai
 
 ## back end layout
 
+This API is primarely used for our blockchain ecosystem explorer, using axiom.
+
+Example call:
+
+~~~
+const axios = require("axios")
+
+axios({
+  url: 'http://localhost/graphql',
+  method: 'post',
+  data: {
+    query: `
+      your query or mutation here!
+      `
+  }
+}).then((result) => {
+  console.log(result.data)
+});
+~~~
+
 ## API calls
 
 To query groups, send to localhost:4000/grapql
