@@ -7,11 +7,6 @@
 
 const graphql = require('graphql');
 
-
-// Mongoose schemes
-const Painting = require('../models/painting');
-const Comment = require('../models/comment');
-
 const {
     GraphQLObjectType,
     GraphQLInputObjectType,

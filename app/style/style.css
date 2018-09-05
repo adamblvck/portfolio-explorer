@@ -53,15 +53,59 @@ body {
 
 /* Concept Details */
 
-.concept-detail-paper {
-    max-width: 350px;
-    max-height: 400px;
 
-    padding: 20px;
-}
 
 #concept-detail-popper {
     top: -10px !important;
     left: -5px !important;
     z-index: 3;
+
+    
+}
+
+.concept-detail-card {
+    max-width: 350px;
+    
+
+    
+
+    /* padding: 20px; */
+}
+
+.concept-detail-media {
+    height: 50px;
+}
+
+.concept-detail-content {
+    max-height: 400px;
+    overflow-y: auto;  
+}
+
+/* Markdown font setting */
+.concept-detail-content h1 {
+    font-size: 30px;
+}
+
+.concept-detail-content h2 {
+    font-size: 22px;
+}
+
+.concept-detail-content h3 {
+    font-size: 18px;
+}
+
+/* FORMS */
+.form-add-concept-paper {
+    width: 500px;
+
+    max-width: 600px;
+    max-height: 450px;
+    overflow-y: auto;
+
+    padding: 10px;
+
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

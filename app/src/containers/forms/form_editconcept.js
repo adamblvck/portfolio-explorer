@@ -9,9 +9,11 @@ import TextField from '@material-ui/core/TextField';
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
-import { addConcept } from '../../actions'
+import { updateConcept } from '../../actions'
 
-class FormAddConcept extends Component {
+const initValsTest = `{"name":"a","logo_url":"b","meta":{"color":"c"},"details":{"title":"d","summary":"e\n\n#  fuk the police","reference_links":[{"name":"testboi","url":"accurate"}]},"groupId":"5b898603fb1d5855aad156d2"}`;
+
+class FormEditConcept extends Component {
     constructor(props) {
         super(props);
 
@@ -24,6 +26,8 @@ class FormAddConcept extends Component {
         this.renderReferenceDetails = this.renderReferenceDetails.bind(this);
     }
 
+    // Event Handlers
+
     handleOpen = () => {
         this.setState({ open: true });
     };
@@ -31,6 +35,13 @@ class FormAddConcept extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
+
+    onSubmit(values, groupId) {
+        // console.log("Form value:", values, groupId);
+        this.props.updateConcept( values); // { ...values, groupId: groupId } );
+    }
+
+    // Render functions
 
     renderField(field) {
         const { meta : { touched, error } } = field;
@@ -46,7 +57,6 @@ class FormAddConcept extends Component {
 
                     {...field.input}
                 />
-
             </div>
         );
     }
@@ -70,24 +80,17 @@ class FormAddConcept extends Component {
         );
     }
 
-    onSubmit(values, groupId) {
-        // console.log("Form value:", values, groupId);
-        this.props.addConcept( { ...values, groupId: groupId } );
-    }
-
     renderReferenceDetails( { fields, meta: { error, submitFailed } } ) {
         return (
             <div>
-                <Button type="button" onClick={() => fields.push({})} color="primary">Add Reference Link</Button>
-                {/* <button type="button" onClick={() => fields.push({})}>
+                <button type="button" onClick={() => fields.push({})}>
                     Add Link
-                </button> */}
+                </button>
                 { fields.map((link, index) => (
                     <li key={index}>
-                        <Button type="button" onClick={() => fields.remove(index)} ariant="outlined" color="secondary">Remove Detail</Button>
-                        {/* <button type="button" onClick={() => fields.remove(index)} title="Remove Detail">
+                        <button type="button" onClick={() => fields.remove(index)} title="Remove Detail">
                             Remove group
-                        </button> */}
+                        </button>
                         <h4>Reference Link #{index + 1}</h4>
                         <Field
                             name={`${link}.name`}
@@ -115,8 +118,7 @@ class FormAddConcept extends Component {
                 <Button
                     className="addConcep-btn"
                     onClick={this.handleOpen}
-                    >Add Concept
-                </Button>
+                >Edit Concept</Button>
 
                 <Modal
                     aria-labelledby="simple-modal-title"
@@ -128,6 +130,7 @@ class FormAddConcept extends Component {
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
                                 Adding new concept to "{this.props.groupName}"
+                                Adding new concept to "{this.props.groupId}"
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
@@ -164,6 +167,12 @@ class FormAddConcept extends Component {
                                     <FieldArray name="reference_links" component={this.renderReferenceDetails} />
                                 </FormSection>
                                 
+                                <Field
+                                    label="Group ID (Only if you want to change the group"
+                                    name="groupId"
+                                    component={this.renderField}
+                                />
+                                
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
                                 <Button type="cancel" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
                             </form>
@@ -181,12 +190,18 @@ function validate(){
     return errors;
 }
 
+function mapStateToProps(state, ownProps) {
+    return {
+        initialValues: initValsTest
+    }    
+}
+
 export default reduxForm({
     validate,
-    form: 'NewConceptForm'
+    form: 'EditConceptForm'
 })(
     connect(
-        null,
-        {addConcept}
-    )(FormAddConcept)
+        mapStateToProps,
+        {updateConcept}
+    )(FormEditConcept)
 );

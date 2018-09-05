@@ -28,7 +28,30 @@ axios({
 
 ## API calls
 
-To query groups, send to localhost:4000/grapql
+~~~
+{
+    addConcept(
+        
+    ) {
+
+    }
+}
+~~~
+
+~~~
+{
+    groups {
+        name
+        sector
+        description
+        concepts {
+            
+        }
+    }
+}
+~~~
+
+To add a group, send to localhost:4000/grapql
 ~~~
 mutation {
     addGroup(name:"Crypto", sector:"Finance", description:"Internet money") {

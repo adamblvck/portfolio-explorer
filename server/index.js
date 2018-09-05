@@ -10,7 +10,6 @@ const mongoose = require('mongoose');
 
 const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
 const schema = require('./graphql/schema');
-const Painting = require('./models/painting');
 
 const dbuser = 'admin';
 const dbpwd = '***REMOVED***';
@@ -54,28 +53,28 @@ const init = async() => {
     });
 
     server.route([
-        {
-            method: 'GET',
-            path: '/api/v1/paintings',
-            handler: (req, reply) => {
-                return Painting.find();
-            }
-        },
-        {
-            method: 'POST',
-            path: '/api/v1/paintings',
-            handler: (req, reply) => {
-                const { name ,url, technique, comments} = req.payload;
+        // {
+        //     method: 'GET',
+        //     path: '/api/v1/paintings',
+        //     handler: (req, reply) => {
+        //         return Painting.find();
+        //     }
+        // },
+        // {
+        //     method: 'POST',
+        //     path: '/api/v1/paintings',
+        //     handler: (req, reply) => {
+        //         const { name ,url, technique, comments} = req.payload;
 
-                const painting = new Painting({
-                    name,
-                    url,
-                    technique,
-                    comments
-                });
-                return painting.save();
-            }
-        }
+        //         const painting = new Painting({
+        //             name,
+        //             url,
+        //             technique,
+        //             comments
+        //         });
+        //         return painting.save();
+        //     }
+        // }
     ]);
 
     await server.start();

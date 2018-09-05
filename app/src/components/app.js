@@ -25,6 +25,8 @@ export default class App extends Component {
                 </AppBar>
 
                 <div className="groups-masonry"><GroupsMasonry/></div>
+
+                {/* TODO: Optimize further after done programming
                 <Particles
                     className="particle-background"
                     params={particlesConfig}
@@ -33,7 +35,7 @@ export default class App extends Component {
                     }}
                 >
 
-                </Particles>
+                </Particles> */}
             </div>
 		);
 	}
