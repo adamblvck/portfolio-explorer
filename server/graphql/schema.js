@@ -43,6 +43,12 @@ const RootQuery = new GraphQLObjectType({
                 return Group.findById(args.id);
             }
         },
+        root_groups: { // returns group with n_depth = 0 (these are root groups)
+            type: new GraphQLList(GroupType),
+            resolve(parent, args){
+                return Group.find({n_depth:0});
+            }
+        },
         groups: {
             type: new GraphQLList(GroupType),
             resolve(parent, args){
@@ -73,13 +79,17 @@ const Mutation = new GraphQLObjectType({
             args: {
                 name: { type: GraphQLString },
                 sector: { type: GraphQLString },
-                description: { type: GraphQLString }
+                description: { type: GraphQLString },
+                n_depth: { type: GraphQLInt},
+                parent_groupId: { type: GraphQLID}
             },
             resolve(parent, args){
                 let group = new Group({
                     name: args.name,
                     sector: args.sector,
-                    description: args.description
+                    description: args.description,
+                    n_depth: args.n_depth,
+                    parent_groupId: args.parent_groupId,
                 });
 
                 return group.save();

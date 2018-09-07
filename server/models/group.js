@@ -12,8 +12,8 @@ var GroupSchema = new Schema({
     name: String,
     sector: String,
     description: String,
-    //n_depth: { type: Number, min: 0, max: 3 },
-    //parent_groupId: String
+    n_depth: { type: Number, min: 0, max: 3 }, // specifies group depth
+    parent_groupId: String // link to parent group
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

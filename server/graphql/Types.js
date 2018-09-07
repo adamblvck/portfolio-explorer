@@ -111,6 +111,13 @@ const GroupType = new GraphQLObjectType({
                 // return CONCEPTS where groupId=group.id (= parent)
                 return Concept.find({groupId:parent.id});
             }
+        },
+        groups: {
+            type: new GraphQLList(GroupType),
+            resolve(parent, args){
+                // return subgroups where parent_groupId equal current id and n_depth is 1 deeper
+                return Group.find({parent_groupId:parent.id, n_depth:parent.n_depth+1});
+            }
         }
     })
 });
