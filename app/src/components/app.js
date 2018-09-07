@@ -24,7 +24,9 @@ export default class App extends Component {
                     </Toolbar>
                 </AppBar>
 
-                <div className="groups-masonry"><GroupsMasonry/></div>
+                <div className="groups-masonry">
+                    <GroupsMasonry/>
+                </div>
 
                 {/* TODO: Optimize further after done programming
                 <Particles

@@ -118,7 +118,8 @@ class FormEditConcept extends Component {
                 <Button
                     className="addConcep-btn"
                     onClick={this.handleOpen}
-                >Edit Concept</Button>
+                    color="primary"
+                >Edit</Button>
 
                 <Modal
                     aria-labelledby="simple-modal-title"

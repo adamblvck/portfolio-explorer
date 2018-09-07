@@ -8,14 +8,8 @@ import { fetchConcepts } from '../actions';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 // Material Design Graphics
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-
-import Button from '@material-ui/core/Button';
+import { Card, CardContent, CardMedia, CardActions, Button, withStyles, Typography } from '@material-ui/core';
 
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
@@ -23,6 +17,7 @@ import ConceptDetails from './concept_details';
 
 // Forms
 import FormAddConcept from './forms/form_addconcept';
+
 
 const styles = {
     card: {
@@ -71,10 +66,13 @@ class GroupsMasonry extends Component {
                         />
                     </CardContent>
                     
-                    <FormAddConcept
-                        groupId={group.id}
-                        groupName={group.name}
-                    />
+                    <CardActions>
+                        <FormAddConcept
+                            groupId={group.id}
+                            groupName={group.name}
+                        />
+                    </CardActions>
+                    
                 </Card>
             )
         });

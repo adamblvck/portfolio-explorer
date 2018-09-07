@@ -3,8 +3,9 @@ import axios from 'axios';
 // action types
 export const FETCH_CONCEPTS = 'fetch_concepts';
 export const SHOW_CONCEPT_DETAIL = 'show_concept_detail';
-export const ADD_CONCEPT = "add_concept";
-export const UPDATE_CONCEPT = "update_concept";
+export const ADD_CONCEPT = 'add_concept';
+export const UPDATE_CONCEPT = 'update_concept';
+export const DELETE_CONCEPT = 'delete_concept';
 
 const ROOT_URL = 'http://localhost:4000/graphql'
 
@@ -190,6 +191,32 @@ export function updateConcept(updatedConceptInfo) {
 
     return {
         type: UPDATE_CONCEPT,
+        payload: request
+    }
+}
+
+export function deleteConcept(conceptInfo) {
+    let query = `
+    mutation deleteConcept (
+        $id:ID!
+    ) {
+        deleteConcept(
+            id:$id
+        ) { id }
+    }
+    `;
+
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data:{
+            query: query,
+            variables: conceptInfo
+        }
+    });
+
+    return {
+        type: DELETE_CONCEPT,
         payload: request
     }
 }

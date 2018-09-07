@@ -20,11 +20,23 @@ import markdown from "marked";
 
 // import update form
 import FormEditConcept from './forms/form_editconcept';
+import { Button } from '@material-ui/core';
+
+// import actions
+import { deleteConcept } from '../actions';
 
 class ConceptDetails extends Component {
     constructor(props) {
         super(props);
+
+        this.handleDelete = this.handleDelete.bind(this);
     };
+
+    handleDelete(){
+        if( confirm('Sure want to delete?')) {
+            this.props.deleteConcept(this.props.concept);
+        }
+    }
 
     renderContent(){
         let md_summary = `<div></div>`;
@@ -33,19 +45,14 @@ class ConceptDetails extends Component {
 
         return (
             <Card className="concept-detail-card">
-                <CardMedia
+                {/* <CardMedia
                     className="concept-detail-media"
                     image={this.props.concept.logo_url}
-                />
+                /> */}
                 <CardContent
                     className="concept-detail-content"
                 >
-                    {/* <Typography>{this.props.concept.details.title}</Typography> */}
-                    {/* <Typography>{this.props.concept.details.summary}</Typography> */}
-
                     <div dangerouslySetInnerHTML={{__html:md_summary}} />
-
-                    {/* <ReactMarkdown source={this.props.concept.details.summary} /> */}
                 </CardContent>
                 <CardActions>
                     <FormEditConcept
@@ -53,6 +60,12 @@ class ConceptDetails extends Component {
                         groupName={this.props.concept.group.name}
                         initialValues={{...this.props.concept, groupId: this.props.concept.group.id}}
                     />
+                    <Button
+                        type="cancel" 
+                        color="secondary" 
+                        onClick={this.handleDelete}>
+                        Delete
+                    </Button>
                 </CardActions>
             </Card>
         );
@@ -91,5 +104,7 @@ class ConceptDetails extends Component {
     }
 }
 
-export default ConceptDetails;
+export default connect( null, {deleteConcept})(ConceptDetails);
+
+
 
