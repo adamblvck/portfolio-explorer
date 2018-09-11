@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions
-import { fetchConcepts } from '../actions';
+import { fetchConcepts, fetchCoreGroups } from '../actions';
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 // Material Design Graphics
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardMedia, CardActions, Button, withStyles, Typography } from '@material-ui/core';
+import { Card, CardContent, CardMedia, CardActions, Button, withStyles, Typography, CardHeader } from '@material-ui/core';
 
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
@@ -17,18 +17,20 @@ import ConceptDetails from './concept_details';
 
 // Forms
 import FormAddConcept from './forms/form_addconcept';
+import FormAddGroup from './forms/form_addgroup';
 
+import MenuGroup from './menus/menu_groups';
 
 const styles = {
     card: {
       maxWidth: 450,
-      margin: 10
+      margin: 7.5
     },
     media: {
       height: 100,
     },
     content: {
-        height: 350,
+        height: "auto",
         width: 300
     }
 };
@@ -39,7 +41,49 @@ class GroupsMasonry extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchConcepts();
+        this.props.fetchCoreGroups();
+    }
+
+    renderSubgroups(group) {
+        const { classes } = this.props;
+
+        // Don't render group if the no subgroups are available
+        if (_.isEmpty(group.groups)){
+            return (
+                <div></div>
+            );
+        }
+
+        return _.map(group.groups, group => {
+            return (
+
+                <div
+                    key={group.id}
+                >
+                    <CardHeader
+                        // action={
+                        //     <MenuGroup 
+                        //         className="groupmenu-btn"                             
+                        //     />
+                        // }
+                        // title={group.name}
+                        subheader={group.name}
+                        component="h3"
+                        className="subgroup-header"
+                    />
+                    {/* <Typography gutterBottom variant="subheading" component="h3" align="center">
+                        {group.name}
+                    </Typography> */}
+                    <ConceptsMasonry
+                        concepts={group.concepts}
+                    />
+                    <FormAddConcept
+                            groupId={group.id}
+                            groupName={group.name}
+                    />
+                </div>
+            );
+        });
     }
 
     renderGroups() {
@@ -51,30 +95,41 @@ class GroupsMasonry extends Component {
                     className={classes.card} 
                     key={group.id}
                     elevation={3}>
-                    <CardMedia
+
+                    {/* <CardMedia
                         className={classes.media}
                         image="https://cdn.images.express.co.uk/img/dynamic/22/590x/cryptocurrency-predictions-2018-914087.jpg"
                         title="Contemplative Reptile"
+                    /> */}
+
+                    <CardHeader
+                        action={
+                            <MenuGroup 
+                                className="groupmenu-btn" 
+                                menuItems={ [
+                                    {label:"Add Subgroup",func:"test"},
+                                    {label:"Edit Group",func:"test"}
+                                ]}
+                            />
+                        }
+                        title={group.name}
+                        subheader={group.description}
                     />
+
                     <CardContent className={classes.content}>
-                        <Typography gutterBottom variant="title" component="h1" align="center">
-                        {group.name}
-                        </Typography>
-                        
-                        <ConceptsMasonry
-                            concepts={group.concepts}
-                        />
+                        {this.renderSubgroups(group)}
                     </CardContent>
                     
                     <CardActions>
-                        <FormAddConcept
-                            groupId={group.id}
-                            groupName={group.name}
+                        <FormAddGroup 
+                            n_depth={1}
+                            parent_groupId={group.id}
+                            addButtonText="Add Subgroup"
                         />
                     </CardActions>
                     
                 </Card>
-            )
+            );
         });
     }
 
@@ -85,6 +140,11 @@ class GroupsMasonry extends Component {
             >
                 <Masonry>
                     {this.renderGroups()}
+                    <FormAddGroup 
+                        n_depth={0}
+                        parent_groupId={null}
+                        addButtonText="Add Group"
+                    />
                 </Masonry>
             </ResponsiveMasonry>
         );
@@ -130,5 +190,5 @@ GroupsMasonry.propTypes = {
 };
   
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchConcepts })(GroupsMasonry)
+    connect(mapStateToProps, { fetchConcepts, fetchCoreGroups })(GroupsMasonry)
 );
