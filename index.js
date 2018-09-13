@@ -15,10 +15,12 @@ const dbuser = 'admin';
 const dbpwd = '***REMOVED***';
 const MONGO_URI = `mongodb://${dbuser}:${dbpwd}@ds237192.mlab.com:37192/concept-db`;
 
-const PORT = process.env.PORT || 4000
+const Path = require('path')
+const Inert = require('inert');
+
 const server = hapi.server({
-    port: PORT,
-    host: '0.0.0.0'
+    port: process.env.PORT || 4000,
+    host: 'localhost'
 });
 
 mongoose.connect(MONGO_URI);
@@ -53,30 +55,20 @@ const init = async() => {
         }
     });
 
-    server.route([
-        // {
-        //     method: 'GET',
-        //     path: '/api/v1/paintings',
-        //     handler: (req, reply) => {
-        //         return Painting.find();
-        //     }
-        // },
-        // {
-        //     method: 'POST',
-        //     path: '/api/v1/paintings',
-        //     handler: (req, reply) => {
-        //         const { name ,url, technique, comments} = req.payload;
+    // register static file serving (REACT)
+    await server.register(require('inert'));
 
-        //         const painting = new Painting({
-        //             name,
-        //             url,
-        //             technique,
-        //             comments
-        //         });
-        //         return painting.save();
-        //     }
-        // }
-    ]);
+    server.route({
+        method: 'GET',
+        path: '/{path*}',
+        handler: {
+          directory: {
+            path: Path.join(__dirname, 'app'),
+            listing: false,
+            index: true
+          }
+        }
+    })
 
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
