@@ -13,7 +13,7 @@ export const DELETE_CONCEPT = 'delete_concept';
 export const ADD_GROUP = 'add_group';
 export const EDIT_GROUP = 'edit_group';
 
-const ROOT_URL = 'http://localhost:4000/graphql'
+const ROOT_URL = '/graphql'
 
 export function fetchCoreGroups() {
     let query = `
