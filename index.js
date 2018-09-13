@@ -20,7 +20,7 @@ const Inert = require('inert');
 
 const server = hapi.server({
     port: process.env.PORT || 4000,
-    host: 'localhost'
+    host: process.env.HOST || 'localhost'
 });
 
 mongoose.connect(MONGO_URI);
