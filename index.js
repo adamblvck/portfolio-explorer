@@ -18,7 +18,7 @@ const MONGO_URI = `mongodb://${dbuser}:${dbpwd}@ds237192.mlab.com:37192/concept-
 const PORT = process.env.PORT || 4000
 const server = hapi.server({
     port: PORT,
-    host: 'localhost'
+    host: '0.0.0.0'
 });
 
 mongoose.connect(MONGO_URI);
