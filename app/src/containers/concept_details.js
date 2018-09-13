@@ -20,10 +20,13 @@ import markdown from "marked";
 
 // import update form
 import FormEditConcept from './forms/form_editconcept';
-import { Button } from '@material-ui/core';
+import { Button, CardHeader } from '@material-ui/core';
 
 // import actions
 import { deleteConcept } from '../actions';
+
+// to make multi-column layouts
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class ConceptDetails extends Component {
     constructor(props) {
@@ -38,6 +41,22 @@ class ConceptDetails extends Component {
         }
     }
 
+    renderReferenceLinks(details){
+        if (!details.reference_links)
+            return (<div></div>);
+        
+        const {reference_links} = details;
+
+        console.log(reference_links);
+
+        return _.map(reference_links, ref_link => {
+            return (
+                <li className="list-unstyled"><a href={ref_link.url} target="_blank">{ref_link.name}</a></li>
+            )
+        });
+
+    }
+
     renderContent(){
         let md_summary = `<div></div>`;
         if (this.props.concept.details.summary)
@@ -49,10 +68,36 @@ class ConceptDetails extends Component {
                     className="concept-detail-media"
                     image={this.props.concept.logo_url}
                 /> */}
+                <CardHeader
+                    className="concept-detail-card-header"
+                    title={this.props.concept.details.title}
+                >
+                    <div>{this.renderReferenceLinks(this.props.concept.details)}</div>
+                </CardHeader>
                 <CardContent
                     className="concept-detail-content"
                 >
-                    <div dangerouslySetInnerHTML={{__html:md_summary}} />
+                    <Grid>
+                        <Row>
+                            <Col xs={12} md={8}>
+                                {/* render summary */}
+                                <div dangerouslySetInnerHTML={{__html:md_summary}} />
+                            </Col>
+                            <Col xs={6} md={4}>
+                                {/* Reference links */}
+                                <Row>
+                                    {this.renderReferenceLinks(this.props.concept.details)}
+                                </Row>
+                                {/* Pro's & Cons */}
+                                <Row>
+                                    Pro's and con's
+                                </Row>                              
+
+                            </Col>
+                        </Row>
+                    </Grid>
+
+                    
                 </CardContent>
                 <CardActions>
                     <FormEditConcept

@@ -149,14 +149,18 @@ const Mutation = new GraphQLObjectType({
                 id: { type: new GraphQLNonNull(GraphQLID)},
                 name: { type: GraphQLString},
                 sector: { type: GraphQLString },
+                color:  { type: GraphQLString },
+                background:  { type: GraphQLString },
                 description: { type: GraphQLString },
-                n_depth: { type: GraphQLString },
-                parent_groupId: { type: GraphQLString },
+                n_depth: { type: GraphQLInt },
+                parent_groupId: { type: GraphQLID },
             },
             resolve(parent, args){
                 let mod = {}
                 if (args.name) mod.name = args.name;
                 if (args.sector) mod.sector = args.sector;
+                if (args.color) mod.color = args.color;
+                if (args.background) mod.background = args.background;
                 if (args.description) mod.description = args.description;
                 if (args.n_depth) mod.n_depth = args.n_depth;
                 if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;

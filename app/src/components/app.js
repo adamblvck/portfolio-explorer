@@ -16,19 +16,19 @@ export default class App extends Component {
 	render() {
 		return (
             <div>
-                <AppBar className="menubar">
+                {/* <AppBar className="menubar">
                     <Toolbar>
                         <Typography variant="title" color="inherit">
                             Blockchain Ecosystem Explorer
                         </Typography>
                     </Toolbar>
-                </AppBar>
+                </AppBar> */}
 
                 <div className="groups-masonry">
                     <GroupsMasonry/>
                 </div>
 
-                {/* TODO: Optimize further after done programming
+                {/* TODO: Optimize further after done programming */}
                 <Particles
                     className="particle-background"
                     params={particlesConfig}
@@ -37,7 +37,7 @@ export default class App extends Component {
                     }}
                 >
 
-                </Particles> */}
+                </Particles>
             </div>
 		);
 	}

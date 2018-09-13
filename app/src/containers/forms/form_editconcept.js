@@ -126,6 +126,7 @@ class FormEditConcept extends Component {
                     aria-describedby="simple-modal-description"
                     open={this.state.open}
                     onClose={this.handleClose}
+                    className="forms-class"
                 >
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">

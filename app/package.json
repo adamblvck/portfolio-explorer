@@ -28,6 +28,7 @@
     "lodash": "^3.10.1",
     "marked": "^0.5.0",
     "react": "16.3.2",
+    "react-bootstrap": "^0.32.4",
     "react-confirm-alert": "^2.0.5",
     "react-dom": "16.3.2",
     "react-markdown": "^3.6.0",

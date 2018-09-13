@@ -36,13 +36,31 @@ body {
     max-height: 100%;
 }
 
+.RootGroupHeader [class*="MuiCardHeader-title"] {
+    color: #fff;
+}
+
+.RootGroupHeader [class*="MuiCardHeader-subheader"] {
+    color: #eee;
+}
+
 .groupmenu-btn{
 
 }
 
 /* subgroup styling */
+
 .subgroup-header{
     padding: 0px !important;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
+.subgroup-header [class*="MuiCardHeader-subheader"] {
+    color: var(--parent-color);
+    font-size: 1.5rem;
+    text-align: center;
 }
 
 /* Concepts */
@@ -73,10 +91,14 @@ body {
 }
 
 .concept-detail-card {
-    max-width: 350px;
+    max-width: 550px;
     
 
     /* padding: 20px; */
+}
+
+.concept-detail-card-header{
+    /* background-color: var(--parent-color); */
 }
 
 .concept-detail-media {
@@ -102,17 +124,25 @@ body {
 }
 
 /* FORMS */
+.form-group{
+    margin-bottom: 0px !important;
+}
+
 .form-add-concept-paper {
     width: 550px;
 
     max-width: 600px;
-    max-height: 450px;
+    /* max-height: 450px; */
     overflow-y: auto;
 
-    padding: 10px;
+    padding: 15px;
 
     position:absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.form-add-concept-paper {
+    max-height: 80%;
 }

@@ -50,7 +50,8 @@ const ConceptDetailType = new GraphQLObjectType({
     fields: () => ({
         title: { type: GraphQLString},
         summary: { type: GraphQLString},
-        reference_links: { type: new GraphQLList(LinkType)}
+        reference_links: { type: new GraphQLList(LinkType)},
+        trade_off: { type: TradeOffType}
     })
 });
 
@@ -59,9 +60,26 @@ const ConceptDetailInputType = new GraphQLInputObjectType({
     fields: () => ({
         title: { type: GraphQLString},
         summary: { type: GraphQLString},
-        reference_links: { type: new GraphQLList(LinkInputType)}
+        reference_links: { type: new GraphQLList(LinkInputType)},
+        trade_off: { type: TradeOffInputType}
     })
 });
+
+const TradeOffType = new GraphQLObjectType({
+    name: 'TradeOffType',
+    fields: () => ({
+        pros: { type: new GraphQLList(GraphQLString)},
+        cons: { type: new GraphQLList(GraphQLString)},
+    })
+})
+
+const TradeOffInputType = new GraphQLInputObjectType({
+    name: 'TradeOffInputType',
+    fields: () => ({
+        pros: { type: new GraphQLList(GraphQLString)},
+        cons: { type: new GraphQLList(GraphQLString)},
+    })
+})
 
 const LinkType = new GraphQLObjectType({
     name: "Link",
@@ -105,6 +123,10 @@ const GroupType = new GraphQLObjectType({
         name: { type: GraphQLString },
         sector: { type: GraphQLString },
         description: { type: GraphQLString },
+        background: { type: GraphQLString },
+        color: { type: GraphQLString },
+        n_depth: { type: GraphQLInt },
+        parent_groupId: { type: GraphQLID },
         concepts: {
             type: new GraphQLList(ConceptType),
             resolve(parent, args){

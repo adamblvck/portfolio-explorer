@@ -49,15 +49,8 @@ export default class MenuGroup extends Component {
                   },
                 }}
               >
-                {/* <MenuItem onClick={this.handleClose}>
-                    Add group
-                </MenuItem>             */}
-
-
-                {this.props.menuItems.map(item => (
-                  <MenuItem key={item.label} onClick={}>
-                    {item.label}
-                  </MenuItem>
+                {this.props.components.map(component => (
+                    component.render(component)
                 ))}
               </Menu>
             </div>

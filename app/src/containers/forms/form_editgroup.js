@@ -11,9 +11,9 @@ import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { connect } from 'react-redux';
-import { addGroup } from '../../actions'
+import { editGroup } from '../../actions'
 
-class FormAddGroup extends Component {
+class FormEditGroup extends Component {
     constructor(props) {
         super(props);
 
@@ -72,11 +72,13 @@ class FormAddGroup extends Component {
     }
 
     onSubmit(values) {
-        //console.log("Form value:", values, this.props.n_depth, this.props.parent_groupId);
-        this.props.addGroup({ 
-            ...values, 
-            n_depth:this.props.n_depth, 
-            parent_groupId:this.props.parent_groupId
+        // console.log("Form value:", values, groupId);
+        //console.log(this.props.n_depth);
+        //console.log(this.props.parent_groupId);
+        this.props.editGroup({ 
+            ...values
+            // n_depth:this.props.n_depth, 
+            // parent_groupId:this.props.parent_groupId
         });
     }
 
@@ -100,10 +102,10 @@ class FormAddGroup extends Component {
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
-                                Add new group
+                                Edit Group
                             </Typography>
                             <form
-                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
+                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
                                 <Field
                                     label="Name"
                                     name="name"
@@ -115,9 +117,29 @@ class FormAddGroup extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
+                                    label="Color"
+                                    name="color"
+                                    component={this.renderField}
+                                />
+                                <Field
+                                    label="Background"
+                                    name="background"
+                                    component={this.renderField}
+                                />
+                                <Field
                                     label="Description"
                                     name="description"
                                     component={this.renderTextField}
+                                />
+                                <Field
+                                    label="N Depth"
+                                    name="n_depth"
+                                    component={this.renderField}
+                                />
+                                <Field
+                                    label="Parent Group ID"
+                                    name="parent_groupId"
+                                    component={this.renderField}
                                 />
                                 
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
@@ -139,10 +161,10 @@ function validate(){
 
 export default reduxForm({
     validate,
-    form: 'NewGroupForm'
+    form: 'EditGroupForm'
 })(
     connect(
         null,
-        {addGroup}
-    )(FormAddGroup)
+        {editGroup}
+    )(FormEditGroup)
 );

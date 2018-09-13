@@ -18,6 +18,7 @@ import ConceptDetails from './concept_details';
 // Forms
 import FormAddConcept from './forms/form_addconcept';
 import FormAddGroup from './forms/form_addgroup';
+import FormEditGroup from './forms/form_editgroup';
 
 import MenuGroup from './menus/menu_groups';
 
@@ -31,7 +32,7 @@ const styles = {
     },
     content: {
         height: "auto",
-        width: 300
+        width: "auto"
     }
 };
 
@@ -44,6 +45,53 @@ class GroupsMasonry extends Component {
         this.props.fetchCoreGroups();
     }
 
+    /* 
+        Render form components
+    */
+
+    renderFormAddConcept(component) {
+        const { label, groupName, groupId } = component;
+        return (
+            <FormAddConcept
+                groupId={groupId}
+                groupName={groupName}
+                key={label}
+                // addButtonText={label}
+            />
+        );
+    }
+
+    renderFormAddGroup(component) {
+        const { label, parent_groupId } = component;
+
+        return (
+            <FormAddGroup 
+                n_depth={1}
+                key={label}
+                parent_groupId={parent_groupId}
+                addButtonText={label}
+            />
+        );
+    }
+
+    renderFormEditGroup(component) {
+        const { label, parent_groupId, group } = component;
+
+        return (
+            <FormEditGroup 
+                n_depth={1}
+                key={label}
+                parent_groupId={parent_groupId}
+                addButtonText={label}
+                initialValues={group}
+            />
+        );
+    }
+
+    /* 
+        Render cascading groups of information!
+    */
+
     renderSubgroups(group) {
         const { classes } = this.props;
 
@@ -54,32 +102,45 @@ class GroupsMasonry extends Component {
             );
         }
 
-        return _.map(group.groups, group => {
-            return (
+        // extract root color
+        const rootColor = group.rootColor;
 
+        return _.map(group.groups, (group) => {
+            return (
                 <div
                     key={group.id}
                 >
                     <CardHeader
-                        // action={
-                        //     <MenuGroup 
-                        //         className="groupmenu-btn"                             
-                        //     />
-                        // }
-                        // title={group.name}
+                        action={
+                            <MenuGroup 
+                                className="groupmenu-btn" 
+                                components={ [
+                                    {
+                                        label:"Add Concept",
+                                        groupId:group.id,
+                                        groupName:group.name,
+                                        render:this.renderFormAddConcept
+                                    },
+                                    {
+                                        label:"Edit Subgroup",
+                                        groupId:group.id,
+                                        // groupName:group.name,
+                                        render:this.renderFormEditGroup,
+                                        group:group
+                                    }
+                                ]}
+                            />
+                        }
                         subheader={group.name}
+                        // title={group.name}
                         component="h3"
                         className="subgroup-header"
+                        style={{
+                            '--parent-color': rootColor
+                        }}
                     />
-                    {/* <Typography gutterBottom variant="subheading" component="h3" align="center">
-                        {group.name}
-                    </Typography> */}
                     <ConceptsMasonry
                         concepts={group.concepts}
-                    />
-                    <FormAddConcept
-                            groupId={group.id}
-                            groupName={group.name}
                     />
                 </div>
             );
@@ -96,37 +157,43 @@ class GroupsMasonry extends Component {
                     key={group.id}
                     elevation={3}>
 
-                    {/* <CardMedia
-                        className={classes.media}
-                        image="https://cdn.images.express.co.uk/img/dynamic/22/590x/cryptocurrency-predictions-2018-914087.jpg"
-                        title="Contemplative Reptile"
-                    /> */}
 
                     <CardHeader
                         action={
                             <MenuGroup 
                                 className="groupmenu-btn" 
-                                menuItems={ [
-                                    {label:"Add Subgroup",func:"test"},
-                                    {label:"Edit Group",func:"test"}
+                                components={ [
+                                    {
+                                        label:"Add Subgroup",
+                                        parent_groupId:group.id,
+                                        render:this.renderFormAddGroup
+                                    },
+                                    {
+                                        label:"Edit Group",
+                                        parent_groupId:group.id,
+                                        render:this.renderFormEditGroup,
+                                        group:group
+                                    }
                                 ]}
                             />
                         }
                         title={group.name}
                         subheader={group.description}
+                        style={{backgroundColor: group.color, background: group.background}}
+                        className='RootGroupHeader'
                     />
 
                     <CardContent className={classes.content}>
-                        {this.renderSubgroups(group)}
+                        {this.renderSubgroups({...group, rootColor: group.color})}
                     </CardContent>
                     
-                    <CardActions>
+                    {/* <CardActions>
                         <FormAddGroup 
                             n_depth={1}
                             parent_groupId={group.id}
                             addButtonText="Add Subgroup"
                         />
-                    </CardActions>
+                    </CardActions> */}
                     
                 </Card>
             );

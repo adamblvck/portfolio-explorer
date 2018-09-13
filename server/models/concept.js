@@ -20,7 +20,11 @@ var ConceptSchema = new Schema({
         reference_links: [ {
             name: String,
             url: String
-        }]
+        }],
+        trade_off: {
+            pros: [String],
+            cons: [String],
+        }
     },
     groupId: String // link to group
 });

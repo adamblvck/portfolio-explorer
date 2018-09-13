@@ -3,11 +3,15 @@ import axios from 'axios';
 // action types
 export const FETCH_CONCEPTS = 'fetch_concepts';
 export const FETCH_ROOT_GROUPS_AND_CONCEPTS = 'fetch_rootgroup_and_concepts';
+
 export const SHOW_CONCEPT_DETAIL = 'show_concept_detail';
+
 export const ADD_CONCEPT = 'add_concept';
 export const UPDATE_CONCEPT = 'update_concept';
 export const DELETE_CONCEPT = 'delete_concept';
+
 export const ADD_GROUP = 'add_group';
+export const EDIT_GROUP = 'edit_group';
 
 const ROOT_URL = 'http://localhost:4000/graphql'
 
@@ -18,12 +22,19 @@ export function fetchCoreGroups() {
                 id
                 name
                 sector
+                color # used for background colors
+                background # used for background gradients or pictures
                 description
+                n_depth # needed for group editing, in case when needed
+                parent_groupId # needed for group editing, in case when needed
                 groups { # n_depth = 1
                     id
                     name
                     sector
+                    color # used for subgroup-title color
                     description
+                    n_depth # needed for group editing, in case when needed
+                    parent_groupId # needed for group editing, in case when needed
                     concepts {
                         id
                         name
@@ -293,6 +304,38 @@ export function addGroup(groupInfo) {
 
     return {
         type: ADD_GROUP,
+        payload: request
+    }
+}
+
+export function editGroup(groupInfo) {
+    let query = `
+    mutation editGroup(
+        $id:ID!,
+        $name:String,
+        $sector:String,
+        $color:String,
+        $background:String,
+        $description:String,
+        $n_depth:Int,
+        $parent_groupId:ID
+    ){
+        updateGroup(id:$id,name:$name,color:$color, background:$background, sector:$sector, description:$description,n_depth:$n_depth,parent_groupId:$parent_groupId){
+            name
+    }}
+    `;
+    
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data:{
+            query: query,
+            variables: groupInfo
+        }
+    });
+
+    return {
+        type: EDIT_GROUP,
         payload: request
     }
 }

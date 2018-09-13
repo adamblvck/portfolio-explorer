@@ -11,6 +11,8 @@ const Schema = mongoose.Schema;
 var GroupSchema = new Schema({ 
     name: String,
     sector: String,
+    color: String,
+    background: String,
     description: String,
     n_depth: { type: Number, min: 0, max: 3 }, // specifies group depth
     parent_groupId: String // link to parent group

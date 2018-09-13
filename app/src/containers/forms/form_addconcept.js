@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
+import MenuItem from '@material-ui/core/MenuItem';
+
 import { connect } from 'react-redux';
 import { addConcept } from '../../actions'
 
@@ -107,22 +109,46 @@ class FormAddConcept extends Component {
         );
     }
 
+    renderListOfInputs( { fields, meta: { error, submitFailed } } ) {
+        return (
+            <div>
+                <Button type="button" onClick={() => fields.push({})} color="primary">Add item</Button>
+                { fields.map((link, index) => (
+                    <li key={index}>
+                        <Button type="button" onClick={() => fields.remove(index)} ariant="outlined" color="secondary">Remove item</Button>
+                        {/* <button type="button" onClick={() => fields.remove(index)} title="Remove Detail">
+                            Remove group
+                        </button> */}
+                        <h4>Reference Link #{index + 1}</h4>
+                        <Field
+                            name={`${link}.url`}
+                            type="text"
+                            component={this.renderField}
+                            label="text"
+                        />
+                    </li>
+                )) }
+            </div>
+        );
+    }
+
     render() {
         const { handleSubmit } = this.props;
 
         return (
             <div>
-                <Button
-                    className="addConcep-btn"
+                <MenuItem
                     onClick={this.handleOpen}
-                    >Add Concept
-                </Button>
+                >
+                    Add Concept
+                </MenuItem>
 
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                     open={this.state.open}
                     onClose={this.handleClose}
+                    className="forms-class"
                 >
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">
@@ -161,6 +187,12 @@ class FormAddConcept extends Component {
                                         name="summary"
                                         component={this.renderTextField}
                                     />
+
+                                    {/* <FormSection name="trade_off">
+                                        <FieldArray name="pros" component={this.renderListOfInputs} />
+                                        <FieldArray name="cons" component={this.renderListOfInputs} />
+                                    </FormSection> */}
+
                                     <FieldArray name="reference_links" component={this.renderReferenceDetails} />
                                 </FormSection>
                                 
