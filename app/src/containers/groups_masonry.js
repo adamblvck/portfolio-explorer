@@ -218,26 +218,13 @@ class GroupsMasonry extends Component {
     }
 
     render() {
-        // check if activeConcepts are ready to be viewed
-        const show_details = !this.props.activeConcept ? false : true;
-
-        // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
-        const { activeConcept } = this.props;
-        const open = show_details ? activeConcept.open : false;
-        const anchorEl = show_details ? activeConcept.anchorEl : null;
-        const concept = show_details ? activeConcept.concept : null;
-
         return (
             <div>
                 { this.renderMasonry() }
                 
                 <ConceptDetails 
                     id="concept-detail-popper"
-
-                    // information for component 
-                    open={open} 
-                    anchorEl={anchorEl} 
-                    concept={concept}/>
+                />
             </div>
         );
 
@@ -247,7 +234,7 @@ class GroupsMasonry extends Component {
 function mapStateToProps (state) {
     return { 
         groups: state.groups,
-        activeConcept: state.activeConcept
+        // activeConcept: state.activeConcept
     };
 }
 

@@ -38,7 +38,6 @@ class ConceptBasic extends Component {
                 conceptId: this.props.concept.id
             });
         }
-            
     }
 
     render(){

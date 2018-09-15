@@ -8,6 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
+import Modal from '@material-ui/core/Modal';
+
 
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
@@ -33,6 +35,8 @@ class ConceptDetails extends Component {
         super(props);
 
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        // this.renderContent = this.renderContent.bind(this);
     };
 
     handleDelete(){
@@ -40,6 +44,11 @@ class ConceptDetails extends Component {
             this.props.deleteConcept(this.props.concept);
         }
     }
+
+    handleClose = () => {
+        console.log("handling close");
+        this.setState({ open: false });
+    };
 
     renderReferenceLinks(details){
         if (!details.reference_links)
@@ -51,16 +60,25 @@ class ConceptDetails extends Component {
 
         return _.map(reference_links, ref_link => {
             return (
-                <li className="list-unstyled"><a href={ref_link.url} target="_blank">{ref_link.name}</a></li>
+                <li // list item
+                    key={ref_link.url} 
+                    className="list-unstyled">
+                    <a // anchor
+                        href={ref_link.url} 
+                        target="_blank"
+                    >
+                        {ref_link.name}
+                    </a>
+                </li>
             )
         });
 
     }
 
-    renderContent(){
+    renderContent(concept){
         let md_summary = `<div></div>`;
-        if (this.props.concept.details.summary)
-            md_summary = markdown.parse(this.props.concept.details.summary);
+        if (concept.details.summary)
+            md_summary = markdown.parse(concept.details.summary);
 
         return (
             <Card className="concept-detail-card">
@@ -70,9 +88,9 @@ class ConceptDetails extends Component {
                 /> */}
                 <CardHeader
                     className="concept-detail-card-header"
-                    title={this.props.concept.details.title}
+                    title={concept.details.title}
                 >
-                    <div>{this.renderReferenceLinks(this.props.concept.details)}</div>
+                    <div>{this.renderReferenceLinks(concept.details)}</div>
                 </CardHeader>
                 <CardContent
                     className="concept-detail-content"
@@ -86,7 +104,7 @@ class ConceptDetails extends Component {
                             <Col xs={6} md={4}>
                                 {/* Reference links */}
                                 <Row>
-                                    {this.renderReferenceLinks(this.props.concept.details)}
+                                    {this.renderReferenceLinks(concept.details)}
                                 </Row>
                                 {/* Pro's & Cons */}
                                 <Row>
@@ -101,9 +119,9 @@ class ConceptDetails extends Component {
                 </CardContent>
                 <CardActions>
                     <FormEditConcept
-                        groupId={this.props.concept.group.id}
-                        groupName={this.props.concept.group.name}
-                        initialValues={{...this.props.concept, groupId: this.props.concept.group.id}}
+                        groupId={concept.group.id}
+                        groupName={concept.group.name}
+                        initialValues={{...concept, groupId: concept.group.id}}
                     />
                     <Button
                         type="cancel" 
@@ -117,39 +135,42 @@ class ConceptDetails extends Component {
     }
 
     render() {
+        // check if activeConcepts are ready to be viewed
+        const { activeConcept } = this.props;
+        const show_details = !this.props.activeConcept ? false : true;
+
+        // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
+        const open = show_details ? activeConcept.open : false;
+        const anchorEl = show_details ? activeConcept.anchorEl : null;
+        const concept = show_details ? activeConcept.concept : null;
+
+        if ((!show_details) && (!open)){
+            return (
+                <div></div>
+            );
+        }
+
         return (
-            <Popper 
-                id="concept-detail-popper" 
-                open={this.props.open} 
-                anchorEl={this.props.anchorEl} 
-                transition
-                placement="bottom-start"
-                disablePortal={true}
-                modifiers={{
-                    flip: {
-                        enabled: true,
-                    },
-                    preventOverflow: {
-                        enabled: true,
-                        boundariesElement: 'scrollParent',
-                    },
-                    // arrow: {
-                    // enabled: false,
-                    // element: arrowRef,
-                    // },
-                }}
+            <Modal
+                aria-labelledby="concept-detail"
+                aria-describedby="concept-detail-description"
+
+                open={open}
+                onClose={this.handleClose}
             >
-                {({ TransitionProps }) => (
-                    <Fade {...TransitionProps} timeout={350}>
-                        {this.renderContent()}
-                    </Fade>
-                )}
-            </Popper>      
+                {this.renderContent(concept)}
+            </Modal>      
         );
     }
 }
 
-export default connect( null, {deleteConcept})(ConceptDetails);
+function mapStateToProps (state) {
+    return {
+        activeConcept: state.activeConcept
+    };
+}
+
+export default connect( mapStateToProps, {deleteConcept})(ConceptDetails);
 
 
 
