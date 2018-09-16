@@ -34,10 +34,25 @@ class ConceptDetails extends Component {
     constructor(props) {
         super(props);
 
+        this.state = { 
+            open: false
+        };
+
         this.handleDelete = this.handleDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
         // this.renderContent = this.renderContent.bind(this);
     };
+
+    componentWillReceiveProps(nextProps) {
+
+        console.log('nextProps',nextProps);
+
+        if (nextProps.activeConcept) {
+          this.setState({
+            open: nextProps.activeConcept.open
+          })
+        }
+    }
 
     handleDelete(){
         if( confirm('Sure want to delete?')) {
@@ -134,6 +149,8 @@ class ConceptDetails extends Component {
         );
     }
 
+
+
     render() {
         // check if activeConcepts are ready to be viewed
         const { activeConcept } = this.props;
@@ -155,7 +172,7 @@ class ConceptDetails extends Component {
                 aria-labelledby="concept-detail"
                 aria-describedby="concept-detail-description"
 
-                open={open}
+                open={this.state.open}
                 onClose={this.handleClose}
             >
                 {this.renderContent(concept)}

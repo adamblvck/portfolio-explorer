@@ -92,8 +92,15 @@ body {
 
 .concept-detail-card {
     max-width: 550px;
-    
+    max-height: 600px;
 
+    width: 95%;
+    height: auto;
+    
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     /* padding: 20px; */
 }
 
