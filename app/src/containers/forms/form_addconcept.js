@@ -18,12 +18,14 @@ class FormAddConcept extends Component {
         super(props);
 
         this.state = {
-            open: false
+            open: false,
+            logo_url: ""
         }
 
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.renderReferenceDetails = this.renderReferenceDetails.bind(this);
+        this.onNewLogoUrl = this.onNewLogoUrl.bind(this);
     }
 
     handleOpen = () => {
@@ -70,6 +72,10 @@ class FormAddConcept extends Component {
                 />
             </div>
         );
+    }
+
+    onNewLogoUrl(event) {
+        this.setState({logo_url: event.target.value});
     }
 
     onSubmit(values, groupId) {
@@ -157,6 +163,7 @@ class FormAddConcept extends Component {
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
+                                <img className="concept-logo-small" src={this.state.logo_url}></img>
                                 <Field
                                     label="Name"
                                     name="name"
@@ -166,6 +173,7 @@ class FormAddConcept extends Component {
                                     label="Logo URL"
                                     name="logo_url"
                                     component={this.renderField}
+                                    onChange={this.onNewLogoUrl}
                                 />
 
                                 <FormSection name="meta">

@@ -25,13 +25,15 @@ class FormEditConcept extends Component {
         super(props);
 
         this.state = {
-            open: false
+            open: false,
+            logo_url: props.logo_url
         }
 
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.renderReferenceDetails = this.renderReferenceDetails.bind(this);
         this.renderProsCons = this.renderProsCons.bind(this);
+        this.onNewLogoUrl = this.onNewLogoUrl.bind(this);
     }
 
     // Event Handlers
@@ -45,7 +47,6 @@ class FormEditConcept extends Component {
     };
 
     onSubmit(values, groupId) {
-        // console.log("Form value:", values, groupId);
         this.props.updateConcept( values); // { ...values, groupId: groupId } );
     }
 
@@ -88,18 +89,8 @@ class FormEditConcept extends Component {
         );
     }
 
-    // <div style={{ display: 'inline-flex' }}>
-    //         <div>
-    //             <TextField />
-    //         </div>
-    //         <div style={{ alignSelf: 'center' }}>
-    //             <Checkbox />
-    //         </div>
-    //     </div>
-
     renderProsCons({ fields, meta: { error, submitFailed } } ) {
-        const fieldName = fields.name.split('.').pop();
-        console.log(fieldName);
+        const fieldName = fields.name.split('.').pop(); // get the last part of the component name, which is 'pros' or 'cons'
 
         return (
             <div>
@@ -160,6 +151,10 @@ class FormEditConcept extends Component {
         );
     }
 
+    onNewLogoUrl(event) {
+        this.setState({logo_url: event.target.value});
+    }
+
     render() {
         const { handleSubmit } = this.props;
 
@@ -185,6 +180,7 @@ class FormEditConcept extends Component {
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
+                                <img className="concept-logo-small" src={this.state.logo_url}></img>
                                 <Field
                                     label="Name"
                                     name="name"
@@ -194,6 +190,7 @@ class FormEditConcept extends Component {
                                     label="Logo URL"
                                     name="logo_url"
                                     component={this.renderField}
+                                    onChange={this.onNewLogoUrl}
                                 />
 
                                 <FormSection name="meta">
@@ -255,18 +252,18 @@ function validate(){
     return errors;
 }
 
-function mapStateToProps(state, ownProps) {
-    return {
-        initialValues: initValsTest
-    }    
-}
+// function mapStateToProps(state, ownProps) {
+//     return {
+//         initialValues: initValsTest
+//     }    
+// }
 
 export default reduxForm({
     validate,
     form: 'EditConceptForm'
 })(
     connect(
-        mapStateToProps,
+        null,
         {updateConcept}
     )(FormEditConcept)
 );

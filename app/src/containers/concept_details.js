@@ -52,9 +52,6 @@ class ConceptDetails extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-
-        console.log('nextProps',nextProps);
-
         if (nextProps.activeConcept) {
           this.setState({
             open: nextProps.activeConcept.open
@@ -69,7 +66,6 @@ class ConceptDetails extends Component {
     }
 
     handleClose = () => {
-        console.log("handling close");
         this.setState({ open: false });
     };
 
@@ -134,6 +130,8 @@ class ConceptDetails extends Component {
             <FormEditConcept
                 groupId={concept.group.id}
                 groupName={concept.group.name}
+                key="editConcept"
+                logo_url={concept.logo_url} // hacky but works, used in the constructor
                 initialValues={{...concept, groupId: concept.group.id}}
             />
         );
@@ -145,6 +143,7 @@ class ConceptDetails extends Component {
         return (
             <MenuItem
                 color="secondary" 
+                key="deleteConcept"
                 onClick={() => this.handleDelete(concept)}>
                 Delete concept
             </MenuItem>
@@ -215,17 +214,6 @@ class ConceptDetails extends Component {
                 <CardActions
                     style={{float:'right'}}
                 >
-                    {/* <FormEditConcept
-                        groupId={concept.group.id}
-                        groupName={concept.group.name}
-                        initialValues={{...concept, groupId: concept.group.id}}
-                    />
-                    <Button
-                        type="cancel" 
-                        color="secondary" 
-                        onClick={this.handleDelete}>
-                        Delete
-                    </Button> */}
                     <Button
                         type="Back" 
                         onClick={this.handleClose}>
@@ -243,7 +231,6 @@ class ConceptDetails extends Component {
 
         // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
         const open = show_details ? activeConcept.open : false;
-        const anchorEl = show_details ? activeConcept.anchorEl : null;
         const concept = show_details ? activeConcept.concept : null;
 
         if ((!show_details) && (!open)){

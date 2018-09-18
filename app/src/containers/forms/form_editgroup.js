@@ -72,13 +72,8 @@ class FormEditGroup extends Component {
     }
 
     onSubmit(values) {
-        // console.log("Form value:", values, groupId);
-        //console.log(this.props.n_depth);
-        //console.log(this.props.parent_groupId);
         this.props.editGroup({ 
             ...values
-            // n_depth:this.props.n_depth, 
-            // parent_groupId:this.props.parent_groupId
         });
     }
 
