@@ -27,6 +27,13 @@ import { Button, CardHeader } from '@material-ui/core';
 // import actions
 import { deleteConcept } from '../actions';
 
+// import icons
+import PlusIcon from '@material-ui/icons/AddCircleRounded';
+import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
+import LinkIcon from '@material-ui/icons/LinkRounded';
+
+import Avatar from '@material-ui/core/Avatar';
+
 // to make multi-column layouts
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -71,8 +78,6 @@ class ConceptDetails extends Component {
         
         const {reference_links} = details;
 
-        console.log(reference_links);
-
         return _.map(reference_links, ref_link => {
             return (
                 <li // list item
@@ -82,12 +87,49 @@ class ConceptDetails extends Component {
                         href={ref_link.url} 
                         target="_blank"
                     >
-                        {ref_link.name}
+                        <LinkIcon style={{verticalAlign: 'middle'}}/>{ref_link.name}
                     </a>
                 </li>
             )
         });
 
+    }
+
+    renderList(items, component){
+        return _.map(items, item => {
+            return (
+                <li
+                    key={item}
+                    className="list-unstyled"
+                >   
+                    {component}
+                    {item}
+                </li>
+            )
+        });
+    }
+
+    renderProsAndCons(details){
+        if (!details.trade_off)
+            return (<div></div>);
+
+        const {pros} = details.trade_off;
+        const {cons} = details.trade_off;
+
+        return(
+            <div>
+                <h2>Pro's</h2>
+                {this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
+                <h2>Con's</h2>
+                {this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
+            </div>
+        )
+    }
+
+    renderImg(url){
+        return (
+            <img className="concept-logo-small" src={url} />
+        );
     }
 
     renderContent(concept){
@@ -96,17 +138,28 @@ class ConceptDetails extends Component {
             md_summary = markdown.parse(concept.details.summary);
 
         return (
+            <div>
+            
+
             <Card className="concept-detail-card">
                 {/* <CardMedia
                     className="concept-detail-media"
                     image={this.props.concept.logo_url}
                 /> */}
+
+                <Paper
+                    elevation={3}
+                    className="concept-detail-logo"
+                >
+                    <img src={concept.logo_url} />
+                </Paper>
+
                 <CardHeader
                     className="concept-detail-card-header"
                     title={concept.details.title}
-                >
-                    <div>{this.renderReferenceLinks(concept.details)}</div>
-                </CardHeader>
+                    style={{backgroundColor: concept.meta.color, background: concept.meta.color}}
+                />         
+
                 <CardContent
                     className="concept-detail-content"
                 >
@@ -116,14 +169,14 @@ class ConceptDetails extends Component {
                                 {/* render summary */}
                                 <div dangerouslySetInnerHTML={{__html:md_summary}} />
                             </Col>
-                            <Col xs={6} md={4}>
+                            <Col xs={12} md={4}>
                                 {/* Reference links */}
                                 <Row>
                                     {this.renderReferenceLinks(concept.details)}
                                 </Row>
                                 {/* Pro's & Cons */}
                                 <Row>
-                                    Pro's and con's
+                                    {this.renderProsAndCons(concept.details)}
                                 </Row>                              
 
                             </Col>
@@ -146,6 +199,7 @@ class ConceptDetails extends Component {
                     </Button>
                 </CardActions>
             </Card>
+            </div>
         );
     }
 

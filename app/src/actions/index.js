@@ -41,12 +41,19 @@ export function fetchCoreGroups() {
                         id
                         name
                         logo_url
+                        meta {
+                            color
+                        }
                         details {
                             title
                             summary
                             reference_links {
                                 name
                                 url
+                            }
+                            trade_off {
+                                pros
+                                cons
                             }
                         }
                     }
@@ -81,12 +88,19 @@ export function fetchConcepts() {
                     id
                     name
                     logo_url
+                    meta {
+                        color
+                    }
                     details {
                         title
                         summary
                         reference_links {
                             name
                             url
+                        }
+                        trade_off {
+                            pros
+                            cons
                         }
                     }
                 }
@@ -115,12 +129,19 @@ export function fetchAndShowConceptDetails(conceptInfo) {
                 id
                 name
                 logo_url
+                meta {
+                    color
+                }
                 details {
                     title
                     summary
                     reference_links {
                         name
                         url
+                    }
+                    trade_off {
+                        pros
+                        cons
                     }
                 }
                 group {
@@ -227,8 +248,12 @@ export function updateConcept(updatedConceptInfo) {
                 title
                 summary
                 reference_links {
-                name
-                url
+                    name
+                    url
+                }
+                trade_off {
+                    pros
+                    cons
                 }
             }
             group {
@@ -239,6 +264,8 @@ export function updateConcept(updatedConceptInfo) {
         }
     }
     `;
+
+    //console.log(updatedConceptInfo);
 
     const request = axios({
         method:'post',

@@ -10,6 +10,8 @@ body {
 }
 
 .particle-background {
+    overflow: hidden;
+
     position: absolute;
     top: 0px;
     left: 0px;
@@ -41,7 +43,8 @@ body {
 }
 
 .RootGroupHeader [class*="MuiCardHeader-subheader"] {
-    color: #eee;
+    color: #fff;
+    font-weight: 200;
 }
 
 .groupmenu-btn{
@@ -80,14 +83,28 @@ body {
 }
 
 /* Concept Details */
+.concept-detail-logo {
+    position: absolute;
+    /* left: 50%; */
+    /* transform: translate(-50%,0); */
+    right: 10%;
+    top: -15px;
+}
 
+.concept-detail-logo img {
+    max-height: 50px;
+    max-width: 110px;
+    padding: 5px;
+
+    margin-left: auto;
+	margin-right: auto;
+    display: block;
+}
 
 #concept-detail-popper {
     top: -10px !important;
     left: -5px !important;
     z-index: 3;
-
-    
 }
 
 .concept-detail-card {
@@ -97,6 +114,8 @@ body {
     width: 95%;
     height: auto;
     
+    overflow: visible !important;
+
     position:absolute;
     top: 50%;
     left: 50%;
@@ -104,8 +123,9 @@ body {
     /* padding: 20px; */
 }
 
-.concept-detail-card-header{
-    /* background-color: var(--parent-color); */
+.concept-detail-card-header [class*="MuiCardHeader-title"]{
+    color: #fff;
+    font-size: 1.5rem;
 }
 
 .concept-detail-media {
@@ -130,16 +150,26 @@ body {
     font-size: 18px;
 }
 
+.trade-off-icon {
+    vertical-align: middle !important;
+}
+
 /* FORMS */
 .form-group{
     margin-bottom: 0px !important;
 }
 
 .form-add-concept-paper {
-    width: 550px;
 
-    max-width: 600px;
-    /* max-height: 450px; */
+    /* width: 550px;
+    max-width: 600px; */
+
+    max-width: 650px;
+    max-height: 600px;
+
+    width: 95%;
+    height: auto;
+
     overflow-y: auto;
 
     padding: 15px;

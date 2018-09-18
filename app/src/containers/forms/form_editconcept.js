@@ -11,6 +11,12 @@ import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { updateConcept } from '../../actions'
 
+// to make multi-column layouts
+import { Grid, Row, Col } from 'react-bootstrap';
+
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import AddRoundedIcon from '@material-ui/icons/AddRounded';
+
 const initValsTest = `{"name":"a","logo_url":"b","meta":{"color":"c"},"details":{"title":"d","summary":"e\n\n#  fuk the police","reference_links":[{"name":"testboi","url":"accurate"}]},"groupId":"5b898603fb1d5855aad156d2"}`;
 
 class FormEditConcept extends Component {
@@ -24,6 +30,7 @@ class FormEditConcept extends Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.renderReferenceDetails = this.renderReferenceDetails.bind(this);
+        this.renderProsCons = this.renderProsCons.bind(this);
     }
 
     // Event Handlers
@@ -80,31 +87,73 @@ class FormEditConcept extends Component {
         );
     }
 
+    // <div style={{ display: 'inline-flex' }}>
+    //         <div>
+    //             <TextField />
+    //         </div>
+    //         <div style={{ alignSelf: 'center' }}>
+    //             <Checkbox />
+    //         </div>
+    //     </div>
+
+    renderProsCons({ fields, meta: { error, submitFailed } } ) {
+        const fieldName = fields.name.split('.').pop();
+        console.log(fieldName);
+
+        return (
+            <div>
+                <Button type="button" variant="outlined" color="primary" onClick={() => fields.push({})}>
+                    <AddRoundedIcon/> {fieldName}
+                </Button><br/>
+                { fields.map((argument, index) => (
+                    <Grid key={index}>
+                        <Col xs={10} md={10}>
+                            <Field
+                                name={argument}
+                                type="text"
+                                component={this.renderField}
+                                label={`${fieldName} #${index + 1}`}
+                            />
+                        </Col>
+                        <Col xs={1} md={1}>
+                            <Button type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
+                                <DeleteRoundedIcon></DeleteRoundedIcon>
+                            </Button>
+                        </Col>
+                    </Grid>
+                )) }
+            </div>
+        );
+    }
+
     renderReferenceDetails( { fields, meta: { error, submitFailed } } ) {
         return (
             <div>
-                <button type="button" onClick={() => fields.push({})}>
-                    Add Link
-                </button>
+                <Button variant="outlined" color="primary" type="button" onClick={() => fields.push({})}>
+                    <AddRoundedIcon/> Link
+                </Button>
                 { fields.map((link, index) => (
-                    <li key={index}>
-                        <button type="button" onClick={() => fields.remove(index)} title="Remove Detail">
-                            Remove group
-                        </button>
-                        <h4>Reference Link #{index + 1}</h4>
-                        <Field
-                            name={`${link}.name`}
-                            type="text"
-                            component={this.renderField}
-                            label="Link Name"
-                        />
-                        <Field
-                            name={`${link}.url`}
-                            type="text"
-                            component={this.renderField}
-                            label="url"
-                        />
-                    </li>
+                    <Grid key={index}>
+                        <Col xs={10} md={10}>
+                            <Field
+                                name={`${link}.name`}
+                                type="text"
+                                component={this.renderField}
+                                label={`Link Name #${index}`}
+                            />
+                            <Field
+                                name={`${link}.url`}
+                                type="text"
+                                component={this.renderField}
+                                label="url"
+                            />
+                        </Col>
+                        <Col xs={1} md={1}>
+                            <Button type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
+                                <DeleteRoundedIcon></DeleteRoundedIcon>
+                            </Button>
+                        </Col>
+                    </Grid>
                 )) }
             </div>
         );
@@ -132,7 +181,6 @@ class FormEditConcept extends Component {
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
                                 Adding new concept to "{this.props.groupName}"
-                                Adding new concept to "{this.props.groupId}"
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
@@ -166,6 +214,20 @@ class FormEditConcept extends Component {
                                         name="summary"
                                         component={this.renderTextField}
                                     />
+
+                                    <FormSection name="trade_off">
+                                        <FieldArray 
+                                            label="Pro's"
+                                            name="pros" 
+                                            component={this.renderProsCons}
+                                        />
+                                        <FieldArray 
+                                            label="Con's"
+                                            name="cons" 
+                                            component={this.renderProsCons}
+                                        />
+                                    </FormSection>
+
                                     <FieldArray name="reference_links" component={this.renderReferenceDetails} />
                                 </FormSection>
                                 
