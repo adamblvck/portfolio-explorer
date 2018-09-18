@@ -9,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import Modal from '@material-ui/core/Modal';
-
+import MenuItem from '@material-ui/core/MenuItem';
 
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
@@ -32,7 +32,7 @@ import PlusIcon from '@material-ui/icons/AddCircleRounded';
 import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
 
-import Avatar from '@material-ui/core/Avatar';
+import MenuGroup from './menus/menu_groups';
 
 // to make multi-column layouts
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -47,6 +47,7 @@ class ConceptDetails extends Component {
 
         this.handleDelete = this.handleDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.renderFormDeleteConcept = this.renderFormDeleteConcept.bind(this);
         // this.renderContent = this.renderContent.bind(this);
     };
 
@@ -61,9 +62,9 @@ class ConceptDetails extends Component {
         }
     }
 
-    handleDelete(){
+    handleDelete(concept){
         if( confirm('Sure want to delete?')) {
-            this.props.deleteConcept(this.props.concept);
+            this.props.deleteConcept(concept);
         }
     }
 
@@ -126,9 +127,27 @@ class ConceptDetails extends Component {
         )
     }
 
-    renderImg(url){
+    renderFormEditConcept(component) {
+        const { concept } = component;
+
         return (
-            <img className="concept-logo-small" src={url} />
+            <FormEditConcept
+                groupId={concept.group.id}
+                groupName={concept.group.name}
+                initialValues={{...concept, groupId: concept.group.id}}
+            />
+        );
+    }
+
+    renderFormDeleteConcept(component) {
+        const { concept } = component;
+
+        return (
+            <MenuItem
+                color="secondary" 
+                onClick={() => this.handleDelete(concept)}>
+                Delete concept
+            </MenuItem>
         );
     }
 
@@ -138,15 +157,8 @@ class ConceptDetails extends Component {
             md_summary = markdown.parse(concept.details.summary);
 
         return (
-            <div>
-            
-
             <Card className="concept-detail-card">
-                {/* <CardMedia
-                    className="concept-detail-media"
-                    image={this.props.concept.logo_url}
-                /> */}
-
+                {/* contains the concept logo / image / picture */}
                 <Paper
                     elevation={3}
                     className="concept-detail-logo"
@@ -158,6 +170,23 @@ class ConceptDetails extends Component {
                     className="concept-detail-card-header"
                     title={concept.details.title}
                     style={{backgroundColor: concept.meta.color, background: concept.meta.color}}
+                    action={
+                            <MenuGroup 
+                                className="groupmenu-btn" 
+                                components={ [
+                                    {
+                                        label:"Edit Concept",
+                                        concept: concept,
+                                        render:this.renderFormEditConcept
+                                    },
+                                    {
+                                        label:"Delete Concept",
+                                        concept: concept,
+                                        render:this.renderFormDeleteConcept
+                                    }
+                                ]}
+                            />
+                        }
                 />         
 
                 <CardContent
@@ -182,11 +211,11 @@ class ConceptDetails extends Component {
                             </Col>
                         </Row>
                     </Grid>
-
-                    
                 </CardContent>
-                <CardActions>
-                    <FormEditConcept
+                <CardActions
+                    style={{float:'right'}}
+                >
+                    {/* <FormEditConcept
                         groupId={concept.group.id}
                         groupName={concept.group.name}
                         initialValues={{...concept, groupId: concept.group.id}}
@@ -196,14 +225,16 @@ class ConceptDetails extends Component {
                         color="secondary" 
                         onClick={this.handleDelete}>
                         Delete
-                    </Button>
+                    </Button> */}
+                    <Button
+                        type="Back" 
+                        onClick={this.handleClose}>
+                        Back
+                    </Button>                
                 </CardActions>
             </Card>
-            </div>
         );
     }
-
-
 
     render() {
         // check if activeConcepts are ready to be viewed

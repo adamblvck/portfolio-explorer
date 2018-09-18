@@ -85,15 +85,16 @@ body {
 /* Concept Details */
 .concept-detail-logo {
     position: absolute;
-    /* left: 50%; */
-    /* transform: translate(-50%,0); */
-    right: 10%;
+    /* left: 50%; 
+    transform: translate(-50%,0);
+    right: 10%; */
+    right: 55px;
     top: -15px;
 }
 
 .concept-detail-logo img {
-    max-height: 50px;
-    max-width: 110px;
+    max-height: 60px;
+    max-width: 120px;
     padding: 5px;
 
     margin-left: auto;

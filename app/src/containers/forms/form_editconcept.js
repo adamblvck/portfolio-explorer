@@ -5,6 +5,7 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
@@ -164,11 +165,11 @@ class FormEditConcept extends Component {
 
         return (
             <div>
-                <Button
-                    className="addConcep-btn"
+                <MenuItem
                     onClick={this.handleOpen}
-                    color="primary"
-                >Edit</Button>
+                >
+                    Edit
+                </MenuItem>
 
                 <Modal
                     aria-labelledby="simple-modal-title"
@@ -180,7 +181,7 @@ class FormEditConcept extends Component {
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
-                                Adding new concept to "{this.props.groupName}"
+                                Editing concept
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
