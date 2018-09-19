@@ -79,7 +79,6 @@ class FormAddConcept extends Component {
     }
 
     onSubmit(values, groupId) {
-        // console.log("Form value:", values, groupId);
         this.props.addConcept( { ...values, groupId: groupId } );
     }
 

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, ADD_GROUP, EDIT_GROUP} from '../actions';
 
+// goes into subgroups of every groups and performs another id sorting thingy on it :)
 function mapKeysRecursive(root_groups){
     for(var key in root_groups) {
         let obj = root_groups[key];
@@ -11,7 +12,6 @@ function mapKeysRecursive(root_groups){
 
     return _.mapKeys(root_groups, 'id');
 }
-
 
 export default function (state = {}, action) {
 

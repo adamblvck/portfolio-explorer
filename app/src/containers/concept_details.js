@@ -37,24 +37,62 @@ import MenuGroup from './menus/menu_groups';
 // to make multi-column layouts
 import { Grid, Row, Col } from 'react-bootstrap';
 
+// pose animation
+import posed, { PoseGroup } from 'react-pose';
+
+const BackDropDiv = posed.div({
+    visible: { opacity: 1 },
+    hidden: { 
+        opacity: 0,
+
+        transition: { duration: 150},
+        delay: 150
+    }
+});
+
+const LogoAnimated = posed.div({
+    visible: { y: 0, opacity:1,  delay: 150},
+    hidden: {
+        y: -50,
+        opacity: 0,
+        transition: { duration: 100},
+    }
+});
+
+const ModalAnimated = posed.div({
+    visible: { y: '-50%', x:'-50%', opacity: 1 },
+    hidden: {
+        x: '-50%',
+        y: '-70%',
+        opacity: 0,
+
+        transition: { duration: 150},
+        delay: 150
+    }
+});
+
 class ConceptDetails extends Component {
     constructor(props) {
         super(props);
 
         this.state = { 
-            open: false
+            open: false,
+            animation: false
         };
 
         this.handleDelete = this.handleDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.renderFormDeleteConcept = this.renderFormDeleteConcept.bind(this);
-        // this.renderContent = this.renderContent.bind(this);
+        this.renderContent = this.renderContent.bind(this);
+        this.handleAnimationClose = this.handleAnimationClose.bind(this);
+        this.renderAnimatedBackdrop = this.renderAnimatedBackdrop.bind(this);
     };
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.activeConcept) {
           this.setState({
-            open: nextProps.activeConcept.open
+            open: nextProps.activeConcept.open,
+            animation: nextProps.activeConcept.open,
           })
         }
     }
@@ -66,8 +104,13 @@ class ConceptDetails extends Component {
     }
 
     handleClose = () => {
-        this.setState({ open: false });
+        this.setState({ animation: false });
     };
+
+    handleAnimationClose() {
+        if (this.state.animation == false)
+            this.setState({ open: false });
+    }
 
     renderReferenceLinks(details){
         if (!details.reference_links)
@@ -158,12 +201,18 @@ class ConceptDetails extends Component {
         return (
             <Card className="concept-detail-card">
                 {/* contains the concept logo / image / picture */}
-                <Paper
-                    elevation={3}
-                    className="concept-detail-logo"
+                <LogoAnimated
+                    className="logo-animated-anim"
+                    initialPose='hidden'
+                    // this is a child pose-div, meaning the 'pose' props are pased from the parents
                 >
-                    <img src={concept.logo_url} />
-                </Paper>
+                    <Paper
+                        elevation={3}
+                        className="concept-detail-logo"
+                    >
+                        <img src={concept.logo_url} />
+                    </Paper>
+                </LogoAnimated>
 
                 <CardHeader
                     className="concept-detail-card-header"
@@ -212,7 +261,7 @@ class ConceptDetails extends Component {
                     </Grid>
                 </CardContent>
                 <CardActions
-                    style={{float:'right'}}
+                    // style={{float:'right'}}
                 >
                     <Button
                         type="Back" 
@@ -220,7 +269,19 @@ class ConceptDetails extends Component {
                         Back
                     </Button>                
                 </CardActions>
-            </Card>
+            </Card>        
+        );
+    }
+
+    renderAnimatedBackdrop() {
+        return (
+            <BackDropDiv 
+                className="concept-detail-backdrop"
+                onClick={this.handleClose}
+
+                initialPose='hidden'
+                pose={this.state.animation ? 'visible' : 'hidden'}
+            />
         );
     }
 
@@ -240,15 +301,25 @@ class ConceptDetails extends Component {
         }
 
         return (
-            <Modal
-                aria-labelledby="concept-detail"
-                aria-describedby="concept-detail-description"
+            
+                <Modal
+                    aria-labelledby="concept-detail"
+                    aria-describedby="concept-detail-description"
 
-                open={this.state.open}
-                onClose={this.handleClose}
-            >
-                {this.renderContent(concept)}
-            </Modal>      
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    BackdropComponent={this.renderAnimatedBackdrop}
+                >
+                    <ModalAnimated
+                        className="concept-detail-card-div"
+                        initialPose='hidden'
+                        pose={this.state.animation ? 'visible' : 'hidden'}
+                        onPoseComplete={this.handleAnimationClose}
+                    >
+                        {this.renderContent(concept)}
+                    </ModalAnimated>
+                </Modal>
+            
         );
     }
 }

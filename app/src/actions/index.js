@@ -265,8 +265,6 @@ export function updateConcept(updatedConceptInfo) {
     }
     `;
 
-    //console.log(updatedConceptInfo);
-
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,

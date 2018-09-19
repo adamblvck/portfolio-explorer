@@ -41,18 +41,6 @@ class ConceptBasic extends Component {
     }
 
     render(){
-        // let zIndex = 3; // default z-index of concept
-        
-        // // check if current selected concept is this component, if so, change zIndex to 5 to hover above detail card
-        // const { activeConcept } = this.props;
-        // if (activeConcept != null){
-        //     if (activeConcept.open == true && activeConcept.conceptId == this.props.concept.id) {
-        //         zIndex = 5;
-        //     }
-        // }
-
-        console.log(this.props.concept);
-
         return (
             <div>
                 <Paper 
