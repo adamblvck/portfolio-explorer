@@ -160,6 +160,10 @@ body {
     overflow-y: auto;  
 }
 
+.details-column {
+    margin-bottom: 10px;
+}
+
 /* Markdown font setting */
 .concept-detail-content h1 {
     font-size: 30px;

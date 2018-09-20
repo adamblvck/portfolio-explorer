@@ -25,7 +25,7 @@ import FormEditConcept from './forms/form_editconcept';
 import { Button, CardHeader } from '@material-ui/core';
 
 // import actions
-import { deleteConcept } from '../actions';
+import { deleteConcept, fetchCryptoPrices } from '../actions';
 
 // import icons
 import PlusIcon from '@material-ui/icons/AddCircleRounded';
@@ -39,6 +39,9 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 // pose animation
 import posed, { PoseGroup } from 'react-pose';
+
+// import CryptoChart
+import CryptoChart from './crypto_chart';
 
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
@@ -158,11 +161,24 @@ class ConceptDetails extends Component {
 
         return(
             <div>
-                <h2>Pro's</h2>
-                {this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
-                <h2>Con's</h2>
-                {this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
+                <div style={{marginBottom:'10px'}}>
+                    <h2>Pro's</h2>
+                    {this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
+                </div>
+                <div style={{marginBottom:'10px'}}>
+                    <h2>Con's</h2>
+                    {this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
+                </div>
             </div>
+        )
+    }
+
+    renderCryptoChart(meta){
+        if (!meta.symbol)
+            return (<div></div>);
+
+        return (
+            <CryptoChart symbol={meta.symbol} />
         )
     }
 
@@ -247,17 +263,20 @@ class ConceptDetails extends Component {
                                 <div dangerouslySetInnerHTML={{__html:md_summary}} />
                             </Col>
                             <Col xs={12} md={4}>
+                                <Row className="details-column">
+                                    {this.renderCryptoChart(concept.meta)}
+                                </Row>
                                 {/* Reference links */}
-                                <Row>
+                                <Row className="details-column">
                                     {this.renderReferenceLinks(concept.details)}
                                 </Row>
                                 {/* Pro's & Cons */}
-                                <Row>
+                                <Row className="details-column">
                                     {this.renderProsAndCons(concept.details)}
-                                </Row>                              
-
+                                </Row>                         
                             </Col>
                         </Row>
+                        
                     </Grid>
                 </CardContent>
                 <CardActions
@@ -330,7 +349,7 @@ function mapStateToProps (state) {
     };
 }
 
-export default connect( mapStateToProps, {deleteConcept})(ConceptDetails);
+export default connect( mapStateToProps, {deleteConcept, fetchCryptoPrices})(ConceptDetails);
 
 
 

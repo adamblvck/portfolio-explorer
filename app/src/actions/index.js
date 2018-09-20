@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 // action types
+export const FETCH_CRYPTO_PRICES = 'fetch_crypto'
+
 export const FETCH_CONCEPTS = 'fetch_concepts';
 export const FETCH_ROOT_GROUPS_AND_CONCEPTS = 'fetch_rootgroup_and_concepts';
 
@@ -15,10 +17,26 @@ export const EDIT_GROUP = 'edit_group';
 
 // const ROOT_URL = '/graphql'
 const ROOT_URL = 'http://localhost:4000/graphql';
-// const ROOT_URL = '/graphql';
+
+const CRYPTO_URL_BASE = 'https://min-api.cryptocompare.com/data/histoday?';
+const CRYPTO_URL_END = '&tsym=USD&limit=60&aggregate=1&e=CCCAGG';
+
+export function fetchCryptoPrices(symbol) {
+    const url = `${CRYPTO_URL_BASE}fsym=${symbol}${CRYPTO_URL_END}`; 
+
+    const request = axios({
+        method:'post',
+        url: url
+    });
+
+    return {
+        type: FETCH_CRYPTO_PRICES,
+        payload: request
+    }
+}
 
 export function fetchCoreGroups() {
-    let query = `
+    const query = `
         query getAllGroupsAndConcepts {
             root_groups { # n_depth = 0
                 id
@@ -169,6 +187,7 @@ export function fetchAndShowConceptDetails(conceptInfo) {
         meta: conceptInfo
     }
 }
+
 export function addConcept(conceptInfo) {
     let query = `
         mutation addConcept (
