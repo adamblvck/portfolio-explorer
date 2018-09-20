@@ -43,6 +43,7 @@ export function fetchCoreGroups() {
                         logo_url
                         meta {
                             color
+                            symbol
                         }
                         details {
                             title
@@ -90,6 +91,7 @@ export function fetchConcepts() {
                     logo_url
                     meta {
                         color
+                        symbol
                     }
                     details {
                         title
@@ -131,6 +133,7 @@ export function fetchAndShowConceptDetails(conceptInfo) {
                 logo_url
                 meta {
                     color
+                    symbol
                 }
                 details {
                     title
@@ -187,6 +190,7 @@ export function addConcept(conceptInfo) {
                 logo_url
                 meta {
                     color
+                    symbol
                 }
                 details{
                     title
@@ -243,6 +247,7 @@ export function updateConcept(updatedConceptInfo) {
             logo_url
             meta {
                 color
+                symbol
             }
             details{
                 title
