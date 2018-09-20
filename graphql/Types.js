@@ -34,14 +34,16 @@ const Concept = require('../models/concept');
 const MetaType = new GraphQLObjectType({
     name: 'Meta',
     fields: () => ({
-        color: { type: GraphQLString}
+        color: { type: GraphQLString},
+        symbol: { type: GraphQLString}
     })
 });
 
 const MetaInputType = new GraphQLInputObjectType({
     name: 'MetaInput',
     fields: () => ({
-        color: { type: GraphQLString}
+        color: { type: GraphQLString},
+        symbol: { type: GraphQLString}
     })
 });
 

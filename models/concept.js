@@ -12,7 +12,8 @@ var ConceptSchema = new Schema({
     name: String,
     logo_url: String,
     meta: {
-        color: String
+        color: String,
+        symbol: String
     },
     details: {
         title: String,

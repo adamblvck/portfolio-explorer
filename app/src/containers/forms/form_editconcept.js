@@ -199,6 +199,11 @@ class FormEditConcept extends Component {
                                         name="color"
                                         component={this.renderField}
                                     />
+                                    <Field
+                                        label="Currency Symbol (if applicable)"
+                                        name="symbol"
+                                        component={this.renderField}
+                                    />
                                 </FormSection>
 
                                 <FormSection name="details">
