@@ -195,7 +195,7 @@ class FormEditConcept extends Component {
 
                                 <FormSection name="meta">
                                     <Field
-                                        label="Color"
+                                        label="Header Color"
                                         name="color"
                                         component={this.renderField}
                                     />
@@ -235,7 +235,7 @@ class FormEditConcept extends Component {
                                 </FormSection>
                                 
                                 <Field
-                                    label="Group ID (Only if you want to change the group"
+                                    label="Group ID"
                                     name="groupId"
                                     component={this.renderField}
                                 />
