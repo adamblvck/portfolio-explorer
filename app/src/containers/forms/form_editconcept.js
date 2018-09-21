@@ -160,11 +160,19 @@ class FormEditConcept extends Component {
 
         return (
             <div>
-                <MenuItem
+                {/* <MenuItem
+                    tabIndex={-1}
                     onClick={this.handleOpen}
                 >
                     Edit
-                </MenuItem>
+                </MenuItem> */}
+
+                <Button 
+                    tabIndex={-1}
+                    onClick={this.handleOpen}
+                >
+                    Edit
+                </Button>
 
                 <Modal
                     aria-labelledby="simple-modal-title"
@@ -185,12 +193,14 @@ class FormEditConcept extends Component {
                                     label="Name"
                                     name="name"
                                     component={this.renderField}
+                                    tabIndex={0}
                                 />
                                 <Field
                                     label="Logo URL"
                                     name="logo_url"
                                     component={this.renderField}
                                     onChange={this.onNewLogoUrl}
+                                    tabIndex={1}
                                 />
 
                                 <FormSection name="meta">

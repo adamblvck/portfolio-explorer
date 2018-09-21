@@ -38,6 +38,7 @@ export default class MenuGroup extends Component {
                 <MoreVertIcon />
               </IconButton>
               <Menu
+                disableAutoFocusItem={false}
                 id="long-menu"
                 anchorEl={anchorEl}
                 open={open}

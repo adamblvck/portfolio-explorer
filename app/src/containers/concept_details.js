@@ -282,6 +282,13 @@ class ConceptDetails extends Component {
                 <CardActions
                     // style={{float:'right'}}
                 >
+                    <FormEditConcept
+                        groupId={concept.group.id}
+                        groupName={concept.group.name}
+                        key="editConcept"
+                        logo_url={concept.logo_url} // hacky but works, used in the constructor
+                        initialValues={{...concept, groupId: concept.group.id}}
+                    />
                     <Button
                         type="Back" 
                         onClick={this.handleClose}>
@@ -328,6 +335,7 @@ class ConceptDetails extends Component {
                     open={this.state.open}
                     onClose={this.handleClose}
                     BackdropComponent={this.renderAnimatedBackdrop}
+                    disableAutoFocus={false}
                 >
                     <ModalAnimated
                         className="concept-detail-card-div"
