@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // material ui
-import Paper from '@material-ui/core/Paper';
+import { Paper, Card, CardContent, CardHeader } from '@material-ui/core';
 
 // actions
 import { fetchAndShowConceptDetails } from '../actions';
@@ -41,15 +41,27 @@ class ConceptBasic extends Component {
     }
 
     render(){
+        console.log(this.props.concept);
         return (
             <div>
-                <Paper 
+                <Card 
                     //style={{zIndex:zIndex, position:'relative'}}
                     elevation={1}
                     className="concept-item"
-                    onClick={this.handleClick}>
-                    <img className="concept-logo-small" src={this.props.concept.logo_url} />
-                </Paper>
+                >
+                    <CardHeader
+                        className="concept-item-header"
+                        subheader={this.props.concept.details.title}
+                        style={{backgroundColor: this.props.concept.meta.color, background: this.props.concept.meta.color}}
+                    />
+
+                    <CardContent
+                        className="concept-item-content"
+                        onClick={this.handleClick}
+                    >
+                        <img className="concept-logo-small" src={this.props.concept.logo_url}></img>
+                    </CardContent>
+                </Card>
             </div>
         )
     } 
