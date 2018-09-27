@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions
-import { fetchConcepts, fetchCoreGroups } from '../actions';
+import { fetchConcepts, fetchCoreGroups, deleteGroup } from '../actions';
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 // Material Design Graphics
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardMedia, CardActions, Button, withStyles, Typography, CardHeader } from '@material-ui/core';
+import { Card, CardContent, CardMedia, CardActions, Button, withStyles, Typography, CardHeader, MenuItem } from '@material-ui/core';
 
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
@@ -39,6 +39,8 @@ const styles = {
 class GroupsMasonry extends Component {
     constructor(props) {
         super(props);
+
+        this.renderDeleteGroup = this.renderDeleteGroup.bind(this);
     }
 
     componentDidMount() {
@@ -48,6 +50,10 @@ class GroupsMasonry extends Component {
     /* 
         Render form components
     */
+
+    handleDeleteGroup(group) {
+        this.props.deleteGroup(group);
+    }
 
     renderFormAddConcept(component) {
         const { label, groupName, groupId } = component;
@@ -85,6 +91,19 @@ class GroupsMasonry extends Component {
                 addButtonText={label}
                 initialValues={group}
             />
+        );
+    }
+
+    renderDeleteGroup(component) {
+        const { group, label } = component;
+
+        return (
+            <MenuItem
+                color="secondary" 
+                key="deleteGroup"
+                onClick={() => this.handleDeleteGroup(group)}>
+                {label}
+            </MenuItem>
         );
     }
 
@@ -126,6 +145,12 @@ class GroupsMasonry extends Component {
                                         groupId:group.id,
                                         // groupName:group.name,
                                         render:this.renderFormEditGroup,
+                                        group:group
+                                    },
+                                    {
+                                        label:"Delete Subgroup",
+                                        groupId:group.id,
+                                        render:this.renderDeleteGroup,
                                         group:group
                                     }
                                 ]}
@@ -244,5 +269,5 @@ GroupsMasonry.propTypes = {
 };
   
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchConcepts, fetchCoreGroups })(GroupsMasonry)
+    connect(mapStateToProps, { fetchConcepts, fetchCoreGroups, deleteGroup })(GroupsMasonry)
 );

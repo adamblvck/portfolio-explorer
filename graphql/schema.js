@@ -173,12 +173,23 @@ const Mutation = new GraphQLObjectType({
             }
         },
         deleteConcept:{
-            type: GroupType,
+            type: ConceptType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
             resolve(parent, args){
                 return Concept.findByIdAndRemove(
+                    args.id
+                );
+            }
+        },
+        deleteGroup:{
+            type: GroupType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID)}
+            },
+            resolve(parent, args){
+                return Group.findByIdAndRemove(
                     args.id
                 );
             }

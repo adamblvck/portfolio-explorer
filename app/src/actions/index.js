@@ -14,9 +14,10 @@ export const DELETE_CONCEPT = 'delete_concept';
 
 export const ADD_GROUP = 'add_group';
 export const EDIT_GROUP = 'edit_group';
+export const DELETE_GROUP = 'delete_group';
 
-const ROOT_URL = '/graphql'
-// const ROOT_URL = 'http://localhost:4000/graphql';
+// const ROOT_URL = '/graphql'
+const ROOT_URL = 'http://localhost:4000/graphql';
 
 const CRYPTO_URL_BASE = 'https://min-api.cryptocompare.com/data/histoday?';
 const CRYPTO_URL_END = '&tsym=USD&limit=60&aggregate=1&e=CCCAGG';
@@ -387,6 +388,32 @@ export function editGroup(groupInfo) {
 
     return {
         type: EDIT_GROUP,
+        payload: request
+    }
+}
+
+export function deleteGroup(groupInfo) {
+    let query = `
+    mutation deleteGroup (
+        $id:ID!
+    ) {
+        deleteGroup(
+            id:$id
+        ) { id }
+    }
+    `;
+
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data:{
+            query: query,
+            variables: groupInfo
+        }
+    });
+
+    return {
+        type: DELETE_GROUP,
         payload: request
     }
 }

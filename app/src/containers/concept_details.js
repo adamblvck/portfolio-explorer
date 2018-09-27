@@ -1,46 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Grid, Row, Col } from 'react-bootstrap';
 import _ from 'lodash';
-
-// material design imports
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import Modal from '@material-ui/core/Modal';
-import MenuItem from '@material-ui/core/MenuItem';
-
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import Fade from '@material-ui/core/Fade';
-import Typography from '@material-ui/core/Typography';
-
-// markdown react-component rendering
+import posed from 'react-pose';
 import ReactDOM from "react-dom";
 import markdown from "marked";
 
-// import update form
-import FormEditConcept from './forms/form_editconcept';
-import { Button, CardHeader } from '@material-ui/core';
-
-// import actions
-import { deleteConcept, fetchCryptoPrices } from '../actions';
+// material design imports
+import { Card, CardHeader, CardContent, CardMedia, CardActionArea, CardActions, Modal, MenuItem } from '@material-ui/core';
+import { Button, Popper, Paper, Fade, Typography } from '@material-ui/core';
 
 // import icons
 import PlusIcon from '@material-ui/icons/AddCircleRounded';
 import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
 
+// own components
+import FormEditConcept from './forms/form_editconcept';
 import MenuGroup from './menus/menu_groups';
-
-// to make multi-column layouts
-import { Grid, Row, Col } from 'react-bootstrap';
-
-// pose animation
-import posed, { PoseGroup } from 'react-pose';
-
-// import CryptoChart
+import { deleteConcept, fetchCryptoPrices } from '../actions';
 import CryptoChart from './crypto_chart';
 
 const BackDropDiv = posed.div({

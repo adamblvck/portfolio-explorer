@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, ADD_GROUP, EDIT_GROUP} from '../actions';
+import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions';
 
 // goes into subgroups of every groups and performs another id sorting thingy on it :)
 function mapKeysRecursive(root_groups){
@@ -25,6 +25,10 @@ export default function (state = {}, action) {
                 window.location.reload(); // cheap trick, needs to replaced !
             }
         case EDIT_GROUP:
+            if (action.payload.status == 200){
+                window.location.reload(); // cheap trick, needs to replaced !
+            }
+        case DELETE_GROUP:
             if (action.payload.status == 200){
                 window.location.reload(); // cheap trick, needs to replaced !
             }
