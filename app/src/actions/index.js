@@ -76,6 +76,8 @@ export function fetchCoreGroups() {
                                 cons
                             }
                         }
+                        groupId
+                        groupIds
                     }
                 }
             }
@@ -124,6 +126,8 @@ export function fetchConcepts() {
                             cons
                         }
                     }
+                    groupId
+                    groupIds
                 }
             }
         }
@@ -170,6 +174,7 @@ export function fetchAndShowConceptDetails(conceptInfo) {
                     id
                     name
                 }
+                groupIds
             }
         }
     `;
@@ -252,7 +257,8 @@ export function updateConcept(updatedConceptInfo) {
         $logo_url: String,
         $meta: MetaInput,
         $details: ConceptDetailInput,
-        $groupId: String
+        $groupId: String,
+        $groupIds: [String]
     ) {
         updateConcept(
             id:$id,
@@ -260,7 +266,8 @@ export function updateConcept(updatedConceptInfo) {
             logo_url:$logo_url,
             meta:$meta,
             details:$details,
-            groupId:$groupId
+            groupId:$groupId,
+            groupIds:$groupIds
         ) {
             id
             name

@@ -187,7 +187,7 @@ class ConceptDetails extends Component {
         );
     }
 
-    renderContent(concept){
+    renderContent(concept, headerBackground){
         let md_summary = `<div></div>`;
         if (concept.details.summary)
             md_summary = markdown.parse(concept.details.summary);
@@ -211,7 +211,7 @@ class ConceptDetails extends Component {
                 <CardHeader
                     className="concept-detail-card-header"
                     title={concept.details.title}
-                    style={{backgroundColor: concept.meta.color, background: concept.meta.color}}
+                    style={{backgroundColor: headerBackground, background: headerBackground}}
                     action={
                             <MenuGroup 
                                 className="groupmenu-btn" 
@@ -297,6 +297,7 @@ class ConceptDetails extends Component {
         // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
         const open = show_details ? activeConcept.open : false;
         const concept = show_details ? activeConcept.concept : null;
+        const headerBackground = show_details ? activeConcept.background : null;
 
         if ((!show_details) && (!open)){
             return (
@@ -321,7 +322,7 @@ class ConceptDetails extends Component {
                         pose={this.state.animation ? 'visible' : 'hidden'}
                         onPoseComplete={this.handleAnimationClose}
                     >
-                        {this.renderContent(concept)}
+                        {this.renderContent(concept, headerBackground)}
                     </ModalAnimated>
                 </Modal>
             

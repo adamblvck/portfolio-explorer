@@ -13,6 +13,8 @@ class ConceptsMasonry extends Component {
     }
 
     renderConcepts(){
+        const { background }  = this.props;
+
         return _.map(this.props.concepts, (concept) => {
             return (
                 <div 
@@ -21,6 +23,7 @@ class ConceptsMasonry extends Component {
                     
                     <ConceptBasic
                         concept={concept}
+                        background={background}
                     />
                 </div>
             )

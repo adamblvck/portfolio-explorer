@@ -102,7 +102,8 @@ const Mutation = new GraphQLObjectType({
                 logo_url: { type: GraphQLString },
                 meta: { type: MetaInputType },
                 details: { type: ConceptDetailInputType },
-                groupId: { type: GraphQLString } 
+                groupId: { type: GraphQLString },
+                groupIds: { type: new GraphQLList(GraphQLString)}
             },
             resolve(parent, args){
                 let concept = new Concept({
@@ -110,7 +111,8 @@ const Mutation = new GraphQLObjectType({
                     logo_url: args.logo_url,
                     meta: args.meta,
                     details: args.details,
-                    groupId: args.groupId
+                    groupId: args.groupId,
+                    groupIds: args.groupIds
                 });
 
                 return concept.save();
@@ -124,23 +126,24 @@ const Mutation = new GraphQLObjectType({
                 logo_url: { type: GraphQLString },
                 meta: { type: MetaInputType },
                 details: { type: ConceptDetailInputType },
-                groupId: {type: GraphQLString}
+                groupId: {type: GraphQLString},
+                groupIds: { type: new GraphQLList(GraphQLString)}
             },
             resolve(parent, args){
                 let mods = {}
 
-                if (args.name) mods.name = args.name;
-                if (args.logo_url) mods.logo_url = args.logo_url;
-                if (args.meta) mods.meta = args.meta;
-                if (args.details) mods.details = args.details;
-                if (args.groupId) mods.groupId = args.groupId;
+                if (args.name)      mods.name = args.name;
+                if (args.logo_url)  mods.logo_url = args.logo_url;
+                if (args.meta)      mods.meta = args.meta;
+                if (args.details)   mods.details = args.details;
+                if (args.groupId)   mods.groupId = args.groupId;
+                if (args.groupIds)  mods.groupIds = args.groupIds;
 
                 return Concept.findByIdAndUpdate(
                     args.id,
                     { $set: mods},
                     { new: true }
-                  )
-                    .catch(err => new Error(err));
+                ).catch(err => new Error(err));
             }
         },
         updateGroup: {

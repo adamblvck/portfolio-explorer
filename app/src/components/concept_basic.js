@@ -29,19 +29,20 @@ class ConceptBasic extends Component {
             this.props.fetchAndShowConceptDetails({
                 anchorEl: currentTarget,
                 open: false,
-                conceptId: this.props.concept.id
+                conceptId: this.props.concept.id,
+                background: this.props.background
             });
         } else {
             this.props.fetchAndShowConceptDetails({
                 anchorEl: currentTarget,
                 open: true,
-                conceptId: this.props.concept.id
+                conceptId: this.props.concept.id,
+                background: this.props.background
             });
         }
     }
 
     render(){
-        console.log(this.props.concept);
         return (
             <div>
                 <Card 
@@ -52,7 +53,7 @@ class ConceptBasic extends Component {
                     <CardHeader
                         className="concept-item-header"
                         subheader={this.props.concept.details.title}
-                        style={{backgroundColor: this.props.concept.meta.color, background: this.props.concept.meta.color}}
+                        style={{backgroundColor: this.props.background, background: this.props.background}}
                     />
 
                     <CardContent

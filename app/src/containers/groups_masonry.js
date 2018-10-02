@@ -122,7 +122,7 @@ class GroupsMasonry extends Component {
         }
 
         // extract root color
-        const rootColor = group.rootColor;
+        const { rootColor, background } = group;
 
         return _.map(group.groups, (group) => {
             return (
@@ -166,6 +166,7 @@ class GroupsMasonry extends Component {
                     />
                     <ConceptsMasonry
                         concepts={group.concepts}
+                        background={background}
                     />
                 </div>
             );
@@ -209,7 +210,7 @@ class GroupsMasonry extends Component {
                     />
 
                     <CardContent className={classes.content}>
-                        {this.renderSubgroups({...group, rootColor: group.color})}
+                        {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
                     </CardContent>
                     
                     {/* <CardActions>

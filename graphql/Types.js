@@ -114,7 +114,9 @@ const ConceptType = new GraphQLObjectType({
                 // return Group with id=concept.id (= parent)
                 return Group.findById(parent.groupId);
             }
-        }
+        },
+        groupId: { type: GraphQLID},
+        groupIds: { type: new GraphQLList(GraphQLID)}
     })
 });
 
@@ -133,7 +135,9 @@ const GroupType = new GraphQLObjectType({
             type: new GraphQLList(ConceptType),
             resolve(parent, args){
                 // return CONCEPTS where groupId=group.id (= parent)
-                return Concept.find({groupId:parent.id});
+                //return Concept.find({groupId:parent.id});
+
+                return Concept.find({groupIds: parent.id});
             }
         },
         groups: {

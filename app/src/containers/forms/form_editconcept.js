@@ -33,6 +33,8 @@ class FormEditConcept extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.renderReferenceDetails = this.renderReferenceDetails.bind(this);
         this.renderProsCons = this.renderProsCons.bind(this);
+        this.renderGroupIds = this.renderGroupIds.bind(this);
+
         this.onNewLogoUrl = this.onNewLogoUrl.bind(this);
     }
 
@@ -151,6 +153,34 @@ class FormEditConcept extends Component {
         );
     }
 
+    renderGroupIds( { fields, meta: { error, submitFailed } } ) {
+        return (
+            <div>
+                <Button variant="outlined" color="primary" type="button" onClick={() => fields.push({})}>
+                    <AddRoundedIcon/> Group ID
+                </Button>
+                { fields.map((groupId, index) => (
+                    <Grid key={index}>
+                        <Col xs={10} md={10}>
+                            <Field
+                                name={groupId}
+                                type="text"
+                                component={this.renderField}
+                                label={`groupID #${index}`}
+                                value=""
+                            />
+                        </Col>
+                        <Col xs={1} md={1}>
+                            <Button type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove groupID">
+                                <DeleteRoundedIcon></DeleteRoundedIcon>
+                            </Button>
+                        </Col>
+                    </Grid>
+                )) }
+            </div>
+        );
+    }
+
     onNewLogoUrl(event) {
         this.setState({logo_url: event.target.value});
     }
@@ -244,6 +274,12 @@ class FormEditConcept extends Component {
                                     <FieldArray name="reference_links" component={this.renderReferenceDetails} />
                                 </FormSection>
                                 
+                                <FieldArray 
+                                    label="Group IDs"
+                                    name="groupIds" 
+                                    component={this.renderGroupIds} 
+                                />
+
                                 <Field
                                     label="Group ID"
                                     name="groupId"

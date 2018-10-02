@@ -10,7 +10,6 @@ export default function(state = null, action) {
             if (action.payload.status == 200){
                 window.location.reload(); // cheap trick, needs to replaced !
             }
-            //console.log(action);
             // return { ...action.meta, concept: action.payload.data.data.concept} ;
         case ADD_CONCEPT:
             if (action.payload.status == 200){
