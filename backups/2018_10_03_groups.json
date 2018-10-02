@@ -1,0 +1,27 @@
+{"_id":{"$oid":"5b898603fb1d5855aad156d2"},"name":"Fuck fraud","sector":"Insanitarium","description":"dude this is so fucking amazing!","__v":0}
+{"_id":{"$oid":"5b8986e5e8099a5623bc6eb6"},"name":"KFC","sector":"Superboy","description":"crzy shit","__v":0}
+{"_id":{"$oid":"5b928687891b510ede68a71c"},"name":"Sovereignty","n_depth":0,"__v":0,"color":"#1cb5e0","description":"Your identity in the new connected world, decentralized and secure.","background":"linear-gradient(45deg, #4532E6, #1cb5e0)"}
+{"_id":{"$oid":"5b9286b5891b510ede68a71e"},"name":"Small Coins","n_depth":1,"parent_groupId":"5b928698891b510ede68a71d","__v":0,"color":"--parent-color"}
+{"_id":{"$oid":"5b9286bc891b510ede68a71f"},"name":"The Best","n_depth":1,"parent_groupId":"5b928698891b510ede68a71d","__v":0,"color":"#FFC600"}
+{"_id":{"$oid":"5b9685e136f77735ff02600d"},"name":"Finance","sector":"Financial sector, ultra important information","description":"This thing is beyong crazy yet the information rings a true bell with everyone on it","n_depth":0,"parent_groupId":null,"__v":0,"color":"#6666ff","background":"linear-gradient(45deg, #6666ff, #B32AFF)"}
+{"_id":{"$oid":"5b96861136f77735ff02600e"},"name":"Top 20","sector":"Top 20","n_depth":1,"parent_groupId":"5b928698891b510ede68a71d","__v":0}
+{"_id":{"$oid":"5b9687d704742c42cd4b7ca3"},"name":"FinTech","sector":"This is beyond abnormal and hopefully I'm able to actually provide value with this fucking product","n_depth":1,"parent_groupId":"5b9685e136f77735ff02600d","__v":0}
+{"_id":{"$oid":"5b97cc49b020144edc5951cb"},"name":"Browser","n_depth":1,"parent_groupId":"5b928687891b510ede68a71c","__v":0}
+{"_id":{"$oid":"5b99739954252a64a0274a12"},"name":"Government","sector":"Government","n_depth":1,"__v":0}
+{"_id":{"$oid":"5b99744d54252a64a0274a13"},"name":"Government","sector":"Government","n_depth":1,"__v":0}
+{"_id":{"$oid":"5b9974cb54252a64a0274a14"},"name":"Government","n_depth":1,"__v":0}
+{"_id":{"$oid":"5b9974f254252a64a0274a15"},"name":"Government","n_depth":1,"__v":0}
+{"_id":{"$oid":"5b99774f54252a64a0274a16"},"name":"Government","n_depth":1,"parent_groupId":"5b928687891b510ede68a71c","__v":0}
+{"_id":{"$oid":"5ba55ae77140824cfce66044"},"name":"HAHHAHA","n_depth":1,"parent_groupId":"5b928698891b510ede68a71d","__v":0}
+{"_id":{"$oid":"5baa4a281c31a0412470ad69"},"name":"Business","sector":"Business","description":"Programmable blockchains specifically designed for business use cases","n_depth":0,"parent_groupId":null,"__v":0,"background":"linear-gradient(45deg, #e65c00, #f9d423)","color":"#e65c00"}
+{"_id":{"$oid":"5baa4b9d1c31a0412470ad6a"},"name":"Permissioned","n_depth":1,"parent_groupId":"5baa4a281c31a0412470ad69","__v":0}
+{"_id":{"$oid":"5baccfe36a6a8a4e5c77b5b1"},"name":"Cryptocurrencies","description":"Cryptocurrencies are taking over the world, here's a list of the top 20 tokens in the industry","n_depth":0,"parent_groupId":null,"__v":0,"background":"linear-gradient(45deg, #fc466b, #FFA447)","color":"#fc466b"}
+{"_id":{"$oid":"5bacd0256a6a8a4e5c77b5b2"},"name":"Top 20","n_depth":1,"parent_groupId":"5baccfe36a6a8a4e5c77b5b1","__v":0}
+{"_id":{"$oid":"5bb23ee272468835c427e865"},"name":"Liquidity Services","n_depth":1,"parent_groupId":"5b9685e136f77735ff02600d","__v":0}
+{"_id":{"$oid":"5bb2402172468835c427e869"},"name":"Anonymized","n_depth":1,"parent_groupId":"5baccfe36a6a8a4e5c77b5b1","__v":0}
+{"_id":{"$oid":"5bb28fb072468835c427e86b"},"name":"Application Stack","n_depth":0,"parent_groupId":null,"__v":0,"background":"linear-gradient(45deg, #283048, #859398)","color":"#283048","description":"To develop a Dapp you'll need an application stack. Here's a list of the most prominent projects"}
+{"_id":{"$oid":"5bb290aa72468835c427e86c"},"name":"Platforms","n_depth":1,"parent_groupId":"5bb28fb072468835c427e86b","__v":0}
+{"_id":{"$oid":"5bb290bd72468835c427e86d"},"name":"Data Storage","n_depth":1,"parent_groupId":"5bb28fb072468835c427e86b","__v":0}
+{"_id":{"$oid":"5bb290cf72468835c427e86e"},"name":"Computing","n_depth":1,"parent_groupId":"5bb28fb072468835c427e86b","__v":0}
+{"_id":{"$oid":"5bb290da72468835c427e86f"},"name":"AI","n_depth":1,"parent_groupId":"5bb28fb072468835c427e86b","__v":0}
+{"_id":{"$oid":"5bb298b372468835c427e870"},"name":"Another Group","description":"Has nice colors to it, that's why I've created it","n_depth":0,"parent_groupId":null,"__v":0,"background":"linear-gradient(45deg, #2bc0e4, #eaecc6)","color":"#2bc0e4"}
