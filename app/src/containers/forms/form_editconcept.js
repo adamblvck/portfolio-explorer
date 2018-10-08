@@ -167,7 +167,6 @@ class FormEditConcept extends Component {
                                 type="text"
                                 component={this.renderField}
                                 label={`groupID #${index}`}
-                                value=""
                             />
                         </Col>
                         <Col xs={1} md={1}>
@@ -251,6 +250,11 @@ class FormEditConcept extends Component {
                                         label="Title"
                                         name="title"
                                         component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Short Copy"
+                                        name="short_copy"
+                                        component={this.renderTextField}
                                     />
                                     <Field
                                         label="Summary"

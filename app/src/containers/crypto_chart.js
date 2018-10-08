@@ -36,13 +36,10 @@ class CryptoChart extends Component {
     }
 
     render() {
-        // console.log('crypto_prices', this.props.crypto_prices);
         if (!this.props.crypto_prices)
             return (<div></div>);
 
-        // console.log(this.props.crypto_prices.data);
         const data = _.map(this.props.crypto_prices.data, 'close');
-        // console.log(data);
 
         return (
             <div>

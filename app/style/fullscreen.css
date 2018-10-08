@@ -1,0 +1,4 @@
+.fullscreen-read-card-header [class*="MuiCardHeader-title"]{
+    color: #fff;
+    font-size: 1.5rem;
+}

@@ -1,0 +1,7 @@
+/* Make all buttons modern round */
+
+button {
+    border-radius: 50px !important
+}
+
+

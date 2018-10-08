@@ -31,6 +31,57 @@ const BackDropDiv = posed.div({
     }
 });
 
+const transition = {
+    duration: 400,
+    ease: [0.08, 0.69, 0.2, 0.99]
+  };
+
+const Frame = posed.div({
+    summary: {
+        applyAtEnd: { display: 'none' },
+        opacity: 0,
+        zIndex: 3
+    },
+    fullscreen: {
+        applyAtStart: { display: 'block' },
+        opacity: 1,
+        zIndex: 3
+    }
+});
+
+const SummaryDiv = posed.div({
+    summary:{
+        width: 'auto',
+        height: 300,
+        position: 'static',
+        transition: transition,
+        flip: true,
+        zIndex: 3,
+
+        paddingLeft: 0,
+        paddingRight: 0,
+    },
+    fullscreen: {
+        width: '100vw',
+        height: '100vh',
+        
+        flip: true,
+
+        zIndex: 3,
+
+        transition: transition,
+
+        paddingLeft: '10%',
+        paddingRight: '10%',
+
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+    }
+});
+
 const LogoAnimated = posed.div({
     visible: { y: 0, opacity:1,  delay: 150},
     hidden: {
@@ -41,10 +92,14 @@ const LogoAnimated = posed.div({
 });
 
 const ModalAnimated = posed.div({
-    visible: { y: '-50%', x:'-50%', opacity: 1 },
+    visible: { 
+        y: 0, 
+        // top: '25%',
+        opacity: 1
+    },
     hidden: {
-        x: '-50%',
-        y: '-70%',
+        y: -50,
+        // top: '20%',
         opacity: 0,
 
         transition: { duration: 150},
@@ -58,14 +113,17 @@ class ConceptDetails extends Component {
 
         this.state = { 
             open: false,
-            animation: false
+            animation: false,
+            fullscreen: false
         };
 
         this.handleDelete = this.handleDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleAnimationClose = this.handleAnimationClose.bind(this);
+        this.handleShowMore = this.handleShowMore.bind(this);
+
         this.renderFormDeleteConcept = this.renderFormDeleteConcept.bind(this);
         this.renderContent = this.renderContent.bind(this);
-        this.handleAnimationClose = this.handleAnimationClose.bind(this);
         this.renderAnimatedBackdrop = this.renderAnimatedBackdrop.bind(this);
     };
 
@@ -74,6 +132,7 @@ class ConceptDetails extends Component {
           this.setState({
             open: nextProps.activeConcept.open,
             animation: nextProps.activeConcept.open,
+            fullscreen: false
           })
         }
     }
@@ -91,6 +150,10 @@ class ConceptDetails extends Component {
     handleAnimationClose() {
         if (this.state.animation == false)
             this.setState({ open: false });
+    }
+
+    handleShowMore() {
+        this.setState({ fullscreen: !this.state.fullscreen });
     }
 
     renderReferenceLinks(details){
@@ -187,10 +250,36 @@ class ConceptDetails extends Component {
         );
     }
 
+    renderFullscreenMarkdown(title, headerBackground, md_copy){
+        return (
+            <Card className="fullscreen-read-card">
+                <CardHeader
+                    className="fullscreen-read-card-header"
+                    title={title}
+                    style={{
+                        // position: 'absolute',
+                        // left: 0,
+                        // right:0,
+                        // height:'40px',
+                        background:headerBackground
+                    }}
+                />
+                <CardContent>
+                    <div 
+                        dangerouslySetInnerHTML={{__html:md_copy}}
+                    ></div>
+                </CardContent>
+            </Card>
+        )
+    }
+
     renderContent(concept, headerBackground){
         let md_summary = `<div></div>`;
+
         if (concept.details.summary)
             md_summary = markdown.parse(concept.details.summary);
+
+        const { short_copy } = concept.details;
 
         return (
             <Card className="concept-detail-card">
@@ -238,7 +327,45 @@ class ConceptDetails extends Component {
                         <Row>
                             <Col xs={12} md={8}>
                                 {/* render summary */}
-                                <div dangerouslySetInnerHTML={{__html:md_summary}} />
+                                {/* <div dangerouslySetInnerHTML={{__html:md_summary}} /> */}
+
+                                {/* <Frame 
+                                    pose={this.state.fullscreen ? 'fullscreen' : 'summary'} 
+                                    initialPose='summary'
+                                    className="frame"
+                                    style={{
+                                        zIndex: 3
+                                    }}
+                                /> */}
+                                <SummaryDiv
+                                    className="summary-animated-anim"
+                                    initialPose='summary'
+                                    pose={this.state.fullscreen ? 'fullscreen' : 'summary'}
+                                    style={{
+                                        overflowY: this.state.fullscreen ? 'scroll' : 'hidden',
+                                        zIndex: 3
+                                    }}
+                                >
+                                    {/* Render short_copy or markdown in fullscreen */}
+                                    <div>
+                                        {this.state.fullscreen
+                                            ?this.renderFullscreenMarkdown(concept.details.title, headerBackground, md_summary) 
+                                            :<h3>{short_copy}</h3>
+                                        }
+                                    </div>
+                                    <div
+                                        style={{textAlign: 'center'}}
+                                    >
+                                        <Button 
+                                            onClick={this.handleShowMore}
+                                            variant="outlined"
+                                        >
+                                            {this.state.fullscreen? 'Close': 'Read More'}
+                                        </Button>
+                                    </div>
+                                </SummaryDiv>
+                                
+
                             </Col>
                             <Col xs={12} md={4}>
                                 <Row className="details-column">

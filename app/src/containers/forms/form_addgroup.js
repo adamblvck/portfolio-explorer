@@ -72,7 +72,6 @@ class FormAddGroup extends Component {
     }
 
     onSubmit(values) {
-        //console.log("Form value:", values, this.props.n_depth, this.props.parent_groupId);
         this.props.addGroup({ 
             ...values, 
             n_depth:this.props.n_depth, 

@@ -18,6 +18,7 @@ var ConceptSchema = new Schema({
     details: {
         title: String,
         summary: String,
+        short_copy: String,
         reference_links: [ {
             name: String,
             url: String

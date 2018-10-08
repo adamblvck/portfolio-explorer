@@ -67,6 +67,7 @@ export function fetchCoreGroups() {
                         details {
                             title
                             summary
+                            short_copy
                             reference_links {
                                 name
                                 url
@@ -117,6 +118,7 @@ export function fetchConcepts() {
                     details {
                         title
                         summary
+                        short_copy
                         reference_links {
                             name
                             url
@@ -161,6 +163,7 @@ export function fetchAndShowConceptDetails(conceptInfo) {
                 details {
                     title
                     summary
+                    short_copy
                     reference_links {
                         name
                         url
@@ -220,9 +223,10 @@ export function addConcept(conceptInfo) {
                 details{
                     title
                     summary
+                    short_copy
                     reference_links {
-                    name
-                    url
+                        name
+                        url
                     }
                 }
                 group {
@@ -279,6 +283,7 @@ export function updateConcept(updatedConceptInfo) {
             details{
                 title
                 summary
+                short_copy
                 reference_links {
                     name
                     url

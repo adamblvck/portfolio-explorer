@@ -52,6 +52,7 @@ const ConceptDetailType = new GraphQLObjectType({
     fields: () => ({
         title: { type: GraphQLString},
         summary: { type: GraphQLString},
+        short_copy: { type: GraphQLString},
         reference_links: { type: new GraphQLList(LinkType)},
         trade_off: { type: TradeOffType}
     })
@@ -62,6 +63,7 @@ const ConceptDetailInputType = new GraphQLInputObjectType({
     fields: () => ({
         title: { type: GraphQLString},
         summary: { type: GraphQLString},
+        short_copy: { type: GraphQLString},
         reference_links: { type: new GraphQLList(LinkInputType)},
         trade_off: { type: TradeOffInputType}
     })
