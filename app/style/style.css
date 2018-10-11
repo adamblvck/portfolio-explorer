@@ -22,8 +22,14 @@ body {
 
 /* Menus*/
 .menubar {
-    background-color: #006D89 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
     height: 64px;
+}
+
+.menubar-header {
+    flex-grow: 1;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 /* Groups */

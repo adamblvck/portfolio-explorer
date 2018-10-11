@@ -45,7 +45,7 @@ const RootQuery = new GraphQLObjectType({
         },
         root_groups: { // returns group with n_depth = 0 (these are root groups)
             type: new GraphQLList(GroupType),
-            resolve(parent, args){
+            resolve(parent, args, context){
                 return Group.find({n_depth:0});
             }
         },
@@ -83,7 +83,20 @@ const Mutation = new GraphQLObjectType({
                 n_depth: { type: GraphQLInt},
                 parent_groupId: { type: GraphQLID}
             },
-            resolve(parent, args){
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to add groups to the database');
+                }
+
+                // query resolve
+
                 let group = new Group({
                     name: args.name,
                     sector: args.sector,
@@ -105,14 +118,26 @@ const Mutation = new GraphQLObjectType({
                 groupId: { type: GraphQLString },
                 groupIds: { type: new GraphQLList(GraphQLString)}
             },
-            resolve(parent, args){
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to add concepts to the database');
+                }
+
+                // query resolve
                 let concept = new Concept({
                     name: args.name,
                     logo_url: args.logo_url,
                     meta: args.meta,
                     details: args.details,
                     groupId: args.groupId,
-                    groupIds: args.groupIds
+                    groupIds: [args.groupId]
                 });
 
                 return concept.save();
@@ -129,7 +154,19 @@ const Mutation = new GraphQLObjectType({
                 groupId: {type: GraphQLString},
                 groupIds: { type: new GraphQLList(GraphQLString)}
             },
-            resolve(parent, args){
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to update concepts in the database');
+                }
+
+                // query resolve
                 let mods = {}
 
                 if (args.name)      mods.name = args.name;
@@ -158,7 +195,19 @@ const Mutation = new GraphQLObjectType({
                 n_depth: { type: GraphQLInt },
                 parent_groupId: { type: GraphQLID },
             },
-            resolve(parent, args){
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to update groups in the database');
+                }
+
+                // query resolve
                 let mod = {}
                 if (args.name) mod.name = args.name;
                 if (args.sector) mod.sector = args.sector;
@@ -180,7 +229,19 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
-            resolve(parent, args){
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to delete concepts from the database');
+                }
+
+                // query resolve
                 return Concept.findByIdAndRemove(
                     args.id
                 );
@@ -191,7 +252,19 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
-            resolve(parent, args){
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to delete groups from the database');
+                }
+
+                // query resolve
                 return Group.findByIdAndRemove(
                     args.id
                 );

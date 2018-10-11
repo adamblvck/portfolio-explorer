@@ -11,18 +11,52 @@ import particlesConfig from '../../configs/particlesjs-config';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Button } from '@material-ui/core';
+
+import Auth from '../auth/auth';
 
 export default class App extends Component {
+    constructor(props){
+        super(props);
+
+        this.handleLogin  = this.handleLogin.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+    }
+
+    handleLogin() {
+        this.props.auth.login();
+    }
+
+    handleLogout() {
+        this.props.auth.logout();
+    }
+
 	render() {
+        const { isAuthenticated } = this.props.auth; // function inside auth to check if logged in
+
 		return (
             <div>
-                {/* <AppBar className="menubar">
+                <AppBar className="menubar">
                     <Toolbar>
-                        <Typography variant="title" color="inherit">
+                        <Typography variant="title" className="menubar-header">
                             Blockchain Ecosystem Explorer
                         </Typography>
+
+                        {
+                            isAuthenticated() && (
+                                <Button onClick={this.handleLogout} > Logout </Button>
+                            )
+                        }
+
+                        {
+                            !isAuthenticated() && (
+                                <Button onClick={this.handleLogin} > Login </Button>
+                            )
+                        }
                     </Toolbar>
-                </AppBar> */}
+                </AppBar>
+
+                
 
                 <div className="groups-masonry">
                     <GroupsMasonry/>

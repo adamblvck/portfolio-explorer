@@ -70,7 +70,7 @@ export function fetchCoreGroups() {
                             short_copy
                             reference_links {
                                 name
-                                url
+                                 url
                             }
                             trade_off {
                                 pros
@@ -85,66 +85,22 @@ export function fetchCoreGroups() {
         }
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
         type: FETCH_ROOT_GROUPS_AND_CONCEPTS,
-        payload: request//payload
-    }
-}
-
-export function fetchConcepts() {
-    let query = `
-        query getGroupsAndConcepts {
-            groups {
-                id
-                name
-                sector
-                description
-                concepts {
-                    id
-                    name
-                    logo_url
-                    meta {
-                        color
-                        symbol
-                    }
-                    details {
-                        title
-                        summary
-                        short_copy
-                        reference_links {
-                            name
-                            url
-                        }
-                        trade_off {
-                            pros
-                            cons
-                        }
-                    }
-                    groupId
-                    groupIds
-                }
-            }
-        }
-    `;
-
-    const request = axios({
-        method:'post',
-        url:`${ROOT_URL}`,
-        data:{
-            query: query
-        }
-    });
-
-    return {
-        type: FETCH_CONCEPTS,
         payload: request//payload
     }
 }
@@ -182,12 +138,18 @@ export function fetchAndShowConceptDetails(conceptInfo) {
         }
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
@@ -238,13 +200,19 @@ export function addConcept(conceptInfo) {
         }
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query,
             variables: conceptInfo
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
@@ -302,13 +270,19 @@ export function updateConcept(updatedConceptInfo) {
     }
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query,
             variables: updatedConceptInfo
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
@@ -328,13 +302,19 @@ export function deleteConcept(conceptInfo) {
     }
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query,
             variables: conceptInfo
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
@@ -357,13 +337,19 @@ export function addGroup(groupInfo) {
     }}
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query,
             variables: groupInfo
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
@@ -389,13 +375,19 @@ export function editGroup(groupInfo) {
     }}
     `;
     
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query,
             variables: groupInfo
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {
@@ -415,13 +407,19 @@ export function deleteGroup(groupInfo) {
     }
     `;
 
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
     const request = axios({
         method:'post',
         url:`${ROOT_URL}`,
         data:{
             query: query,
             variables: groupInfo
-        }
+        },
+        headers: localStorage.getItem('id_token')? headers: {}
     });
 
     return {

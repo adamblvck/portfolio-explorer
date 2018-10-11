@@ -13,6 +13,34 @@ function mapKeysRecursive(root_groups){
     return _.mapKeys(root_groups, 'id');
 }
 
+function parseResponse(state, action){
+    let error = null;
+
+    if (action && action.payload && action.payload.request){
+        const { response } = action.payload.request;
+        error = handleErrors(response);
+    }
+
+    if (action.payload.status == 200 && !error){
+        window.location.reload(); // cheap trick, needs to replaced !
+    }
+
+    return state;
+}
+
+function handleErrors(response){
+    const obj = JSON.parse(response);
+
+    if (obj.errors){
+        obj.errors.forEach(function(element){
+            alert("Error " + element.message);
+        });
+
+        return "errors";
+    } else
+        return null;
+}
+
 export default function (state = {}, action) {
 
     switch(action.type) {
@@ -21,17 +49,11 @@ export default function (state = {}, action) {
         case FETCH_ROOT_GROUPS_AND_CONCEPTS:
             return mapKeysRecursive(action.payload.data.data.root_groups);
         case ADD_GROUP:
-            if (action.payload.status == 200){
-                window.location.reload(); // cheap trick, needs to replaced !
-            }
+            return parseResponse(state, action);
         case EDIT_GROUP:
-            if (action.payload.status == 200){
-                window.location.reload(); // cheap trick, needs to replaced !
-            }
+            return parseResponse(state, action);
         case DELETE_GROUP:
-            if (action.payload.status == 200){
-                window.location.reload(); // cheap trick, needs to replaced !
-            }
+            return parseResponse(state, action);
         default:
             return state;
     }
