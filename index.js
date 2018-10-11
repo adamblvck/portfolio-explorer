@@ -11,9 +11,16 @@ const mongoose = require('mongoose');
 const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
 const schema = require('./graphql/schema');
 
+const hapiJWTAuth = require('hapi-auth-jwt2');
+const jwksRSA = require('jwks-rsa');
+
 const dbuser = 'admin';
 const dbpwd = '***REMOVED***';
 const MONGO_URI = `mongodb://${dbuser}:${dbpwd}@ds237192.mlab.com:37192/concept-db`;
+
+const publicuser = 'public'
+const publicpwd = '***REMOVED***'
+const MONGO_PUBLIC_URI = `mongodb://${publicuser}:${publicpwd}@ds237192.mlab.com:37192/concept-db`;
 
 const Path = require('path')
 const Inert = require('inert');
@@ -29,7 +36,38 @@ mongoose.connection.once('open', () => {
     console.log('connected to mlab database');
 })
 
+// bring your own validation function
+const validateUser = function (decoded, request) {
+
+    if (decoded && decoded.email) {
+        return { isValid: true };
+    }
+
+    return { isValid: false };
+};
+
 const init = async() => {
+
+    // register JWT authorization / verification for HAPI
+    await server.register(hapiJWTAuth);
+
+    server.auth.strategy('jwt', 'jwt', {
+        complete: true,
+        key: jwksRSA.hapiJwt2KeyAsync({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: 'https://blockchainexplorer.eu.auth0.com/.well-known/jwks.json'
+        }),
+        validate: validateUser,
+        verifyOptions: {
+            audience: 'nmwFAcrQ4iKBlNNqjNuoFjzJwDMlkkJK', // info from auth0 dashboard
+            issuer: 'https://blockchainexplorer.eu.auth0.com/', // info from auth0 dashboard
+            algorithms: ['RS256']
+        },
+    });
+
+    server.auth.default('jwt');
 
     // register GraphiQL, points to /graphql
     await server.register({
@@ -48,17 +86,22 @@ const init = async() => {
         plugin: graphqlHapi,
         options: {
             path: '/graphql',
-            graphqlOptions: {
-                schema
+            graphqlOptions: async (request) => {
+                return {
+                    schema,
+                    context: request.auth
+                }
             },
-            route: { cors: true }
-        }
+            // optional means that the request should have either a valid 
+            // Authentication header, or none at all
+            route: { cors: true, auth: { mode: 'optional' } }
+        },
     });
 
     // register static file serving (REACT)
     await server.register(require('inert'));
 
-    server.route({
+    await server.route({
         method: 'GET',
         path: '/{path*}',
         handler: {
@@ -69,6 +112,12 @@ const init = async() => {
           }
         }
     })
+
+    error => {
+        if (error) return next(error);
+        server.log(['register', 'graphql', 'graphiql'], 'graphql plugins loaded successfully! 🎉');
+        next();
+      },
 
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
