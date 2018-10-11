@@ -110,6 +110,9 @@ const init = async() => {
             listing: false,
             index: true
           }
+        },
+        options: {
+            auth: false
         }
     })
 
