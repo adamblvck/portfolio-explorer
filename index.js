@@ -70,16 +70,16 @@ const init = async() => {
     server.auth.default('jwt');
 
     // register GraphiQL, points to /graphql
-    await server.register({
-        plugin: graphiqlHapi,
-        options: {
-            path: '/graphiql',
-            graphiqlOptions: {
-                endpointURL: '/graphql'
-            },
-            route: { cors: true }
-        }
-    });
+    // await server.register({
+    //     plugin: graphiqlHapi,
+    //     options: {
+    //         path: '/graphiql',
+    //         graphiqlOptions: {
+    //             endpointURL: '/graphql'
+    //         },
+    //         route: { cors: true }
+    //     }
+    // });
 
     // register GraphQL
     await server.register({

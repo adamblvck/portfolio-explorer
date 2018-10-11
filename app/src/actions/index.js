@@ -16,8 +16,8 @@ export const ADD_GROUP = 'add_group';
 export const EDIT_GROUP = 'edit_group';
 export const DELETE_GROUP = 'delete_group';
 
-// const ROOT_URL = '/graphql'
-const ROOT_URL = 'http://localhost:4000/graphql';
+const ROOT_URL = '/graphql'
+// const ROOT_URL = 'http://localhost:4000/graphql';
 
 const CRYPTO_URL_BASE = 'https://min-api.cryptocompare.com/data/histoday?';
 const CRYPTO_URL_END = '&tsym=USD&limit=60&aggregate=1&e=CCCAGG';
