@@ -29,6 +29,7 @@ export default class App extends Component {
 
     handleLogout() {
         this.props.auth.logout();
+        this.forceUpdate();
     }
 
 	render() {
