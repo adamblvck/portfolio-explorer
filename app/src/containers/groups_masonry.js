@@ -131,25 +131,29 @@ class GroupsMasonry extends Component {
                 >
                     <CardHeader
                         action={
-                            <MenuGroup 
-                                className="groupmenu-btn" 
+                            this.props.isAuthenticated && <MenuGroup 
+                                className="groupmenu-btn"
+                                isAuthenticated={this.props.isAuthenticated}
                                 components={ [
                                     {
                                         label:"Add Concept",
                                         groupId:group.id,
                                         groupName:group.name,
+                                        needAuth: true,
                                         render:this.renderFormAddConcept
                                     },
                                     {
                                         label:"Edit Subgroup",
                                         groupId:group.id,
                                         // groupName:group.name,
+                                        needAuth: true,
                                         render:this.renderFormEditGroup,
                                         group:group
                                     },
                                     {
                                         label:"Delete Subgroup",
                                         groupId:group.id,
+                                        needAuth: true,
                                         render:this.renderDeleteGroup,
                                         group:group
                                     }
@@ -167,6 +171,7 @@ class GroupsMasonry extends Component {
                     <ConceptsMasonry
                         concepts={group.concepts}
                         background={background}
+                        isAuthenticated={this.props.isAuthenticated}
                     />
                 </div>
             );
@@ -186,17 +191,20 @@ class GroupsMasonry extends Component {
 
                     <CardHeader
                         action={
-                            <MenuGroup 
-                                className="groupmenu-btn" 
+                            this.props.isAuthenticated  && <MenuGroup 
+                                className="groupmenu-btn"
+                                isAuthenticated={this.props.isAuthenticated}
                                 components={ [
                                     {
                                         label:"Add Subgroup",
                                         parent_groupId:group.id,
+                                        needAuth: true,
                                         render:this.renderFormAddGroup
                                     },
                                     {
                                         label:"Edit Group",
                                         parent_groupId:group.id,
+                                        needAuth: true,
                                         render:this.renderFormEditGroup,
                                         group:group
                                     }
@@ -246,10 +254,13 @@ class GroupsMasonry extends Component {
     render() {
         return (
             <div>
+                {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
                 { this.renderMasonry() }
                 
+                {/* Holds concept details form */}
                 <ConceptDetails 
                     id="concept-detail-popper"
+                    isAuthenticated={this.props.isAuthenticated}
                 />
             </div>
         );

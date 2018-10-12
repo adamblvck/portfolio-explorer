@@ -310,18 +310,21 @@ class ConceptDetails extends Component {
                     title={concept.details.title}
                     style={{backgroundColor: headerBackground, background: headerBackground}}
                     action={
-                            <MenuGroup 
-                                className="groupmenu-btn" 
+                        this.props.isAuthenticated && <MenuGroup 
+                                className="groupmenu-btn"
+                                isAuthenticated={this.props.isAuthenticated}
                                 components={ [
                                     {
                                         label:"Edit Concept",
                                         concept: concept,
-                                        render:this.renderFormEditConcept
+                                        render:this.renderFormEditConcept,
+                                        needAuth: true
                                     },
                                     {
                                         label:"Delete Concept",
                                         concept: concept,
-                                        render:this.renderFormDeleteConcept
+                                        render:this.renderFormDeleteConcept,
+                                        needAuth: true
                                     }
                                 ]}
                             />
@@ -394,13 +397,13 @@ class ConceptDetails extends Component {
                 <CardActions
                     // style={{float:'right'}}
                 >
-                    <FormEditConcept
+                    {this.props.isAuthenticated && <FormEditConcept
                         groupId={concept.group.id}
                         groupName={concept.group.name}
                         key="editConcept"
                         logo_url={concept.logo_url} // hacky but works, used in the constructor
                         initialValues={{...concept, groupId: concept.group.id}}
-                    />
+                    />}
                     <Button
                         type="Back" 
                         onClick={this.handleClose}>

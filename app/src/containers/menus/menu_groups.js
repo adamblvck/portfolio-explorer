@@ -27,33 +27,36 @@ export default class MenuGroup extends Component {
         const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
 
+        console.log(this.props.needAuth,this.props.isAuthenticated);
+
         return (
             <div>
-              <IconButton
-                aria-label="More"
-                aria-owns={open ? 'long-menu' : null}
-                aria-haspopup="true"
-                onClick={this.handleClick}
-              >
+                <IconButton
+                    aria-label="More"
+                    aria-owns={open ? 'long-menu' : null}
+                    aria-haspopup="true"
+                    onClick={this.handleClick}
+                >
                 <MoreVertIcon />
-              </IconButton>
-              <Menu
-                disableAutoFocusItem={false}
-                id="long-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={this.handleClose}
-                PaperProps={{
-                  style: {
-                    maxHeight: 48 * 4.5,
-                    width: 200,
-                  },
-                }}
-              >
+                </IconButton>
+                <Menu
+                    disableAutoFocusItem={false}
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={this.handleClose}
+                    PaperProps={{
+                        style: {
+                        maxHeight: 48 * 4.5,
+                        width: 200,
+                        },
+                    }}
+                >
                 {this.props.components.map(component => (
-                    component.render(component)
+                    // if this menu item needs authentication, but the user isn't authenticated, dont render
+                    ((component.needAuth && this.props.isAuthenticated) || (!component.needAuth)) && (component.render(component))
                 ))}
-              </Menu>
+                </Menu>
             </div>
         );
 

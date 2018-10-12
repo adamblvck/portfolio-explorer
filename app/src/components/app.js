@@ -60,7 +60,7 @@ export default class App extends Component {
                 
 
                 <div className="groups-masonry">
-                    <GroupsMasonry/>
+                    <GroupsMasonry isAuthenticated={isAuthenticated()}/>
                 </div>
 
                 {/* TODO: Optimize further after done programming */}
