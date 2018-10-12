@@ -107,7 +107,8 @@ const init = async() => {
           directory: {
             path: Path.join(__dirname, 'app'),
             listing: false,
-            index: true
+            index: true,
+            redirectToSlash: true
           }
         },
         options: {
