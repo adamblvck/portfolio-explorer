@@ -22,8 +22,7 @@ const publicuser = 'public'
 const publicpwd = '***REMOVED***'
 const MONGO_PUBLIC_URI = `mongodb://${publicuser}:${publicpwd}@ds237192.mlab.com:37192/concept-db`;
 
-const Path = require('path')
-const Inert = require('inert');
+const Path = require('path');
 
 const server = hapi.server({
     port: process.env.PORT || 4000
@@ -107,14 +106,25 @@ const init = async() => {
           directory: {
             path: Path.join(__dirname, 'app'),
             listing: false,
-            index: true,
-            redirectToSlash: true
+            index: true
           }
         },
         options: {
             auth: false
         }
     })
+
+    server.ext('onPreResponse', (request, reply) => {
+        let response = request.response;
+
+        // if 404 - serve Vue app
+        if (response.isBoom &&
+            response.output.statusCode === 404) {
+            return reply.file('./app/index.html');
+        }
+
+        reply.continue();
+    });
 
     error => {
         if (error) return next(error);
