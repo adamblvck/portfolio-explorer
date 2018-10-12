@@ -57,10 +57,10 @@ const Frame = posed.div({
 const SummaryDiv = posed.div({
     summary:{
         width: 'auto',
+        height: 'auto',
         position: 'static',
         transition: transition,
         flip: true,
-
     },
     fullscreen: {
         width: '100vw',
