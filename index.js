@@ -117,13 +117,13 @@ const init = async() => {
     server.ext('onPreResponse', (request, reply) => {
         let response = request.response;
 
-        // if 404 - serve Vue app
+        // if 404 - serve React app
         if (response.isBoom &&
             response.output.statusCode === 404) {
             return reply.file('./app/index.html');
         }
 
-        reply.continue();
+        return reply.continue;
     });
 
     error => {
