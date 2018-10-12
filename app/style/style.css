@@ -98,16 +98,18 @@ body {
     /* background: rgb(43, 133, 207); */
 }
 
+.concept-item-header [class*="MuiCardHeader-subheader"] {
+    /* color: #fff; */
+    font-weight: 100;
+    font-size: 0.8rem;
+}
+
 /* to align detail icons in the middle of the text align */
 li [class*="MuiSvgIcon"] {
     margin-bottom:3px;
 }
 
-.concept-item-header [class*="MuiCardHeader-subheader"] {
-    color: #fff;
-    font-weight: 100;
-    font-size: 0.8rem;
-}
+
 
 .concept-item-content {
     padding: 0px !important;

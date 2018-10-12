@@ -47,21 +47,22 @@ class ConceptBasic extends Component {
             <div>
                 <Card 
                     //style={{zIndex:zIndex, position:'relative'}}
-                    elevation={1}
+                    elevation={0}
                     className="concept-item"
                 >
-                    <CardHeader
-                        className="concept-item-header"
-                        subheader={this.props.concept.details.title}
-                        style={{backgroundColor: this.props.background, background: this.props.background}}
-                    />
-
                     <CardContent
                         className="concept-item-content"
                         onClick={this.handleClick}
                     >
                         <img className="concept-logo-small" src={this.props.concept.logo_url}></img>
                     </CardContent>
+
+                    <CardHeader
+                        className="concept-item-header"
+                        subheader={this.props.concept.details.title}
+                        // style={{backgroundColor: this.props.background, background: this.props.background}}
+                    />
+                    
                 </Card>
             </div>
         )
