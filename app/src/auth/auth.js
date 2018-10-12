@@ -1,11 +1,16 @@
 import auth0 from 'auth0-js';
 import history from '../history';
 
+const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
+const CALLBACK_URL = isLOCALHOST
+    ? 'http://localhost:8080/callback'
+    : 'https://blockchain-ecosystem-explorer.herokuapp.com/callback';
+
 export default class Auth {
     auth0 = new auth0.WebAuth({
         domain: 'blockchainexplorer.eu.auth0.com',
         clientID: 'nmwFAcrQ4iKBlNNqjNuoFjzJwDMlkkJK',
-        redirectUri: 'http://localhost:8080/callback',
+        redirectUri: CALLBACK_URL,
         responseType: 'token id_token',
         scope: 'openid email'
     });
