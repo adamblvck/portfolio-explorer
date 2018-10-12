@@ -22,6 +22,9 @@ import history from './history';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+
 const auth = new Auth();
 
 const handleAuthentication = (nextState, replace) => {
@@ -30,26 +33,38 @@ const handleAuthentication = (nextState, replace) => {
     }
 }
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <Router history={history}>
-        <div>
-            <Switch>
-                <Route 
-                    path="/callback" 
-                    render={(props) => {
-                        handleAuthentication(props);
-                        return <Callback {...props} />
-                }}/>
-                <Route 
-                    path="/" 
-                    render={
-                        (props) => <App auth={auth} {...props} />
-                    }    
-                />
-            </Switch>
-        </div>
-    </Router>
+const myTheme = createMuiTheme({
+    typography: {
+     "fontFamily": '"Nunito", "Roboto", "Helvetica", "Arial", "sans-serif"',
+     "fontSize": 14,
+     "fontWeightLight": 300,
+     "fontWeightRegular": 400,
+     "fontWeightMedium": 500
+    }
+ });
 
-  </Provider>
-  , document.querySelector('.container'));
+ReactDOM.render(
+    <MuiThemeProvider theme={myTheme}>
+        <Provider store={createStoreWithMiddleware(reducers)}>
+        <Router history={history}>
+            <div>
+                <Switch>
+                    <Route 
+                        path="/callback" 
+                        render={(props) => {
+                            handleAuthentication(props);
+                            return <Callback {...props} />
+                    }}/>
+                    <Route 
+                        path="/" 
+                        render={
+                            (props) => <App auth={auth} {...props} />
+                        }    
+                    />
+                </Switch>
+            </div>
+        </Router>
+
+        </Provider>
+    </MuiThemeProvider>
+    , document.querySelector('.container'));

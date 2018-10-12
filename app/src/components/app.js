@@ -40,7 +40,7 @@ export default class App extends Component {
                 <AppBar className="menubar">
                     <Toolbar>
                         <Typography variant="title" className="menubar-header">
-                            Blockchain Ecosystem Explorer
+                            Blockchain Ecosystem
                         </Typography>
 
                         {

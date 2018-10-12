@@ -2,6 +2,14 @@
 
 This is an api for recalling blockchain ecosystem details, used by the blockchain ecosystem explorer!
 
+## Deployment on heroku
+
+For a new heroku, you need to 
+
+~~~
+git push heroku master
+~~~
+
 ## Repository contents
 
 ## back end layout

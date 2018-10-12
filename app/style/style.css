@@ -7,6 +7,8 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
+
+    font-family: "Nunito","Roboto", "Helvetica", "Arial" !important;
 }
 
 .particle-background {
@@ -25,11 +27,16 @@ body {
     background-color: transparent !important;
     box-shadow: none !important;
     height: 64px;
+
+    position: absolute !important;
 }
 
 .menubar-header {
     flex-grow: 1;
     color: rgba(0, 0, 0, 0.87);
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.5rem;
 }
 
 /* Groups */
@@ -89,6 +96,11 @@ body {
     padding: 0px !important;
     text-align: center;
     /* background: rgb(43, 133, 207); */
+}
+
+/* to align detail icons in the middle of the text align */
+li [class*="MuiSvgIcon"] {
+    margin-bottom:3px;
 }
 
 .concept-item-header [class*="MuiCardHeader-subheader"] {
@@ -157,15 +169,17 @@ body {
     transform: translate(-50%, -50%); */
 }
 
+/* For devices below 600px in width */
 @media only screen and (max-width: 600px) {
     .concept-detail-card-div {
         top: 4%;
     }
 } 
 
+/* from resolutions with 600px width and up */
 @media only screen and (min-width: 600px) {
     .concept-detail-card-div {
-        top: 25%;
+        top: 20%;
     }
 } 
 

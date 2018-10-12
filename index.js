@@ -27,7 +27,6 @@ const Inert = require('inert');
 
 const server = hapi.server({
     port: process.env.PORT || 4000
-    //host: process.env.HOST || 'localhost'
 });
 
 mongoose.connect(MONGO_URI);
@@ -57,12 +56,12 @@ const init = async() => {
             cache: true,
             rateLimit: true,
             jwksRequestsPerMinute: 5,
-            jwksUri: 'https://blockchainexplorer.eu.auth0.com/.well-known/jwks.json'
+            jwksUri: 'https://blockchainexplorer.eu.auth0.com/.well-known/jwks.json' 
         }),
         validate: validateUser,
         verifyOptions: {
-            audience: 'nmwFAcrQ4iKBlNNqjNuoFjzJwDMlkkJK', // info from auth0 dashboard
-            issuer: 'https://blockchainexplorer.eu.auth0.com/', // info from auth0 dashboard
+            audience: 'nmwFAcrQ4iKBlNNqjNuoFjzJwDMlkkJK', // Auth0 application ID
+            issuer: 'https://blockchainexplorer.eu.auth0.com/', // Auth0 authentication endpoint
             algorithms: ['RS256']
         },
     });

@@ -1,4 +1,56 @@
+.fullscreen-read-card{
+    /* max-height: 600px; */
+}
+
 .fullscreen-read-card-header [class*="MuiCardHeader-title"]{
     color: #fff;
     font-size: 1.5rem;
+    
+}
+
+.fullscreen-read-card-content {
+    overflow-y: scroll;
+    max-height: 600px;
+    font-family: "Nunito","Roboto", "Helvetica", "Arial";
+}
+
+.fullscreen-read-card-content h1 {
+    font-size: 30px;
+}
+
+.fullscreen-read-card-content h2 {
+    font-size: 22px;
+}
+
+.fullscreen-read-card-content h3 {
+    font-size: 18px;
+}
+
+.summary-animated-anim {
+    max-height: 300px;
+    margin-bottom: 24px;
+}
+
+/* on mobile */
+@media only screen and (max-width: 600px) {
+    .summary-animated-anim {
+        padding-left: 0;
+        padding-right: 0;
+        top: 0;
+    }
+}
+
+/* on bigger than mobile */
+@media only screen and (min-width: 600px) {
+    .summary-animated-anim {
+        padding-left: 10%;
+        padding-right: 10%;
+
+        top: 4%;
+    }
+
+    .fullscreen-read-card-content {
+        padding-left: 100px !important;
+        padding-right: 100px !important;
+    }
 }

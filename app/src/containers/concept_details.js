@@ -10,6 +10,9 @@ import markdown from "marked";
 import { Card, CardHeader, CardContent, CardMedia, CardActionArea, CardActions, Modal, MenuItem } from '@material-ui/core';
 import { Button, Popper, Paper, Fade, Typography } from '@material-ui/core';
 
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+
 // import icons
 import PlusIcon from '@material-ui/icons/AddCircleRounded';
 import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
@@ -20,6 +23,8 @@ import FormEditConcept from './forms/form_editconcept';
 import MenuGroup from './menus/menu_groups';
 import { deleteConcept, fetchCryptoPrices } from '../actions';
 import CryptoChart from './crypto_chart';
+
+
 
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
@@ -35,7 +40,7 @@ const transition = {
     duration: 400,
     ease: [0.08, 0.69, 0.2, 0.99]
   };
-
+  
 const Frame = posed.div({
     summary: {
         applyAtEnd: { display: 'none' },
@@ -52,30 +57,20 @@ const Frame = posed.div({
 const SummaryDiv = posed.div({
     summary:{
         width: 'auto',
-        height: 300,
         position: 'static',
         transition: transition,
         flip: true,
-        zIndex: 3,
 
-        paddingLeft: 0,
-        paddingRight: 0,
     },
     fullscreen: {
         width: '100vw',
         height: '100vh',
-        
-        flip: true,
 
-        zIndex: 3,
+        flip: true,
 
         transition: transition,
 
-        paddingLeft: '10%',
-        paddingRight: '10%',
-
         position: 'fixed',
-        top: 0,
         left: 0,
         bottom: 0,
         right: 0,
@@ -263,12 +258,25 @@ class ConceptDetails extends Component {
                         // height:'40px',
                         background:headerBackground
                     }}
+                    action={
+                        <IconButton onClick={this.handleShowMore} >
+                            <CloseIcon/>
+                        </IconButton>
+                    }
                 />
-                <CardContent>
+                <CardContent className="fullscreen-read-card-content">
                     <div 
                         dangerouslySetInnerHTML={{__html:md_copy}}
                     ></div>
                 </CardContent>
+                <CardActions>
+                    <Button 
+                        onClick={this.handleShowMore}
+                        variant="outlined"
+                    >
+                        Close
+                    </Button>
+                </CardActions>
             </Card>
         )
     }
@@ -342,26 +350,25 @@ class ConceptDetails extends Component {
                                     initialPose='summary'
                                     pose={this.state.fullscreen ? 'fullscreen' : 'summary'}
                                     style={{
-                                        overflowY: this.state.fullscreen ? 'scroll' : 'hidden',
                                         zIndex: 3
                                     }}
                                 >
                                     {/* Render short_copy or markdown in fullscreen */}
                                     <div>
-                                        {this.state.fullscreen
-                                            ?this.renderFullscreenMarkdown(concept.details.title, headerBackground, md_summary) 
-                                            :<h3>{short_copy}</h3>
-                                        }
+
+                                        {this.state.fullscreen && this.renderFullscreenMarkdown(concept.details.title, headerBackground, md_summary)}
+
+                                        { !this.state.fullscreen && (<h3>{short_copy}</h3>) }
+
                                     </div>
                                     <div
                                         style={{textAlign: 'center'}}
                                     >
-                                        <Button 
-                                            onClick={this.handleShowMore}
-                                            variant="outlined"
-                                        >
-                                            {this.state.fullscreen? 'Close': 'Read More'}
-                                        </Button>
+                                        {!this.state.fullscreen && 
+                                            (<Button onClick={this.handleShowMore} variant="outlined">
+                                                Read More
+                                            </Button>)
+                                        }
                                     </div>
                                 </SummaryDiv>
                                 
