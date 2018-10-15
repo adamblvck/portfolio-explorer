@@ -40,6 +40,7 @@ export default class Auth {
         localStorage.setItem('access_token', authResult.accessToken);
         localStorage.setItem('id_token', authResult.idToken);
         localStorage.setItem('expires_at', expiresAt);
+        localStorage.setItem('is_authenticated', true);
 
         history.replace('/'); // navigate home
     }
@@ -48,11 +49,14 @@ export default class Auth {
         // remove all authentiation entries stored in the storage
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
+        localStorage.removeItem('is_authenticated');
         localStorage.setItem('expires_at', 0);
     }
 
     isAuthenticated() {
         let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-        return new Date().getTime() < expiresAt;
+        const isAuth = new Date().getTime() < expiresAt
+        isAuth ? localStorage.setItem('is_authenticated', true) : localStorage.removeItem('is_authenticated');
+        return isAuth;
     }
 }

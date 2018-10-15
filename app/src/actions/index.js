@@ -97,7 +97,7 @@ export function fetchCoreGroups() {
         data:{
             query: query
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -150,7 +150,7 @@ export function fetchAndShowConceptDetails(conceptInfo) {
         data:{
             query: query
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -213,7 +213,7 @@ export function addConcept(conceptInfo) {
             query: query,
             variables: conceptInfo
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -283,7 +283,7 @@ export function updateConcept(updatedConceptInfo) {
             query: query,
             variables: updatedConceptInfo
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -315,7 +315,7 @@ export function deleteConcept(conceptInfo) {
             query: query,
             variables: conceptInfo
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -350,7 +350,7 @@ export function addGroup(groupInfo) {
             query: query,
             variables: groupInfo
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -388,7 +388,7 @@ export function editGroup(groupInfo) {
             query: query,
             variables: groupInfo
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
@@ -420,7 +420,7 @@ export function deleteGroup(groupInfo) {
             query: query,
             variables: groupInfo
         },
-        headers: localStorage.getItem('id_token')? headers: {}
+        headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
