@@ -1,14 +1,14 @@
 {
-  "name": "server-tryout",
-  "version": "1.0.0",
-  "description": "",
+  "name": "blockchain-ecosystem-explorer-server-api",
+  "version": "0.1.0",
+  "description": "An interactive blockchain ecosystem explorer",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "cd app && npm install && npm run build"
   },
-  "author": "",
+  "author": "@adam_blvck",
   "license": "ISC",
   "dependencies": {
     "apollo-server-hapi": "^1.3.6",
