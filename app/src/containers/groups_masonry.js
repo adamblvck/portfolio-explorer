@@ -24,8 +24,8 @@ import MenuGroup from './menus/menu_groups';
 
 const styles = {
     card: {
-      maxWidth: 450,
-      margin: 7.5
+        maxWidth: 450,
+        margin: 7.5
     },
     media: {
       height: 100,
@@ -239,7 +239,9 @@ class GroupsMasonry extends Component {
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
-                <Masonry>
+                <Masonry
+                    gutter="0 auto 0 auto"
+                >
                     {this.renderGroups()}
                     <FormAddGroup 
                         n_depth={0}
