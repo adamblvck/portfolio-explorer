@@ -27,6 +27,8 @@
     "auth0-js": "^9.8.0",
     "axios": "^0.18.0",
     "babel-preset-stage-1": "^6.1.18",
+    "echarts": "^4.2.1",
+    "echarts-for-react": "^2.0.15-beta.0",
     "hapi-auth-jwt2": "^8.1.0",
     "lodash": "^3.10.1",
     "marked": "^0.5.0",

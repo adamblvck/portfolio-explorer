@@ -16,9 +16,6 @@ const handleAuthentication = (nextState, replace) => {
 
 export const makeMainRoutes = () => {
     return (
-
-
-
         <Router history={history} component={App}>
             <div>
                 <Route 
