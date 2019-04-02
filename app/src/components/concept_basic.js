@@ -59,7 +59,7 @@ class ConceptBasic extends Component {
 
                     <CardHeader
                         className="concept-item-header"
-                        subheader={this.props.concept.details.title}
+                        subheader={this.props.concept.name}
                         // style={{backgroundColor: this.props.background, background: this.props.background}}
                     />
                     

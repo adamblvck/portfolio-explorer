@@ -110,7 +110,7 @@ class FormEditConcept extends Component {
                             />
                         </Col>
                         <Col xs={1} md={1}>
-                            <Button type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
+                            <Button className="delete-button-edit-form"  type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
                                 <DeleteRoundedIcon></DeleteRoundedIcon>
                             </Button>
                         </Col>
@@ -128,22 +128,24 @@ class FormEditConcept extends Component {
                 </Button>
                 { fields.map((link, index) => (
                     <Grid key={index}>
-                        <Col xs={10} md={10}>
+                        <Col xs={5} md={5}>
                             <Field
                                 name={`${link}.name`}
                                 type="text"
                                 component={this.renderField}
-                                label={`Link Name #${index}`}
+                                label={`Link #${index}`}
                             />
+                        </Col>
+                        <Col xs={5} md={5}>
                             <Field
                                 name={`${link}.url`}
                                 type="text"
                                 component={this.renderField}
-                                label="url"
+                                label={`URL #${index}`}
                             />
                         </Col>
                         <Col xs={1} md={1}>
-                            <Button type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
+                            <Button className="delete-button-edit-form" type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
                                 <DeleteRoundedIcon></DeleteRoundedIcon>
                             </Button>
                         </Col>
@@ -170,7 +172,7 @@ class FormEditConcept extends Component {
                             />
                         </Col>
                         <Col xs={1} md={1}>
-                            <Button type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove groupID">
+                            <Button className="delete-button-edit-form"  type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove groupID">
                                 <DeleteRoundedIcon></DeleteRoundedIcon>
                             </Button>
                         </Col>
@@ -216,82 +218,106 @@ class FormEditConcept extends Component {
                                 Editing concept
                             </Typography>
                             <form
-                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }>
-                                <img className="concept-logo-small" src={this.state.logo_url}></img>
-                                <Field
-                                    label="Name"
-                                    name="name"
-                                    component={this.renderField}
-                                    tabIndex={0}
-                                />
-                                <Field
-                                    label="Logo URL"
-                                    name="logo_url"
-                                    component={this.renderField}
-                                    onChange={this.onNewLogoUrl}
-                                    tabIndex={1}
-                                />
+                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }
+                            >
+                                <Grid>
 
-                                <FormSection name="meta">
-                                    <Field
-                                        label="Header Color"
-                                        name="color"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Currency Symbol (if applicable)"
-                                        name="symbol"
-                                        component={this.renderField}
-                                    />
-                                </FormSection>
+                                    <Row>
+                                        <Col md={2}>
+                                            <img className="concept-logo-small" src={this.state.logo_url}></img>
+                                        </Col>
+                                        <Col md={5}>
+                                            <Field
+                                                label="Name"
+                                                name="name"
+                                                component={this.renderField}
+                                                tabIndex={0}
+                                            />
+                                            <Field
+                                                label="Logo URL"
+                                                name="logo_url"
+                                                component={this.renderField}
+                                                onChange={this.onNewLogoUrl}
+                                                tabIndex={1}
+                                            />                                            
+                                        </Col>
+                                        <Col md={5}>
+                                            <FormSection name="meta">
+                                                <Field
+                                                    label="Header Color"
+                                                    name="color"
+                                                    component={this.renderField}
+                                                />
+                                                <Field
+                                                    label="Currency Symbol (if applicable)"
+                                                    name="symbol"
+                                                    component={this.renderField}
+                                                />
+                                            </FormSection>
+                                        </Col>
+                                    </Row>
 
-                                <FormSection name="details">
-                                    <Field
-                                        label="Title"
-                                        name="title"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Short Copy"
-                                        name="short_copy"
-                                        component={this.renderTextField}
-                                    />
-                                    <Field
-                                        label="Summary"
-                                        name="summary"
-                                        component={this.renderTextField}
-                                    />
 
-                                    <FormSection name="trade_off">
+                                    
+
+                                        <FormSection name="details">
+                                            <Row>
+                                                <Field
+                                                    label="Title"
+                                                    name="title"
+                                                    component={this.renderField}
+                                                />
+                                                <Field
+                                                    label="Short Copy"
+                                                    name="short_copy"
+                                                    component={this.renderTextField}
+                                                />
+                                                <Field
+                                                    label="Summary"
+                                                    name="summary"
+                                                    component={this.renderTextField}
+                                                />
+                                            </Row>
+                                            <Row>
+                                                <FormSection name="trade_off">
+                                                    <Col md={6}>
+                                                        <FieldArray 
+                                                            label="Pro's"
+                                                            name="pros" 
+                                                            component={this.renderProsCons}
+                                                        />
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <FieldArray 
+                                                            label="Con's"
+                                                            name="cons" 
+                                                            component={this.renderProsCons}
+                                                        />
+                                                    </Col>
+                                                </FormSection>
+                                            </Row>
+                                            <Row>
+                                                <FieldArray name="reference_links" component={this.renderReferenceDetails} />
+                                            </Row>
+                                        </FormSection>
+
+                                    <Row>
                                         <FieldArray 
-                                            label="Pro's"
-                                            name="pros" 
-                                            component={this.renderProsCons}
+                                            label="Group IDs"
+                                            name="groupIds" 
+                                            component={this.renderGroupIds} 
                                         />
-                                        <FieldArray 
-                                            label="Con's"
-                                            name="cons" 
-                                            component={this.renderProsCons}
+
+                                        <Field
+                                            label="Group ID"
+                                            name="groupId"
+                                            component={this.renderField}
                                         />
-                                    </FormSection>
-
-                                    <FieldArray name="reference_links" component={this.renderReferenceDetails} />
-                                </FormSection>
-                                
-                                <FieldArray 
-                                    label="Group IDs"
-                                    name="groupIds" 
-                                    component={this.renderGroupIds} 
-                                />
-
-                                <Field
-                                    label="Group ID"
-                                    name="groupId"
-                                    component={this.renderField}
-                                />
-                                
-                                <Button type="submit" variant="outlined" color="primary">Submit</Button>
-                                <Button type="cancel" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                                        
+                                        <Button type="submit" variant="outlined" color="primary">Submit</Button>
+                                        <Button type="cancel" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                                    </Row>
+                                </Grid>
                             </form>
                         </Paper>
                     </div>

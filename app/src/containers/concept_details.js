@@ -286,7 +286,7 @@ class ConceptDetails extends Component {
     renderCardHeader(concept, headerBackground){
         return (<CardHeader
             className="concept-detail-card-header"
-            title={concept.details.title}
+            title={concept.name}
             style={{backgroundColor: headerBackground, background: headerBackground}}
             action={
                 this.props.isAuthenticated && <MenuGroup 
@@ -344,7 +344,7 @@ class ConceptDetails extends Component {
                             {/* Render short_copy or markdown in fullscreen */}
                             <div>
 
-                                {this.state.fullscreen && this.renderFullscreenMarkdown(concept.details.title, headerBackground, md_summary)}
+                                {this.state.fullscreen && this.renderFullscreenMarkdown(concept.name, headerBackground, md_summary)}
 
                                 { !this.state.fullscreen && (<h3>{short_copy}</h3>) }
 

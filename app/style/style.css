@@ -266,6 +266,9 @@ li [class*="MuiSvgIcon"] {
     max-height: 80%;
 }
 
+.delete-button-edit-form {
+    margin-top: 23px !important;
+}
 
 .frame {
     position: fixed;
