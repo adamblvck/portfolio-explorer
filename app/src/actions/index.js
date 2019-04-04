@@ -39,49 +39,55 @@ export function fetchCryptoPrices(symbol) {
 
 export function fetchCoreGroups() {
     const query = `
-        query getAllGroupsAndConcepts {
-            root_groups { # n_depth = 0
+    query getAllGroupsAndConcepts {
+        root_groups { # n_depth = 0
+            id
+            name
+            # used for background colors
+            color 
+            # used for background gradients or pictures
+            background 
+            description
+            # needed for group editing, in case when needed
+            n_depth 
+            # needed for group editing, in case when needed
+            parent_groupId 
+            # needed for top-level bubble_id
+            bubble_id
+            groups { # n_depth = 1
                 id
                 name
-                color # used for background colors
-                background # used for background gradients or pictures
+                color # used for subgroup-title color
                 description
                 n_depth # needed for group editing, in case when needed
                 parent_groupId # needed for group editing, in case when needed
-                groups { # n_depth = 1
+                bubble_id # needed for bubble hierarchymn 
+                concepts {
                     id
                     name
-                    color # used for subgroup-title color
-                    description
-                    n_depth # needed for group editing, in case when needed
-                    parent_groupId # needed for group editing, in case when needed
-                    bubble_id # needed for bubble hierarchymn 
-                    concepts {
-                        id
-                        name
-                        logo_url
-                        meta {
-                            color
-                            symbol
-                        }
-                        details {
-                            summary
-                            mindmap
-                            short_copy
-                            reference_links {
-                                name
-                                 url
-                            }
-                            trade_off {
-                                pros
-                                cons
-                            }
-                        } 
-                        groupIds
+                    logo_url
+                    meta {
+                        color
+                        symbol
                     }
+                    details {
+                        summary
+                        mindmap
+                        short_copy
+                        reference_links {
+                            name
+                                url
+                        }
+                        trade_off {
+                            pros
+                            cons
+                        }
+                    } 
+                    groupIds
                 }
             }
         }
+    }
     `;
 
     const headers = {
@@ -329,7 +335,9 @@ export function addGroup(groupInfo) {
         $n_depth:Int,
         $parent_groupId:ID
     ){
-        addGroup(name:$name,sector:$sector, description:$description,n_depth:$n_depth,parent_groupId:$parent_groupId){
+        addGroup(name:$name,sector:$sector, 
+            description:$description,n_depth:$n_depth,
+            parent_groupId:$parent_groupId){
             name
     }}
     `;
@@ -367,7 +375,10 @@ export function editGroup(groupInfo) {
         $n_depth:Int,
         $parent_groupId:ID
     ){
-        updateGroup(id:$id,name:$name,color:$color, background:$background, sector:$sector, description:$description,n_depth:$n_depth,parent_groupId:$parent_groupId){
+        updateGroup(id:$id,name:$name,color:$color, 
+            background:$background, sector:$sector, 
+            description:$description,n_depth:$n_depth,
+            parent_groupId:$parent_groupId){
             name
     }}
     `;

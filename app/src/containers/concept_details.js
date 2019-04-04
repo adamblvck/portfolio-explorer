@@ -316,7 +316,7 @@ class ConceptDetails extends Component {
         if (concept.details.summary)
             md_summary = markdown.parse(concept.details.summary);
 
-        const { short_copy } = concept.details;
+        const { short_copy, mindmap } = concept.details;
 
         return (<CardContent className="concept-detail-content">
             <Grid>
@@ -365,7 +365,7 @@ class ConceptDetails extends Component {
                     <Col xs={12} md={6}>
                     
                         <Row className="details-column">
-                            <MindmapViewer mindmapData={short_copy}/>
+                            <MindmapViewer mindmapData={mindmap}/>
                         </Row>
 
                         <Row className="details-column">
