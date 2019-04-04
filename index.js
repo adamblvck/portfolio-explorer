@@ -28,6 +28,10 @@ const server = hapi.server({
     port: process.env.PORT || 4000
 });
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
 mongoose.connect(MONGO_URI);
 
 mongoose.connection.once('open', () => {
@@ -68,16 +72,18 @@ const init = async() => {
     server.auth.default('jwt');
 
     // register GraphiQL, points to /graphql
-    // await server.register({
-    //     plugin: graphiqlHapi,
-    //     options: {
-    //         path: '/graphiql',
-    //         graphiqlOptions: {
-    //             endpointURL: '/graphql'
-    //         },
-    //         route: { cors: true }
-    //     }
-    // });
+    await server.register({
+        plugin: graphiqlHapi,
+        options: {
+            path: '/graphiql',
+            header: {Authorization: "FvRkxz6HXjfD-d61-Iiiv5OA9Nllwmfn",
+                    'content-type': 'application/json'},
+            graphiqlOptions: {
+                endpointURL: '/graphql'
+            },
+            route: { cors: true, auth: { mode: 'optional' }  }
+        }
+    });
 
     // register GraphQL
     await server.register({
@@ -92,7 +98,7 @@ const init = async() => {
             },
             // optional means that the request should have either a valid 
             // Authentication header, or none at all
-            route: { cors: true, auth: { mode: 'optional' } }
+            route: { cors: true, auth: { mode: 'optional' } } // put on optional!
         },
     });
 
