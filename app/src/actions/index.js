@@ -55,6 +55,7 @@ export function fetchCoreGroups() {
                     description
                     n_depth # needed for group editing, in case when needed
                     parent_groupId # needed for group editing, in case when needed
+                    bubble_id # needed for bubble hierarchymn 
                     concepts {
                         id
                         name
@@ -75,7 +76,7 @@ export function fetchCoreGroups() {
                                 pros
                                 cons
                             }
-                        }
+                        } 
                         groupIds
                     }
                 }
@@ -227,7 +228,6 @@ export function updateConcept(updatedConceptInfo) {
         $logo_url: String,
         $meta: MetaInput,
         $details: ConceptDetailInput,
-        $groupId: String,
         $groupIds: [String]
     ) {
         updateConcept(
@@ -236,7 +236,6 @@ export function updateConcept(updatedConceptInfo) {
             logo_url:$logo_url,
             meta:$meta,
             details:$details,
-            groupId:$groupId,
             groupIds:$groupIds
         ) {
             id

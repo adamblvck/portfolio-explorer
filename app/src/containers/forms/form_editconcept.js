@@ -257,19 +257,16 @@ class FormEditConcept extends Component {
                                         </Col>
                                     </Row>
 
-
-                                    
-
                                         <FormSection name="details">
                                             <Row>
                                                 <Field
-                                                    label="Title"
-                                                    name="title"
-                                                    component={this.renderField}
-                                                />
-                                                <Field
                                                     label="Short Copy"
                                                     name="short_copy"
+                                                    component={this.renderTextField}
+                                                />
+                                                <Field
+                                                    label="Mind Map"
+                                                    name="mindmap"
                                                     component={this.renderTextField}
                                                 />
                                                 <Field
@@ -306,12 +303,6 @@ class FormEditConcept extends Component {
                                             label="Group IDs"
                                             name="groupIds" 
                                             component={this.renderGroupIds} 
-                                        />
-
-                                        <Field
-                                            label="Group ID"
-                                            name="groupId"
-                                            component={this.renderField}
                                         />
                                         
                                         <Button type="submit" variant="outlined" color="primary">Submit</Button>
