@@ -52,8 +52,8 @@ const MetaInputType = new GraphQLInputObjectType({
 const ConceptDetailType = new GraphQLObjectType({
     name: 'ConceptDetail',
     fields: () => ({
-        title: { type: GraphQLString},
         summary: { type: GraphQLString},
+        mindmap: { type: GraphQLString},
         short_copy: { type: GraphQLString},
         reference_links: { type: new GraphQLList(LinkType)},
         trade_off: { type: TradeOffType}
@@ -63,8 +63,8 @@ const ConceptDetailType = new GraphQLObjectType({
 const ConceptDetailInputType = new GraphQLInputObjectType({
     name: 'ConceptDetailInput',
     fields: () => ({
-        title: { type: GraphQLString},
         summary: { type: GraphQLString},
+        mindmap: { type: GraphQLString},
         short_copy: { type: GraphQLString},
         reference_links: { type: new GraphQLList(LinkInputType)},
         trade_off: { type: TradeOffInputType}
@@ -118,10 +118,9 @@ const ConceptType = new GraphQLObjectType({
             type: GroupType,
             resolve(parent, args){
                 // return Group with id=concept.id (= parent)
-                return Group.findById(parent.groupId);
+                return Group.findById(parent.groupIds);
             }
         },
-        groupId: { type: GraphQLID},
         groupIds: { type: new GraphQLList(GraphQLID)}
     })
 });

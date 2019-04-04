@@ -43,7 +43,6 @@ export function fetchCoreGroups() {
             root_groups { # n_depth = 0
                 id
                 name
-                sector
                 color # used for background colors
                 background # used for background gradients or pictures
                 description
@@ -52,7 +51,6 @@ export function fetchCoreGroups() {
                 groups { # n_depth = 1
                     id
                     name
-                    sector
                     color # used for subgroup-title color
                     description
                     n_depth # needed for group editing, in case when needed
@@ -66,8 +64,8 @@ export function fetchCoreGroups() {
                             symbol
                         }
                         details {
-                            title
                             summary
+                            mindmap
                             short_copy
                             reference_links {
                                 name
@@ -78,7 +76,6 @@ export function fetchCoreGroups() {
                                 cons
                             }
                         }
-                        groupId
                         groupIds
                     }
                 }
@@ -118,8 +115,8 @@ export function fetchAndShowConceptDetails(conceptInfo) {
                     symbol
                 }
                 details {
-                    title
                     summary
+                    mindmap
                     short_copy
                     reference_links {
                         name
@@ -184,8 +181,8 @@ export function addConcept(conceptInfo) {
                     symbol
                 }
                 details{
-                    title
                     summary
+                    mindmap
                     short_copy
                     reference_links {
                         name
@@ -250,8 +247,8 @@ export function updateConcept(updatedConceptInfo) {
                 symbol
             }
             details{
-                title
                 summary
+                mindmap
                 short_copy
                 reference_links {
                     name

@@ -16,8 +16,8 @@ var ConceptSchema = new Schema({
         symbol: String
     },
     details: {
-        title: String,
         summary: String,
+        mindmap: String,
         short_copy: String,
         reference_links: [ {
             name: String,
@@ -28,7 +28,6 @@ var ConceptSchema = new Schema({
             cons: [String],
         }
     },
-    groupId: String, // link to group,
     groupIds: [String]  // links to many group,
 });
 
