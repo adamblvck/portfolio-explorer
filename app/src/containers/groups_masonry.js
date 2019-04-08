@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-// Actions
-import { fetchConcepts, fetchCoreGroups, deleteGroup } from '../actions';
+// Actions performed in GroupsMasonry
+import { fetchConcepts, fetchCoreGroups, deleteGroup, fetchBubbleGroups } from '../actions';
 
+// Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 // Material Design Graphics
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardMedia, CardActions, Button, withStyles, Typography, CardHeader, MenuItem } from '@material-ui/core';
+import { Card, CardContent, withStyles, CardHeader, MenuItem } from '@material-ui/core';
 
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
@@ -44,7 +45,11 @@ class GroupsMasonry extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchCoreGroups();
+        // this.props.fetchCoreGroups();
+
+        console.log(this.props);
+
+        this.props.fetchBubbleGroups("5ca71c5a07f13235edeebdcc");
     }
 
     /* 
@@ -283,5 +288,5 @@ GroupsMasonry.propTypes = {
 };
   
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchConcepts, fetchCoreGroups, deleteGroup })(GroupsMasonry)
+    connect(mapStateToProps, { fetchConcepts, fetchCoreGroups, fetchBubbleGroups, deleteGroup })(GroupsMasonry)
 );

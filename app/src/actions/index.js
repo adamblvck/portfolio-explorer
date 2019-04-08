@@ -5,6 +5,7 @@ export const FETCH_CRYPTO_PRICES = 'fetch_crypto'
 
 export const FETCH_CONCEPTS = 'fetch_concepts';
 export const FETCH_ROOT_GROUPS_AND_CONCEPTS = 'fetch_rootgroup_and_concepts';
+export const FETCH_BUBBLE_GROUPS = 'fetch_bubble_groups';
 
 export const SHOW_CONCEPT_DETAIL = 'show_concept_detail';
 
@@ -34,6 +35,79 @@ export function fetchCryptoPrices(symbol) {
     return {
         type: FETCH_CRYPTO_PRICES,
         payload: request
+    }
+}
+
+export function fetchBubbleGroups(bubble_id) {
+    const query = `
+    query getBubbleGroups {
+        bubble_groups (bubble_id:"${bubble_id}") { # n_depth = 0
+            id
+            name
+            # used for background colors
+            color 
+            # used for background gradients or pictures
+            background 
+            description
+            # needed for group editing, in case when needed
+            n_depth 
+            # needed for group editing, in case when needed
+            parent_groupId 
+            # needed for top-level bubble_id
+            bubble_id # needed for bubble hierarchymn 
+            groups { # n_depth = 1 (subgroups of group)
+                id
+                name
+                color # used for subgroup-title color
+                description
+                n_depth # needed for group editing, in case when needed
+                parent_groupId # needed for group editing, in case when needed
+                bubble_id # used for bubble hierarchymn 
+                concepts {
+                    id
+                    name
+                    logo_url
+                    meta {
+                        color
+                        symbol
+                    }
+                    details {
+                        summary
+                        mindmap
+                        short_copy
+                        reference_links {
+                            name
+                                url
+                        }
+                        trade_off {
+                            pros
+                            cons
+                        }
+                    } 
+                    groupIds
+                }
+            }
+        }
+    }
+    `;
+
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data:{
+            query: query
+        },
+        headers: localStorage.getItem('is_authenticated')? headers: {}
+    });
+
+    return {
+        type: FETCH_BUBBLE_GROUPS,
+        payload: request//payload
     }
 }
 
@@ -373,12 +447,14 @@ export function editGroup(groupInfo) {
         $background:String,
         $description:String,
         $n_depth:Int,
-        $parent_groupId:ID
+        $parent_groupId:ID,
+        $bubble_id:ID
     ){
         updateGroup(id:$id,name:$name,color:$color, 
             background:$background, sector:$sector, 
             description:$description,n_depth:$n_depth,
-            parent_groupId:$parent_groupId){
+            parent_groupId:$parent_groupId,
+            bubble_id:$bubble_id){
             name
     }}
     `;

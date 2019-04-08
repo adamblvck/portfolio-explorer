@@ -107,11 +107,6 @@ class FormEditGroup extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
-                                    label="Sector"
-                                    name="sector"
-                                    component={this.renderField}
-                                />
-                                <Field
                                     label="Color"
                                     name="color"
                                     component={this.renderField}
@@ -136,7 +131,11 @@ class FormEditGroup extends Component {
                                     name="parent_groupId"
                                     component={this.renderField}
                                 />
-                                
+                                <Field
+                                    label="Bubble  ID"
+                                    name="bubble_id"
+                                    component={this.renderField}
+                                />
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
                                 <Button type="cancel" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
                             </form>

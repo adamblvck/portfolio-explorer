@@ -48,7 +48,7 @@ ReactDOM.render(
         <Provider store={createStoreWithMiddleware(reducers)}>
         <Router history={history}>
             <div>
-                <Switch>
+                <Switch>  {/* Switch matches only a single Route */}
                     <Route 
                         path="/callback" 
                         render={(props) => {

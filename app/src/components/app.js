@@ -57,8 +57,6 @@ export default class App extends Component {
                     </Toolbar>
                 </AppBar>
 
-                
-
                 <div className="groups-masonry">
                     <GroupsMasonry isAuthenticated={isAuthenticated()}/>
                 </div>

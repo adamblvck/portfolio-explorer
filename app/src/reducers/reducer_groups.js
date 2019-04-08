@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions';
+import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, ADD_GROUP, EDIT_GROUP, DELETE_GROUP, FETCH_BUBBLE_GROUPS} from '../actions';
 
 // goes into subgroups of every groups and performs another id sorting thingy on it :)
 function mapKeysRecursive(root_groups){
@@ -42,19 +42,37 @@ function handleErrors(response){
 }
 
 export default function (state = {}, action) {
-
+    // because we're returning in each switch
+    // we don't need a break in each case statement
     switch(action.type) {
+
+        // QUERIES
+
+        case FETCH_BUBBLE_GROUPS:
+
+            console.log("bubble group reducing");
+            console.log(action);
+
+            return mapKeysRecursive(action.payload.data.data.bubble_groups);
+
         case FETCH_CONCEPTS:
             return _.mapKeys(action.payload.data.data.groups, 'id');
+
         case FETCH_ROOT_GROUPS_AND_CONCEPTS:
             return mapKeysRecursive(action.payload.data.data.root_groups);
+
+        // MUTATIONS
+
         case ADD_GROUP:
             return parseResponse(state, action);
         case EDIT_GROUP:
             return parseResponse(state, action);
         case DELETE_GROUP:
             return parseResponse(state, action);
+
+        // CATCH UNKNOWNS
         default:
+            console.log("Groups reducer received unkown action type")
             return state;
     }
 }
