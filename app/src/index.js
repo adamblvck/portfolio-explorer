@@ -15,7 +15,8 @@ import { Route, Router, BrowserRouter, Switch} from 'react-router-dom';
 
 import reducers from './reducers';
 
-import App from './components/app';
+import Bubble from './components/bubble';
+import BubbleOverview from './components/bubbles_overview';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';
@@ -48,17 +49,27 @@ ReactDOM.render(
         <Provider store={createStoreWithMiddleware(reducers)}>
         <Router history={history}>
             <div>
-                <Switch>  {/* Switch matches only a single Route */}
+                {/* Switch matches only a single Route */}
+                <Switch> 
+                    {/* callback for auth */}
                     <Route 
                         path="/callback" 
                         render={(props) => {
                             handleAuthentication(props);
                             return <Callback {...props} />
                     }}/>
+                    {/* Show specific bubble */}
+                    <Route 
+                        path="/b/:id" 
+                        render={
+                            (props) => <Bubble auth={auth} {...props} />
+                        }    
+                    />
+                    {/* Show bubbles */}
                     <Route 
                         path="/" 
                         render={
-                            (props) => <App auth={auth} {...props} />
+                            (props) => <BubbleOverview auth={auth} {...props} />
                         }    
                     />
                 </Switch>

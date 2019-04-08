@@ -15,12 +15,16 @@ import { Button } from '@material-ui/core';
 
 import Auth from '../auth/auth';
 
-export default class App extends Component {
+export default class Bubble extends Component {
     constructor(props){
         super(props);
 
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+    }
+
+    componentDidMount(){
+        console.log(this.props);
     }
 
     handleLogin() {
@@ -68,11 +72,9 @@ export default class App extends Component {
                     style={{
                         width: '100%'
                     }}
-                >
+                />
 
-                </Particles>
             </div>
 		);
 	}
 }
-
