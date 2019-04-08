@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
+// Navigation to different Router Links
 import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+
+// Import material-design toolbar
+import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
 
 export default class BubblesOverview extends Component {
     constructor(props){
@@ -12,14 +15,46 @@ export default class BubblesOverview extends Component {
         
     }
 
+    renderAppBar(isAuthenticated){
+
+        return (
+            <AppBar className="menubar">
+                    <Toolbar>
+                        <Typography variant="title" className="menubar-header">
+                            Data Bubbles
+                        </Typography>
+
+                        {
+                            isAuthenticated() && (
+                                <Button onClick={this.handleLogout} > Logout </Button>
+                            )
+                        }
+
+                        {
+                            !isAuthenticated() && (
+                                <Button onClick={this.handleLogin} > Login </Button>
+                            )
+                        }
+                    </Toolbar>
+                </AppBar>
+        );
+    }
+
     render(){
+        const { isAuthenticated } = this.props.auth; // function inside auth to check if logged in
+
         return (
             <div>
-                <Link to="/b/blockchain">
-                    <Button type="button" color="primary">
-                        Blockchain
-                    </Button>
-                </Link>
+                {/* Toolbar */}
+                {this.renderAppBar(isAuthenticated)}
+
+                <div className="groups-masonry">
+                    <Link to="/b/blockchain">
+                        <Button type="button">
+                            Blockchain
+                        </Button>
+                    </Link>
+                </div>
             </div>
         )
     }
