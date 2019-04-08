@@ -23,6 +23,9 @@ import history from './history';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
+// Stylish background 
+import Particles from 'react-particles-js';
+import particlesConfig from '../configs/particlesjs-config';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
@@ -77,5 +80,14 @@ ReactDOM.render(
         </Router>
 
         </Provider>
+
+        <Particles
+                    className="particle-background"
+                    params={particlesConfig}
+                    style={{
+                        width: '100%'
+                    }}
+                />
+
     </MuiThemeProvider>
     , document.querySelector('.container'));

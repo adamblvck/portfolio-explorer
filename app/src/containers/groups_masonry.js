@@ -45,11 +45,7 @@ class GroupsMasonry extends Component {
     }
 
     componentDidMount() {
-        // this.props.fetchCoreGroups();
-
-        console.log(this.props);
-
-        this.props.fetchBubbleGroups("5ca71c5a07f13235edeebdcc");
+        this.props.fetchBubbleGroups(this.props.bubbleID);
     }
 
     /* 

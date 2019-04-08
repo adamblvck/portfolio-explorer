@@ -3,17 +3,9 @@ import React, { Component } from 'react';
 // Core components, containing and rendering Groups
 import GroupsMasonry from '../containers/groups_masonry';
 
-// Stylish background 
-import Particles from 'react-particles-js';
-import particlesConfig from '../../configs/particlesjs-config';
-
 // Import material-design toolbar
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { Button } from '@material-ui/core';
-
-import Auth from '../auth/auth';
+import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 export default class Bubble extends Component {
     constructor(props){
@@ -21,6 +13,8 @@ export default class Bubble extends Component {
 
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+
+        this.bubbleID = "5ca71c5a07f13235edeebdcc";
     }
 
     componentDidMount(){
@@ -36,13 +30,18 @@ export default class Bubble extends Component {
         this.forceUpdate();
     }
 
-	render() {
-        const { isAuthenticated } = this.props.auth; // function inside auth to check if logged in
+    renderAppBar(isAuthenticated){
 
-		return (
-            <div>
-                <AppBar className="menubar">
+        return (
+            <AppBar className="menubar">
                     <Toolbar>
+
+                        <Link to="/">
+                            <Button type="button">
+                                Home
+                            </Button>
+                        </Link>
+
                         <Typography variant="title" className="menubar-header">
                             Blockchain Ecosystem
                         </Typography>
@@ -60,19 +59,21 @@ export default class Bubble extends Component {
                         }
                     </Toolbar>
                 </AppBar>
+        );
+    }
 
+	render() {
+        const { isAuthenticated } = this.props.auth; // function inside auth to check if logged in
+
+		return (
+            <div>
+                {/* Toolbar */}
+                {this.renderAppBar(isAuthenticated)}
+
+                {/* Groups Overview */}
                 <div className="groups-masonry">
-                    <GroupsMasonry isAuthenticated={isAuthenticated()}/>
+                    <GroupsMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID} />
                 </div>
-
-                {/* TODO: Optimize further after done programming */}
-                <Particles
-                    className="particle-background"
-                    params={particlesConfig}
-                    style={{
-                        width: '100%'
-                    }}
-                />
 
             </div>
 		);
