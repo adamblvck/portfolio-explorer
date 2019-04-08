@@ -5,6 +5,8 @@ import GroupsMasonry from '../containers/groups_masonry';
 
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
+
+// Navigation to different Router Links
 import { Link } from 'react-router-dom';
 
 export default class Bubble extends Component {
