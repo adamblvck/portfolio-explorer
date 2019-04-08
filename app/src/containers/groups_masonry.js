@@ -261,10 +261,10 @@ class GroupsMasonry extends Component {
                 { this.renderMasonry() }
                 
                 {/* Holds concept details form */}
-                <ConceptDetails 
+                {/* <ConceptDetails 
                     id="concept-detail-popper"
                     isAuthenticated={this.props.isAuthenticated}
-                />
+                /> */}
             </div>
         );
 

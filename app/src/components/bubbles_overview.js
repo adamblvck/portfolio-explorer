@@ -19,9 +19,15 @@ export default class BubblesOverview extends Component {
 
         return (
             <AppBar className="menubar">
-                    <Toolbar>
+                    <Toolbar className="toolbar">
+                        <Link to="/">
+                            <Button type="button">
+                                About
+                            </Button>
+                        </Link>
+
                         <Typography variant="title" className="menubar-header">
-                            Data Bubbles
+                            Bubbles
                         </Typography>
 
                         {

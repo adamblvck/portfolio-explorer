@@ -26,9 +26,13 @@ body {
 .menubar {
     background-color: transparent !important;
     box-shadow: none !important;
-    height: 64px;
+    min-height: 64px !important;
 
     position: absolute !important;
+}
+
+.toolbar{
+    height: 80px;
 }
 
 .menubar-header {
@@ -38,7 +42,8 @@ body {
     font-weight: 500 !important;
     font-size: 1.5rem !important;
 
-    margin-left: 74px !important;
+    margin-left: 0px !important;
+    margin-top: 3px !important;
 }
 
 /* Groups */

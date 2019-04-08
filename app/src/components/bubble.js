@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 // Core components, containing and rendering Groups
 import GroupsMasonry from '../containers/groups_masonry';
+import ConceptDetails from '../containers/concept_details';
 
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
@@ -36,7 +37,7 @@ export default class Bubble extends Component {
 
         return (
             <AppBar className="menubar">
-                    <Toolbar>
+                    <Toolbar className="toolbar">
 
                         <Link to="/">
                             <Button type="button">
@@ -45,7 +46,7 @@ export default class Bubble extends Component {
                         </Link>
 
                         <Typography variant="title" className="menubar-header">
-                            Blockchain Ecosystem
+                            /b/Blockchain
                         </Typography>
 
                         {
@@ -76,6 +77,12 @@ export default class Bubble extends Component {
                 <div className="groups-masonry">
                     <GroupsMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID} />
                 </div>
+
+                {/* Holds concept details form */}
+                <ConceptDetails 
+                    id="concept-detail-popper"
+                    isAuthenticated={isAuthenticated}
+                />
 
             </div>
 		);
