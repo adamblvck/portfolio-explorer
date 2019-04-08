@@ -94,6 +94,19 @@ body {
     display: block;
 }
 
+/* Animate shadows on hover */
+.concept-item{
+    box-shadow: 0 0px 0px rgba(0,0,0,0.15);
+    transition: box-shadow 0.21s ease-in-out;
+    cursor: pointer;
+}
+
+.concept-item:hover{
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+
+
 .concept-item-header {
     padding: 0px !important;
     text-align: center;
@@ -230,6 +243,11 @@ li [class*="MuiSvgIcon"] {
 
 .concept-detail-content h3 {
     font-size: 18px;
+}
+
+concept-short-copy-header {
+    font-size: 16px;
+    font-weight: 200;
 }
 
 .trade-off-icon {

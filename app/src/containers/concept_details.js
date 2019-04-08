@@ -346,7 +346,7 @@ class ConceptDetails extends Component {
 
                                 {this.state.fullscreen && this.renderFullscreenMarkdown(concept.name, headerBackground, md_summary)}
 
-                                { !this.state.fullscreen && (<h3>{short_copy}</h3>) }
+                                { !this.state.fullscreen && (<h3 className="concept-short-copy-header">{short_copy}</h3>) }
 
                             </div>
                             <div
