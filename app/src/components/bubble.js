@@ -17,11 +17,12 @@ export default class Bubble extends Component {
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
 
-        this.bubbleID = "5ca71c5a07f13235edeebdcc";
+        if (this.props.match.params)
+            this.bubbleID = this.props.match.params['id'];
     }
 
     componentDidMount(){
-        console.log(this.props);
+        
     }
 
     handleLogin() {

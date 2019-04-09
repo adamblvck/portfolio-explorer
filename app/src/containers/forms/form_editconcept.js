@@ -259,39 +259,45 @@ class FormEditConcept extends Component {
 
                                         <FormSection name="details">
                                             <Row>
-                                                <Field
-                                                    label="Short Copy"
-                                                    name="short_copy"
-                                                    component={this.renderTextField}
-                                                />
-                                                <Field
-                                                    label="Mind Map"
-                                                    name="mindmap"
-                                                    component={this.renderTextField}
-                                                />
-                                                <Field
-                                                    label="Summary"
-                                                    name="summary"
-                                                    component={this.renderTextField}
-                                                />
+                                                <Col md={2}/>
+
+                                                <Col md={10}>
+                                                    <Field
+                                                        label="Short Copy"
+                                                        name="short_copy"
+                                                        component={this.renderTextField}
+                                                    />
+                                                    <Field
+                                                        label="Mind Map"
+                                                        name="mindmap"
+                                                        component={this.renderTextField}
+                                                    />
+                                                    <Field
+                                                        label="Summary"
+                                                        name="summary"
+                                                        component={this.renderTextField}
+                                                    />
+                                                </Col>
                                             </Row>
                                             <Row>
-                                                <FormSection name="trade_off">
-                                                    <Col md={6}>
-                                                        <FieldArray 
-                                                            label="Pro's"
-                                                            name="pros" 
-                                                            component={this.renderProsCons}
-                                                        />
-                                                    </Col>
-                                                    <Col md={6}>
-                                                        <FieldArray 
-                                                            label="Con's"
-                                                            name="cons" 
-                                                            component={this.renderProsCons}
-                                                        />
-                                                    </Col>
-                                                </FormSection>
+                                                <Col>
+                                                    <FormSection name="trade_off">
+                                                        <Col md={6}>
+                                                            <FieldArray 
+                                                                label="Pro's"
+                                                                name="pros" 
+                                                                component={this.renderProsCons}
+                                                            />
+                                                        </Col>
+                                                        <Col md={6}>
+                                                            <FieldArray 
+                                                                label="Con's"
+                                                                name="cons" 
+                                                                component={this.renderProsCons}
+                                                            />
+                                                        </Col>
+                                                    </FormSection>
+                                                </Col>
                                             </Row>
                                             <Row>
                                                 <FieldArray name="reference_links" component={this.renderReferenceDetails} />
