@@ -16,7 +16,7 @@ import { Route, Router, BrowserRouter, Switch} from 'react-router-dom';
 import reducers from './reducers';
 
 import Bubble from './components/bubble';
-import BubbleOverview from './components/bubbles_overview';
+import BubbleOverview from './containers/bubbles_overview';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';

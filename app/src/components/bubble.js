@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
+// actions used in the bubles
+
 // Core components, containing and rendering Groups
-import GroupsMasonry from '../containers/groups_masonry';
+import BubbleMasonry from '../containers/bubble_masonry';
 import ConceptDetails from '../containers/concept_details';
 
 // Import material-design toolbar
@@ -17,12 +19,14 @@ export default class Bubble extends Component {
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
 
+        this.bubbleID = "blockchains"
+
         if (this.props.match.params)
             this.bubbleID = this.props.match.params['id'];
     }
 
     componentDidMount(){
-        
+
     }
 
     handleLogin() {
@@ -47,7 +51,7 @@ export default class Bubble extends Component {
                         </Link>
 
                         <Typography variant="title" className="menubar-header">
-                            /b/Blockchain
+                            /b/{this.bubbleID}
                         </Typography>
 
                         {
@@ -76,7 +80,7 @@ export default class Bubble extends Component {
 
                 {/* Groups Overview */}
                 <div className="groups-masonry">
-                    <GroupsMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID} />
+                    <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID} />
                 </div>
 
                 {/* Holds concept details form */}

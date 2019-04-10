@@ -70,9 +70,8 @@ export default function (state = {}, action) {
         case DELETE_GROUP:
             return parseResponse(state, action);
 
-        // CATCH UNKNOWNS
+        // CATCH NO ACTIONS
         default:
-            console.log("Groups reducer received unkown action type")
             return state;
     }
 }

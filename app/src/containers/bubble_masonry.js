@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-// Actions performed in GroupsMasonry
-import { fetchConcepts, fetchCoreGroups, deleteGroup, fetchBubbleGroups } from '../actions';
+// Actions performed in Bubble Masonry
+import { fetchConcepts, deleteGroup, fetchBubbleGroups } from '../actions';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -14,7 +14,6 @@ import { Card, CardContent, withStyles, CardHeader, MenuItem } from '@material-u
 
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
-import ConceptDetails from './concept_details';
 
 // Forms
 import FormAddConcept from './forms/form_addconcept';
@@ -37,7 +36,7 @@ const styles = {
     }
 };
 
-class GroupsMasonry extends Component {
+class BubbleMasonry extends Component {
     constructor(props) {
         super(props);
 
@@ -179,58 +178,53 @@ class GroupsMasonry extends Component {
         });
     }
 
-    renderGroups() {
+    renderCard(group){
         const { classes } = this.props;
 
+        return (
+            <Card className={classes.card} key={group.id} elevation={3}>
+                <CardHeader
+                    action={
+                        this.props.isAuthenticated  && <MenuGroup 
+                            className="groupmenu-btn"
+                            isAuthenticated={this.props.isAuthenticated}
+                            components={ [
+                                {
+                                    label:"Add Subgroup",
+                                    parent_groupId:group.id,
+                                    needAuth: true,
+                                    render:this.renderFormAddGroup
+                                },
+                                {
+                                    label:"Edit Group",
+                                    parent_groupId:group.id,
+                                    needAuth: true,
+                                    render:this.renderFormEditGroup,
+                                    group:group
+                                }
+                            ]}
+                        />
+                    }
+                    title={group.name}
+                    subheader={group.description}
+                    style={{backgroundColor: group.color, background: group.background}}
+                    className='RootGroupHeader'
+                />
+
+                <CardContent className={classes.content}>
+                    {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
+                </CardContent>
+                
+            </Card>
+        );
+    }
+
+    renderGroups() {
         return _.map(this.props.groups, group => {
             return (
-                <Card 
-                    className={classes.card} 
-                    key={group.id}
-                    elevation={3}>
-
-
-                    <CardHeader
-                        action={
-                            this.props.isAuthenticated  && <MenuGroup 
-                                className="groupmenu-btn"
-                                isAuthenticated={this.props.isAuthenticated}
-                                components={ [
-                                    {
-                                        label:"Add Subgroup",
-                                        parent_groupId:group.id,
-                                        needAuth: true,
-                                        render:this.renderFormAddGroup
-                                    },
-                                    {
-                                        label:"Edit Group",
-                                        parent_groupId:group.id,
-                                        needAuth: true,
-                                        render:this.renderFormEditGroup,
-                                        group:group
-                                    }
-                                ]}
-                            />
-                        }
-                        title={group.name}
-                        subheader={group.description}
-                        style={{backgroundColor: group.color, background: group.background}}
-                        className='RootGroupHeader'
-                    />
-
-                    <CardContent className={classes.content}>
-                        {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
-                    </CardContent>
-                    
-                    {/* <CardActions>
-                        <FormAddGroup 
-                            n_depth={1}
-                            parent_groupId={group.id}
-                            addButtonText="Add Subgroup"
-                        />
-                    </CardActions> */}
-                    
-                </Card>
+                <div>
+                    {this.renderCard(group)}
+                </div>
             );
         });
     }
@@ -240,9 +234,7 @@ class GroupsMasonry extends Component {
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
-                <Masonry
-                    gutter="0 auto 0 auto"
-                >
+                <Masonry gutter="0 auto 0 auto">
                     {this.renderGroups()}
                     <FormAddGroup 
                         n_depth={0}
@@ -259,12 +251,6 @@ class GroupsMasonry extends Component {
             <div>
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
                 { this.renderMasonry() }
-                
-                {/* Holds concept details form */}
-                {/* <ConceptDetails 
-                    id="concept-detail-popper"
-                    isAuthenticated={this.props.isAuthenticated}
-                /> */}
             </div>
         );
 
@@ -274,15 +260,14 @@ class GroupsMasonry extends Component {
 function mapStateToProps (state) {
     return { 
         groups: state.groups,
-        // activeConcept: state.activeConcept
     };
 }
 
 // export default connect(mapStateToProps, { fetchConcepts })(GroupsMasonry);
-GroupsMasonry.propTypes = {
+BubbleMasonry.propTypes = {
     classes: PropTypes.object.isRequired,
 };
   
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchConcepts, fetchCoreGroups, fetchBubbleGroups, deleteGroup })(GroupsMasonry)
+    connect(mapStateToProps, { fetchConcepts, fetchBubbleGroups, deleteGroup })(BubbleMasonry)
 );

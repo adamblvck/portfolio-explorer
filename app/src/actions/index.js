@@ -3,6 +3,7 @@ import axios from 'axios';
 // action types
 export const FETCH_CRYPTO_PRICES = 'fetch_crypto'
 
+export const FETCH_BUBBLES = "fetch_bubbles";
 export const FETCH_CONCEPTS = 'fetch_concepts';
 export const FETCH_ROOT_GROUPS_AND_CONCEPTS = 'fetch_rootgroup_and_concepts';
 export const FETCH_BUBBLE_GROUPS = 'fetch_bubble_groups';
@@ -36,6 +37,40 @@ export function fetchCryptoPrices(symbol) {
         type: FETCH_CRYPTO_PRICES,
         payload: request
     }
+}
+
+export function fetchBubbles() {
+    // FETCH_BUBBLES
+    const query = `
+        query getBubbles {
+            bubbles{
+              id
+              name
+              color
+              background
+              description
+            }
+        }
+    `;
+
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data: {
+            query: query
+        },
+        headers: localStorage.getItem('is_authenticated')? headers: {}
+    });
+
+    return {
+        type: FETCH_BUBBLES,
+        payload: request
+    };
 }
 
 export function fetchBubbleGroups(bubble_id) {
