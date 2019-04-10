@@ -56,7 +56,7 @@ const RootQuery = new GraphQLObjectType({
         },
 
         bubbles: {
-            type: new GraphQLList(GroupType),
+            type: new GraphQLList(BubbleType),
             resolve(parent, args){
                 // return where n_depth=0 and bubble_id matches the one in arg
                 return Bubble.find();
