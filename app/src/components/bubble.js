@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-// actions used in the bubles
-
 // Core components, containing and rendering Groups
 import BubbleMasonry from '../containers/bubble_masonry';
 import ConceptDetails from '../containers/concept_details';

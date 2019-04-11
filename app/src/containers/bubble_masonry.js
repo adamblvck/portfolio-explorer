@@ -182,7 +182,7 @@ class BubbleMasonry extends Component {
         const { classes } = this.props;
 
         return (
-            <Card className={classes.card} key={group.id} elevation={3}>
+            <Card className={classes.card} elevation={3}>
                 <CardHeader
                     action={
                         this.props.isAuthenticated  && <MenuGroup 
@@ -212,9 +212,8 @@ class BubbleMasonry extends Component {
                 />
 
                 <CardContent className={classes.content}>
-                    {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
+                    {/* {this.renderSubgroups({...group, rootColor: group.color, background: group.background})} */}
                 </CardContent>
-                
             </Card>
         );
     }
@@ -222,7 +221,7 @@ class BubbleMasonry extends Component {
     renderGroups() {
         return _.map(this.props.groups, group => {
             return (
-                <div>
+                <div key={group.id}>
                     {this.renderCard(group)}
                 </div>
             );

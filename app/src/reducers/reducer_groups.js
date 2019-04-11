@@ -62,7 +62,6 @@ export default function (state = {}, action) {
             return mapKeysRecursive(action.payload.data.data.root_groups);
 
         // MUTATIONS
-
         case ADD_GROUP:
             return parseResponse(state, action);
         case EDIT_GROUP:

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import _ from 'lodash';
+
 // Actions performed in Bubble Masonry
 import { fetchBubbles } from '../actions';
 
@@ -86,18 +88,21 @@ class BubblesOverview extends Component {
     renderCard(bubble){
         const { classes } = this.props;
 
+        const default_background = "linear-gradient(45deg, rgb(40, 48, 72), rgb(133, 147, 152))"
+        const background_color =  default_background; //bubble.color ? bubble.background : default_background;
+
+        const link_to_bubble = `/b/${bubble.name}`;
+
         return (
             <Card className={classes.card} elevation={3}>
                 <CardHeader
-                    className='RootGroupHeader'
-                    subheader={bubble.description}
-                    style={{backgroundColor: bubble.color, background: bubble.background}}
                     title={bubble.name}
+                    subheader={bubble.description}
+                    style={{backgroundColor: background_color, background: background_color}}
+                    className='RootGroupHeader'
                 />
                 <CardContent className={classes.content}>
-                    {bubble.description}
-
-                    <Link to="/b/blockchain">
+                    <Link to={link_to_bubble}>
                         <Button type="button">
                             {bubble.name}
                         </Button>
@@ -105,7 +110,7 @@ class BubblesOverview extends Component {
 
                 </CardContent>
             </Card>
-        )
+        );
     }
 
     renderBubbles(){
@@ -145,13 +150,6 @@ class BubblesOverview extends Component {
 
                 {/* Holds the overview of all bubbles*/}
                 { this.renderMasonry() }
-
-                
-                <Link to="/b/blockchain">
-                    <Button type="button">
-                        Blockchain
-                    </Button>
-                </Link>
             </div>
         )
     }
