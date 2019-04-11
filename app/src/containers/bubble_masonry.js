@@ -212,7 +212,7 @@ class BubbleMasonry extends Component {
                 />
 
                 <CardContent className={classes.content}>
-                    {/* {this.renderSubgroups({...group, rootColor: group.color, background: group.background})} */}
+                    {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
                 </CardContent>
             </Card>
         );
@@ -257,6 +257,9 @@ class BubbleMasonry extends Component {
 }
 
 function mapStateToProps (state) {
+
+    console.log(state);
+
     return { 
         groups: state.groups,
     };

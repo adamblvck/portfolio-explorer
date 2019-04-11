@@ -9,6 +9,7 @@ export const FETCH_ROOT_GROUPS_AND_CONCEPTS = 'fetch_rootgroup_and_concepts';
 export const FETCH_BUBBLE_GROUPS = 'fetch_bubble_groups';
 
 export const SHOW_CONCEPT_DETAIL = 'show_concept_detail';
+export const FETCH_AND_SHOW_CONCEPT_DETAIL = 'fetch_and_show_concept_detail';
 
 export const ADD_CONCEPT = 'add_concept';
 export const UPDATE_CONCEPT = 'update_concept';
@@ -26,7 +27,7 @@ const CRYPTO_URL_BASE = 'https://min-api.cryptocompare.com/data/histoday?';
 const CRYPTO_URL_END = '&tsym=USD&limit=60&aggregate=1&e=CCCAGG';
 
 export function fetchCryptoPrices(symbol) {
-    const url = `${CRYPTO_URL_BASE}fsym=${symbol}${CRYPTO_URL_END}`; 
+    const url = `${CRYPTO_URL_BASE}fsym=${symbol}${CRYPTO_URL_END}`;
 
     const request = axios({
         method:'post',
@@ -120,6 +121,10 @@ export function fetchBubbleGroups(bubble_id) {
                         }
                     } 
                     groupIds
+                    group {
+                        id
+                        name
+                    }
                 }
             }
         }
@@ -193,6 +198,10 @@ export function fetchCoreGroups() {
                         }
                     } 
                     groupIds
+                    group {
+                        id
+                        name
+                    }
                 }
             }
         }
@@ -216,6 +225,13 @@ export function fetchCoreGroups() {
     return {
         type: FETCH_ROOT_GROUPS_AND_CONCEPTS,
         payload: request//payload
+    }
+}
+
+export function showConceptDetail(concept) {
+    return {
+        type: SHOW_CONCEPT_DETAIL,
+        payload: concept
     }
 }
 
@@ -267,7 +283,7 @@ export function fetchAndShowConceptDetails(conceptInfo) {
     });
 
     return {
-        type: SHOW_CONCEPT_DETAIL,
+        type: FETCH_AND_SHOW_CONCEPT_DETAIL,
         payload: request,
         meta: conceptInfo
     }
@@ -307,9 +323,9 @@ export function addConcept(conceptInfo) {
                 }
                 group {
                     id
-                    sector
                     name
                 }
+                groupIds
             }
         }
     `;
@@ -375,9 +391,9 @@ export function updateConcept(updatedConceptInfo) {
             }
             group {
                 id
-                sector
                 name
             }
+            groupIds
         }
     }
     `;

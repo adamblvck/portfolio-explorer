@@ -447,14 +447,13 @@ class ConceptDetails extends Component {
     render() {
         // check if activeConcepts are ready to be viewed
         const { activeConcept } = this.props;
-        const show_details = !this.props.activeConcept ? false : true;
+        const show_details = !activeConcept ? false : true;
 
         // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
-        const open = show_details ? activeConcept.open : false;
         const concept = show_details ? activeConcept.concept : null;
         const headerBackground = show_details ? activeConcept.background : null;
 
-        if ((!show_details) && (!open)){
+        if ((!show_details) && (!this.state.open)){
             return (
                 <div></div>
             );
@@ -464,7 +463,6 @@ class ConceptDetails extends Component {
                 <Modal
                     aria-labelledby="concept-detail"
                     aria-describedby="concept-detail-description"
-
                     open={this.state.open}
                     onClose={this.handleClose}
                     BackdropComponent={this.renderAnimatedBackdrop}
@@ -480,7 +478,6 @@ class ConceptDetails extends Component {
                         {this.renderContentCard(concept, headerBackground)}
                     </ModalAnimated>
                 </Modal>
-            
         );
     }
 }

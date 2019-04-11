@@ -14,15 +14,13 @@ function mapKeysRecursive(root_groups){
 }
 
 function parseResponse(state, action){
-    let error = null;
-
     if (action && action.payload && action.payload.request){
         const { response } = action.payload.request;
-        error = handleErrors(response);
-    }
+        let error = handleErrors(response);
 
-    if (action.payload.status == 200 && !error){
-        window.location.reload(); // cheap trick, needs to replaced !
+        if (action.payload.status == 200 && !error){
+            window.location.reload(); // cheap trick, needs to replaced !
+        }
     }
 
     return state;
@@ -53,7 +51,10 @@ export default function (state = {}, action) {
             console.log("bubble group reducing");
             console.log(action);
 
-            return mapKeysRecursive(action.payload.data.data.bubble_groups);
+            if (action.payload.data)
+                return mapKeysRecursive(action.payload.data.data.bubble_groups);
+            else
+                return state;
 
         case FETCH_CONCEPTS:
             return _.mapKeys(action.payload.data.data.groups, 'id');
