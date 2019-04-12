@@ -112,8 +112,9 @@ class BubbleMasonry extends Component {
     */
 
     renderSubgroups(group) {
-        const { classes } = this.props;
-
+        const { classes, concepts } = this.props;
+        console.log("concepts in subgroups", concepts);
+        
         // Don't render group if the no subgroups are available
         if (_.isEmpty(group.groups)){
             return (
@@ -169,7 +170,8 @@ class BubbleMasonry extends Component {
                         }}
                     />
                     <ConceptsMasonry
-                        concepts={group.concepts}
+                        conceptIDs={group.concepts}
+                        concepts={concepts}
                         background={background}
                         isAuthenticated={this.props.isAuthenticated}
                     />
@@ -246,6 +248,9 @@ class BubbleMasonry extends Component {
     }
 
     render() {
+        const { classes, concepts } = this.props;
+        // console.log("concepts in subgroups", concepts);
+
         return (
             <div>
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
@@ -258,10 +263,11 @@ class BubbleMasonry extends Component {
 
 function mapStateToProps (state) {
 
-    console.log(state);
+    // console.log("bubble_masonry mapStateToProps", state);
 
-    return { 
-        groups: state.groups,
+    return {
+        groups: state.groups.groups,
+        concepts: state.groups.concepts
     };
 }
 

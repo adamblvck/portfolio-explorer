@@ -14,15 +14,16 @@ class ConceptsMasonry extends Component {
 
     renderConcepts(){
         const { background }  = this.props;
+        const { conceptIDs, concepts } = this.props;
 
-        return _.map(this.props.concepts, (concept) => {
+        return _.map(conceptIDs, (conceptID) => {
             return (
                 <div 
-                    key={concept.id} 
+                    key={conceptID} 
                     className="concept-masonry-item">
                     
                     <ConceptBasic
-                        concept={concept}
+                        concept={concepts[conceptID]}
                         background={background}
                     />
                 </div>

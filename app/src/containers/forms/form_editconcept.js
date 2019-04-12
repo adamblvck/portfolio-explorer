@@ -39,7 +39,6 @@ class FormEditConcept extends Component {
     }
 
     // Event Handlers
-
     handleOpen = () => {
         this.setState({ open: true });
     };
@@ -49,7 +48,7 @@ class FormEditConcept extends Component {
     };
 
     onSubmit(values, groupId) {
-        this.props.updateConcept( values); // { ...values, groupId: groupId } );
+        this.props.updateConcept(values);
     }
 
     // Render functions

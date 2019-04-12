@@ -55,7 +55,7 @@ export default class Auth {
 
     isAuthenticated() {
         let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-        const isAuth = new Date().getTime() < expiresAt
+        const isAuth = new Date().getTime() < expiresAt;
         isAuth ? localStorage.setItem('is_authenticated', true) : localStorage.removeItem('is_authenticated');
         return isAuth;
     }

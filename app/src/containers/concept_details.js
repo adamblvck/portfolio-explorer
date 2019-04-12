@@ -369,7 +369,7 @@ class ConceptDetails extends Component {
                         </Row>
 
                         <Row className="details-column">
-                            {this.renderCryptoChart(concept.meta)}
+                            {/* {this.renderCryptoChart(concept.meta)} */}
                         </Row>
                         {/* Reference links */}
                         <Row className="details-column">
@@ -446,11 +446,13 @@ class ConceptDetails extends Component {
 
     render() {
         // check if activeConcepts are ready to be viewed
-        const { activeConcept } = this.props;
+        const { activeConcept, concepts } = this.props;
         const show_details = !activeConcept ? false : true;
 
+        console.log(activeConcept, concepts);
+
         // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
-        const concept = show_details ? activeConcept.concept : null;
+        const conceptID = show_details ? activeConcept.concept.conceptID : null;
         const headerBackground = show_details ? activeConcept.background : null;
 
         if ((!show_details) && (!this.state.open)){
@@ -458,6 +460,12 @@ class ConceptDetails extends Component {
                 <div></div>
             );
         }
+
+        console.log("conceptID", conceptID);
+
+        const concept = concepts[conceptID];
+
+        console.log("concept detail show", concept);
 
         return (
                 <Modal
@@ -483,8 +491,10 @@ class ConceptDetails extends Component {
 }
 
 function mapStateToProps (state) {
+    console.log("concept details state:", state);
     return {
-        activeConcept: state.activeConcept
+        activeConcept: state.activeConcept,
+        concepts: state.groups.concepts
     };
 }
 
