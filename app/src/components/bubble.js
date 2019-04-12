@@ -81,11 +81,13 @@ export default class Bubble extends Component {
                     <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID} />
                 </div>
 
-                {/* Holds concept details form */}
+                {/* Holds concept details component */}
                 <ConceptDetails 
                     id="concept-detail-popper"
                     isAuthenticated={isAuthenticated}
                 />
+
+                
 
             </div>
 		);

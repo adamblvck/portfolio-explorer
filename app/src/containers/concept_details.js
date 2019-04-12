@@ -449,10 +449,7 @@ class ConceptDetails extends Component {
         const { activeConcept, concepts } = this.props;
         const show_details = !activeConcept ? false : true;
 
-        console.log(activeConcept, concepts);
-
         // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
-        const conceptID = show_details ? activeConcept.concept.conceptID : null;
         const headerBackground = show_details ? activeConcept.background : null;
 
         if ((!show_details) && (!this.state.open)){
@@ -461,39 +458,39 @@ class ConceptDetails extends Component {
             );
         }
 
-        console.log("conceptID", conceptID);
-
-        const concept = concepts[conceptID];
-
-        console.log("concept detail show", concept);
-
         return (
-                <Modal
-                    aria-labelledby="concept-detail"
-                    aria-describedby="concept-detail-description"
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    BackdropComponent={this.renderAnimatedBackdrop}
-                    disableAutoFocus={false}
+            <Modal
+                aria-labelledby="concept-detail"
+                aria-describedby="concept-detail-description"
+                open={this.state.open}
+                onClose={this.handleClose}
+                BackdropComponent={this.renderAnimatedBackdrop}
+                disableAutoFocus={false}
+            >
+                <ModalAnimated
+                    className="concept-detail-card-div"
+                    initialPose='hidden'
+                    pose={this.state.animation ? 'visible' : 'hidden'}
+                    onPoseComplete={this.handleAnimationClose}
                 >
-                    <ModalAnimated
-                        className="concept-detail-card-div"
-                        initialPose='hidden'
-                        pose={this.state.animation ? 'visible' : 'hidden'}
-                        onPoseComplete={this.handleAnimationClose}
-                    >
-                        {/* Render Content Card */}
-                        {this.renderContentCard(concept, headerBackground)}
-                    </ModalAnimated>
-                </Modal>
+                    {/* Render Content Card */}
+                    {this.renderContentCard(this.props.concept, headerBackground)}
+                </ModalAnimated>
+            </Modal>                            
         );
     }
 }
 
 function mapStateToProps (state) {
-    console.log("concept details state:", state);
+    if (state.activeConcept) {
+        return {
+            concept: state.groups.concepts[state.activeConcept.concept.conceptID],
+            activeConcept: state.activeConcept,
+            concepts: state.groups.concepts
+        };
+    }
+
     return {
-        activeConcept: state.activeConcept,
         concepts: state.groups.concepts
     };
 }

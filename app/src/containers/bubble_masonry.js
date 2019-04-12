@@ -113,7 +113,6 @@ class BubbleMasonry extends Component {
 
     renderSubgroups(group) {
         const { classes, concepts } = this.props;
-        console.log("concepts in subgroups", concepts);
         
         // Don't render group if the no subgroups are available
         if (_.isEmpty(group.groups)){
@@ -265,10 +264,21 @@ function mapStateToProps (state) {
 
     // console.log("bubble_masonry mapStateToProps", state);
 
+    if (state.activeConcept) {
+        return {
+            concept: state.groups.concepts[state.activeConcept.concept.conceptID],
+
+            groups: state.groups.groups,
+            concepts: state.groups.concepts
+        };
+    }
+
     return {
         groups: state.groups.groups,
         concepts: state.groups.concepts
     };
+
+
 }
 
 // export default connect(mapStateToProps, { fetchConcepts })(GroupsMasonry);
