@@ -136,6 +136,7 @@ class ConceptDetails extends Component {
 
     handleDelete(concept){
         if( confirm('Sure want to delete?')) {
+            this.setState({open:false});
             this.props.deleteConcept(concept);
         }
     }
@@ -230,6 +231,9 @@ class ConceptDetails extends Component {
                 key="editConcept"
                 logo_url={concept.logo_url} // hacky but works, used in the constructor
                 initialValues={{...concept, groupId: concept.group.id}}
+
+                mode="update"
+                label="Edit"
             />
         );
     }
@@ -395,7 +399,9 @@ class ConceptDetails extends Component {
                     groupName={concept.group.name}
                     key="editConcept"
                     logo_url={concept.logo_url} // hacky but works, used in the constructor
-                    initialValues={{...concept, groupId: concept.group.id}}
+                    initialValues={{...concept}} // , groupIds: concept.group.id
+                    label="Edit"
+                    mode="update"
                 />}
                 <Button
                     type="Back" 
@@ -407,6 +413,12 @@ class ConceptDetails extends Component {
     }
 
     renderContentCard(concept, headerBackground){
+        // if (concept !== undefined) {
+        //     return (<div></div>);
+        // }
+
+        console.log(concept);
+
         return (
             <Card className="concept-detail-card">
                 {/* contains the concept logo / image / picture */}
@@ -491,7 +503,8 @@ function mapStateToProps (state) {
     }
 
     return {
-        concepts: state.groups.concepts
+        concepts: state.groups.concepts,
+        modified: state.groups.modified
     };
 }
 

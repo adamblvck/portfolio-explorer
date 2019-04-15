@@ -17,13 +17,15 @@ import ConceptsMasonry from './concepts_masonry';
 
 // Forms
 import FormAddConcept from './forms/form_addconcept';
+import FormEditConcept from './forms/form_editconcept';
+
 import FormAddGroup from './forms/form_addgroup';
 import FormEditGroup from './forms/form_editgroup';
 
 import MenuGroup from './menus/menu_groups';
 
 const styles = {
-    card: {
+        card: {
         maxWidth: 450,
         margin: 7.5
     },
@@ -58,12 +60,22 @@ class BubbleMasonry extends Component {
     renderFormAddConcept(component) {
         const { label, groupName, groupId } = component;
         return (
-            <FormAddConcept
+            // <FormAddConcept
+            //     groupId={groupId}
+            //     groupName={groupName}
+            //     key={label}
+            //     // addButtonText={label}
+            // />
+
+            <FormEditConcept
                 groupId={groupId}
                 groupName={groupName}
                 key={label}
-                // addButtonText={label}
+                label={label}
+                mode="new"
+                initialValues={{groupIds: [groupId]}}
             />
+
         );
     }
 
@@ -261,24 +273,11 @@ class BubbleMasonry extends Component {
 }
 
 function mapStateToProps (state) {
-
-    // console.log("bubble_masonry mapStateToProps", state);
-
-    if (state.activeConcept) {
-        return {
-            concept: state.groups.concepts[state.activeConcept.concept.conceptID],
-
-            groups: state.groups.groups,
-            concepts: state.groups.concepts
-        };
-    }
-
     return {
         groups: state.groups.groups,
-        concepts: state.groups.concepts
+        concepts: state.groups.concepts,
+        modified: state.groups.modified // increases with 1 if groups/concepts are modified
     };
-
-
 }
 
 // export default connect(mapStateToProps, { fetchConcepts })(GroupsMasonry);

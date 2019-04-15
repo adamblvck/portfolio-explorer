@@ -27,8 +27,6 @@ export default class MenuGroup extends Component {
         const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
 
-        console.log(this.props.needAuth,this.props.isAuthenticated);
-
         return (
             <div>
                 <IconButton

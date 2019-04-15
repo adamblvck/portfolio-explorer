@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
-import { updateConcept } from '../../actions'
+import { addConcept, updateConcept } from '../../actions'
 
 // to make multi-column layouts
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -48,7 +48,13 @@ class FormEditConcept extends Component {
     };
 
     onSubmit(values, groupId) {
-        this.props.updateConcept(values);
+        // if this is an "Update Form", call below
+        if (this.props.mode == "new") {
+            this.props.addConcept( { ...values, groupId: groupId } );
+        }
+        else if (this.props.mode == "update") {
+            this.props.updateConcept(values);
+        }
     }
 
     // Render functions
@@ -201,7 +207,7 @@ class FormEditConcept extends Component {
                     tabIndex={-1}
                     onClick={this.handleOpen}
                 >
-                    Edit
+                    {this.props.label}
                 </Button>
 
                 <Modal
@@ -214,7 +220,8 @@ class FormEditConcept extends Component {
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
-                                Editing concept
+                                { this.props.mode == "update" && <p>Editing Concept</p> }
+                                { this.props.mode == "new" && <p>New Concept</p> }
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }
@@ -341,6 +348,6 @@ export default reduxForm({
 })(
     connect(
         null,
-        {updateConcept}
+        {addConcept, updateConcept}
     )(FormEditConcept)
 );

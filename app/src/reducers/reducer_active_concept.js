@@ -32,23 +32,14 @@ function handleErrors(response){
 export default function(state = null, action) {
     switch(action.type) {
         case FETCH_AND_SHOW_CONCEPT_DETAIL:
-            return { ...action.meta, concept: action.payload.data.data.concept} ;    
+            return { ...action.meta, concept: action.payload.data.data.concept};
 
         case SHOW_CONCEPT_DETAIL:
             console.log("show_concept_detail triggered! WOHOOO", state, action);
             return {concept: action.payload, background: action.payload.background, open: true};
 
-        // case UPDATE_CONCEPT:
-        //     if (action.payload.status == 200){
-        //         return {...state, concept: action.payload.data.data.updateConcept}
-        //     } else {
-        //         console.log("Couldn't update concept, got ",action.payload.status);
-        //         return state;
-        //     }
-        case ADD_CONCEPT:
-            return parseResponse(state, action);
-        case DELETE_CONCEPT:
-            return parseResponse(state, action);
+        
+
         default:
             return state;
     }

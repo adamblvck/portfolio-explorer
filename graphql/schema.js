@@ -205,7 +205,7 @@ const Mutation = new GraphQLObjectType({
                     logo_url: args.logo_url,
                     meta: args.meta,
                     details: args.details,
-                    groupIds: [args.groupId]
+                    groupIds: args.groupIds
                 });
 
                 return concept.save();

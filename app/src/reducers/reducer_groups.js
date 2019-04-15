@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, UPDATE_CONCEPT, ADD_GROUP, EDIT_GROUP, DELETE_GROUP, FETCH_BUBBLE_GROUPS} from '../actions';
+import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT, ADD_GROUP, EDIT_GROUP, DELETE_GROUP, FETCH_BUBBLE_GROUPS} from '../actions';
 
 
 function mapKeysRecursive(root_groups){
@@ -38,7 +38,8 @@ function mapKeysRecursive(root_groups){
 
     const reduced = {
         groups: _.mapKeys(root_groups, 'id'),
-        concepts: all_concepts
+        concepts: all_concepts,
+        modified: 0
     }
 
     return reduced;
@@ -71,17 +72,23 @@ function handleErrors(response){
 }
 
 export default function (state = {}, action) {
+    var error = false;
+
+    // Handle Errors
+    if (action && action.payload && action.payload.request){
+        const { response } = action.payload.request;
+        var error = handleErrors(response);
+    }
+
+    if (error)
+        return state;
+
     // because we're returning in each switch
     // we don't need a break in each case statement
     switch(action.type) {
 
-        // QUERIES
-
+        // DATA QUERIES
         case FETCH_BUBBLE_GROUPS:
-
-            console.log("bubble group reducing");
-            console.log(action);
-
             if (action.payload.data)
                 return mapKeysRecursive(action.payload.data.data.bubble_groups);
             else
@@ -93,25 +100,86 @@ export default function (state = {}, action) {
         case FETCH_ROOT_GROUPS_AND_CONCEPTS:
             return mapKeysRecursive(action.payload.data.data.root_groups);
 
-        
-        case UPDATE_CONCEPT:
+        // CONCEPT MUTATIONS
+
+        case ADD_CONCEPT:
+            console.log("ADD_CONCEPT triggered! WOHOOO", state, action);
+
             if (action.payload.status == 200){
-                const updatedConcept = action.payload.data.data.updateConcept;
+                const { addConcept } = action.payload.data.data;
                 const newState = {...state};
 
-                console.log(action.payload.data);
+                let root_group_id = addConcept.group.parent_groupId;
+                let sub_group_id = addConcept.groupIds[0];
+                let concept_id = addConcept.id;
 
-                newState.concepts[updatedConcept.id] = updatedConcept;
+                // add new ID to concept_id array
+                newState.groups[root_group_id].groups[sub_group_id].concepts.push(concept_id);
 
-                console.log("UPDATE_CONCEPT newState", newState);
+                // add concept to concept dictionary
+                newState.concepts[concept_id] = addConcept;
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
+
+                console.log("new state because of add_concept", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't add concept, got ",action.payload.status);
+                return state;
+            }
+
+        case UPDATE_CONCEPT:
+            if (action.payload.status == 200){
+                const { updateConcept } = action.payload.data.data;
+                const newState = {...state};
+
+                // update concept at key updatedConcept.id with the newly received concept!
+                newState.concepts[updateConcept.id] = updateConcept;
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
 
                 return newState;
             } else {
                 console.log("Couldn't update concept, got ",action.payload.status);
                 return state;
             }
+    
+        case DELETE_CONCEPT:
+            console.log("DELETE_CONCEPT triggered! WOHOOO", state, action);
 
-        // MUTATIONS
+            if (action.payload.status == 200){
+                const { deleteConcept } = action.payload.data.data;
+                const newState = {...state};
+
+                let root_group_id = deleteConcept.group.parent_groupId;
+                let sub_group_id = deleteConcept.group.id;
+                let concept_id = deleteConcept.id;
+
+                // remove concept_id from array
+                let filtered_array = newState.groups[root_group_id].groups[sub_group_id].concepts.filter(function(item) { 
+                    return item !== concept_id
+                });
+                newState.groups[root_group_id].groups[sub_group_id].concepts = filtered_array;
+
+                // remove concept from concept dictionary
+                delete newState.concepts[concept_id];
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
+
+                console.log("new state because of delete_concept", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't add concept, got ",action.payload.status);
+                return state;
+            }
+        
+
+        // GROUP MUTATIONS
         case ADD_GROUP:
             return parseResponse(state, action);
         case EDIT_GROUP:

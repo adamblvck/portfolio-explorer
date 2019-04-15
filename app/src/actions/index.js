@@ -296,14 +296,14 @@ export function addConcept(conceptInfo) {
             $logo_url: String,
             $meta: MetaInput,
             $details: ConceptDetailInput,
-            $groupId: String
+            $groupIds: [String]
         ) {
             addConcept(
                 name:$name,
                 logo_url:$logo_url,
                 meta:$meta,
                 details:$details,
-                groupId:$groupId
+                groupIds:$groupIds
             ) {
                 id
                 name
@@ -324,6 +324,7 @@ export function addConcept(conceptInfo) {
                 group {
                     id
                     name
+                    parent_groupId
                 }
                 groupIds
             }
@@ -426,7 +427,14 @@ export function deleteConcept(conceptInfo) {
     ) {
         deleteConcept(
             id:$id
-        ) { id }
+        ) { 
+            id
+            group {
+                id
+                name
+                parent_groupId
+            }
+         }
     }
     `;
 
