@@ -18,7 +18,6 @@ import ConceptsMasonry from './concepts_masonry';
 // Forms
 import FormEditConcept from './forms/form_concept';
 
-import FormAddGroup from './forms/form_addgroup';
 import FormEditGroup from './forms/form_editgroup';
 
 import MenuGroup from './menus/menu_groups';
@@ -67,7 +66,6 @@ class BubbleMasonry extends Component {
                 mode="new"
                 initialValues={{groupIds: [groupId]}}
             />
-
         );
     }
 
@@ -75,24 +73,27 @@ class BubbleMasonry extends Component {
         const { label, parent_groupId } = component;
 
         return (
-            <FormAddGroup 
+            <FormEditGroup key={label}
                 n_depth={1}
-                key={label}
                 parent_groupId={parent_groupId}
-                addButtonText={label}
+
+                label={label}
+                mode="new"
+
+                // initialValues={{name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}}
+                // initialValues={{name: "FUCK YOURSELF ADD"}}
             />
         );
     }
 
     renderFormEditGroup(component) {
-        const { label, parent_groupId, group } = component;
-
+        const { label, group } = component;
+        
         return (
-            <FormEditGroup 
-                n_depth={1}
-                key={label}
-                parent_groupId={parent_groupId}
-                addButtonText={label}
+            <FormEditGroup key={label}
+                label={label}
+                mode="update"
+
                 initialValues={group}
             />
         );
@@ -140,26 +141,24 @@ class BubbleMasonry extends Component {
                                 isAuthenticated={this.props.isAuthenticated}
                                 components={ [
                                     {
-                                        label:"Add Concept",
-                                        groupId:group.id,
-                                        groupName:group.name,
+                                        label: "Add Concept",
+                                        groupId: group.id,
+                                        groupName: group.name,
                                         needAuth: true,
-                                        render:this.renderFormAddConcept
+                                        render: this.renderFormAddConcept
                                     },
                                     {
-                                        label:"Edit Subgroup",
-                                        groupId:group.id,
-                                        // groupName:group.name,
+                                        label: "Edit Subgroup",
                                         needAuth: true,
-                                        render:this.renderFormEditGroup,
-                                        group:group
+                                        group: group,
+                                        render: this.renderFormEditGroup
                                     },
                                     {
-                                        label:"Delete Subgroup",
-                                        groupId:group.id,
+                                        label: "Delete Subgroup",
+                                        groupId: group.id,
                                         needAuth: true,
-                                        render:this.renderDeleteGroup,
-                                        group:group
+                                        group: group,
+                                        render: this.renderDeleteGroup
                                     }
                                 ]}
                             />
@@ -186,6 +185,8 @@ class BubbleMasonry extends Component {
     renderCard(group){
         const { classes } = this.props;
 
+
+
         return (
             <Card className={classes.card} elevation={3}>
                 <CardHeader
@@ -195,18 +196,18 @@ class BubbleMasonry extends Component {
                             isAuthenticated={this.props.isAuthenticated}
                             components={ [
                                 {
-                                    label:"Add Subgroup",
-                                    parent_groupId:group.id,
+                                    label: "Edit Group",
                                     needAuth: true,
-                                    render:this.renderFormAddGroup
+                                    group: group,
+                                    render: this.renderFormEditGroup
                                 },
                                 {
-                                    label:"Edit Group",
-                                    parent_groupId:group.id,
+                                    label: "New Subgroup",
+                                    parent_groupId: group.id,
                                     needAuth: true,
-                                    render:this.renderFormEditGroup,
-                                    group:group
+                                    render: this.renderFormAddGroup
                                 }
+                                
                             ]}
                         />
                     }
@@ -240,10 +241,12 @@ class BubbleMasonry extends Component {
             >
                 <Masonry gutter="0 auto 0 auto">
                     {this.renderGroups()}
-                    <FormAddGroup 
+                    <FormEditGroup 
                         n_depth={0}
                         parent_groupId={null}
-                        addButtonText="Add Group"
+                        label="New Group"
+                        mode="new"
+                        initialValues={{name:"New Group", n_depth: 0, parent_groupId: null}}
                     />
                 </Masonry>
             </ResponsiveMasonry>

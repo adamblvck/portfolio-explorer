@@ -11,7 +11,7 @@ import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { connect } from 'react-redux';
-import { editGroup } from '../../actions'
+import { addGroup, editGroup } from '../../actions'
 
 class FormEditGroup extends Component {
     constructor(props) {
@@ -32,6 +32,20 @@ class FormEditGroup extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
+
+    onSubmit(values) {
+        // if this is an "Update Form", call below
+        if (this.props.mode == "new") {
+            this.props.addGroup({ 
+                ...values, 
+                n_depth:this.props.n_depth, 
+                parent_groupId:this.props.parent_groupId
+            });
+        }
+        else if (this.props.mode == "update") {
+            this.props.editGroup({...values });
+        }
+    }
 
     renderField(field) {
         const { meta : { touched, error } } = field;
@@ -71,21 +85,13 @@ class FormEditGroup extends Component {
         );
     }
 
-    onSubmit(values) {
-        this.props.editGroup({ 
-            ...values
-        });
-    }
-
     render() {
         const { handleSubmit } = this.props;
 
         return (
             <div>
-                <MenuItem
-                    onClick={this.handleOpen}
-                >
-                    {this.props.addButtonText}
+                <MenuItem onClick={this.handleOpen}>
+                    {this.props.label}
                 </MenuItem>
                 
                 <Modal
@@ -97,7 +103,8 @@ class FormEditGroup extends Component {
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
-                                Edit Group
+                                { this.props.mode == "update" && <p>Editing Group</p> }
+                                { this.props.mode == "new" && <p>New Group</p> }
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
@@ -159,6 +166,6 @@ export default reduxForm({
 })(
     connect(
         null,
-        {editGroup}
+        {addGroup, editGroup}
     )(FormEditGroup)
 );
