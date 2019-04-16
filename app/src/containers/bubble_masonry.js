@@ -18,7 +18,7 @@ import ConceptsMasonry from './concepts_masonry';
 // Forms
 import FormEditConcept from './forms/form_concept';
 
-import FormEditGroup from './forms/form_editgroup';
+import FormEditGroup from './forms/form_group';
 
 import MenuGroup from './menus/menu_groups';
 
