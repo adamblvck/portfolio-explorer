@@ -16,7 +16,7 @@ import { Card, CardContent, withStyles, CardHeader, MenuItem } from '@material-u
 import ConceptsMasonry from './concepts_masonry';
 
 // Forms
-import FormEditConcept from './forms/form_editconcept';
+import FormEditConcept from './forms/form_concept';
 
 import FormAddGroup from './forms/form_addgroup';
 import FormEditGroup from './forms/form_editgroup';

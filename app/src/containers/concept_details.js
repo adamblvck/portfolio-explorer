@@ -19,7 +19,7 @@ import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
 
 // my components
-import FormEditConcept from './forms/form_editconcept';
+import FormEditConcept from './forms/form_concept';
 import MenuGroup from './menus/menu_groups';
 import { deleteConcept, fetchCryptoPrices } from '../actions';
 import CryptoChart from './crypto_chart';
