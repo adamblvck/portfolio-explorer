@@ -75,7 +75,7 @@ class FormEditGroup extends Component {
                 <TextField
                     id={field.name}
                     label={field.label}
-                    className="form-control"Í
+                    className="form-control"
                     margin="normal"
                     multiline
                     rows="5"
