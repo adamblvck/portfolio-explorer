@@ -16,7 +16,6 @@ import { Card, CardContent, withStyles, CardHeader, MenuItem } from '@material-u
 import ConceptsMasonry from './concepts_masonry';
 
 // Forms
-import FormAddConcept from './forms/form_addconcept';
 import FormEditConcept from './forms/form_editconcept';
 
 import FormAddGroup from './forms/form_addgroup';
@@ -60,13 +59,6 @@ class BubbleMasonry extends Component {
     renderFormAddConcept(component) {
         const { label, groupName, groupId } = component;
         return (
-            // <FormAddConcept
-            //     groupId={groupId}
-            //     groupName={groupName}
-            //     key={label}
-            //     // addButtonText={label}
-            // />
-
             <FormEditConcept
                 groupId={groupId}
                 groupName={groupName}
