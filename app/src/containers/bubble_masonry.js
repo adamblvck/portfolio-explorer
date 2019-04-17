@@ -42,10 +42,8 @@ class BubbleMasonry extends Component {
         super(props);
 
         this.renderDeleteGroup = this.renderDeleteGroup.bind(this);
-
-        this.handleSpecialMenuItem = this.handleSpecialMenuItem.bind(this);
         this.renderFormEditGroup = this.renderFormEditGroup.bind(this);
-        this.renderFormAddGroup = this.renderFormAddGroup.bind(this);
+        this.renderFormAddSubgroup = this.renderFormAddSubgroup.bind(this);
     }
 
     componentDidMount() {
@@ -55,10 +53,6 @@ class BubbleMasonry extends Component {
     /* 
         Render form components
     */
-
-    handleDeleteGroup(group) {
-        this.props.deleteGroup(group);
-    }
 
     renderFormAddConcept(component) {
         const { label, groupName, groupId } = component;
@@ -74,7 +68,8 @@ class BubbleMasonry extends Component {
         );
     }
 
-    renderFormAddGroup(component) {
+    renderFormAddSubgroup(component) {
+        // BEAR IN MIND CURRENTLY USED initialValues IS FOR **SUBGROUPS** ONLY
         const { label, parent_groupId } = component;
 
         const group_form_params = {
@@ -118,8 +113,12 @@ class BubbleMasonry extends Component {
         return (
             <MenuItem
                 color="secondary" 
-                key="deleteGroup"
-                onClick={() => this.handleDeleteGroup(group)}>
+                key={`delete${group.id}`}
+                onClick={() => {
+                    if( confirm('Sure want to delete group?')) {
+                        this.props.deleteGroup(group)
+                    }
+                }}>
                 {label}
             </MenuItem>
         );
@@ -169,7 +168,6 @@ class BubbleMasonry extends Component {
                                     },
                                     {
                                         label: "Delete Subgroup",
-                                        groupId: group.id,
                                         needAuth: true,
                                         group: group,
                                         render: this.renderDeleteGroup
@@ -198,9 +196,6 @@ class BubbleMasonry extends Component {
 
     renderCard(group){
         const { classes } = this.props;
-
-
-
         return (
             <Card className={classes.card} elevation={3}>
                 <CardHeader
@@ -220,9 +215,14 @@ class BubbleMasonry extends Component {
                                     label: "New Subgroup",
                                     parent_groupId: group.id,
                                     needAuth: true,
-                                    render: this.renderFormAddGroup
+                                    render: this.renderFormAddSubgroup
+                                },
+                                {
+                                    label: "Delete Group",
+                                    needAuth: true,
+                                    group: group,
+                                    render: this.renderDeleteGroup
                                 }
-                                
                             ]}
                         />
                     }
@@ -249,32 +249,31 @@ class BubbleMasonry extends Component {
         });
     }
 
-    handleSpecialMenuItem() {
-
-        const init_values = {
-            name: "New Subgroup",
-            n_depth: 1,
-            parent_groupId: "blaaaaayadadadada"
-        };
-
-        const wow = {
-            mode: "new",
-            initialValues: init_values
-        };
-
-        this.props.openGroupForm(wow);
-    };
-
     renderMasonry() {
         return (
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
-                    <MenuItem onClick={this.handleSpecialMenuItem} >
-                        CLICK ME FOR SPECIALNESS
+                    {/* TODO: Refactor below item into a function */}
+                    <MenuItem
+                        onClick={() => {
+                            const params = {
+                                mode: "new",
+                                initialValues: {
+                                    bubble_id: this.props.bubbleID,
+                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
+                                    n_depth:0,
+                                    parent_groupId:null}
+                            };
+
+                            this.props.openGroupForm(params)
+                        }}>
+                        Add Group
                     </MenuItem>
                     
+            
+
                     {this.renderGroups()}
                 </Masonry>
             </ResponsiveMasonry>

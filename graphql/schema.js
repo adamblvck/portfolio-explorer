@@ -144,11 +144,12 @@ const Mutation = new GraphQLObjectType({
             type: GroupType,
             args: {
                 name: { type: GraphQLString },
-                sector: { type: GraphQLString },
                 description: { type: GraphQLString },
                 n_depth: { type: GraphQLInt},
                 parent_groupId: { type: GraphQLID},
                 bubble_id: { type: GraphQLID},
+                color: {type: GraphQLString},
+                background: {type: GraphQLString}
             },
             resolve(parent, args, {isAuthenticated, credentials}){
                 // authentication check
@@ -165,11 +166,12 @@ const Mutation = new GraphQLObjectType({
                 // create new group
                 let group = new Group({
                     name: args.name,
-                    sector: args.sector,
                     description: args.description,
                     n_depth: args.n_depth,
                     parent_groupId: args.parent_groupId,
                     bubble_id: args.bubble_id,
+                    color: args.color,
+                    background: args.background
                 });
 
                 // save to DB

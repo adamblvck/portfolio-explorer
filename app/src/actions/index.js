@@ -463,23 +463,27 @@ export function addGroup(groupInfo) {
     let query = `
     mutation addGroup(
         $name:String,
-        $sector:String,
         $description:String,
         $n_depth:Int,
-        $parent_groupId:ID
+        $parent_groupId:ID,
+        $bubble_id:ID,
+        $color:String,
+        $background:String
     ){
-        addGroup(name:$name,sector:$sector, 
+        addGroup(name:$name, 
             description:$description,n_depth:$n_depth,
-            parent_groupId:$parent_groupId){
+            parent_groupId:$parent_groupId,
+            bubble_id:$bubble_id, color:$color,
+            background:$background){
                 id
                 name
                 color
+                background
                 description
                 n_depth
                 parent_groupId
                 bubble_id
-    }}
-    `;
+    }}`;
 
     const headers = {
         Authorization: localStorage.getItem('id_token'),
@@ -557,7 +561,10 @@ export function deleteGroup(groupInfo) {
     ) {
         deleteGroup(
             id:$id
-        ) { id }
+        ) { 
+            id
+            parent_groupId
+        }
     }
     `;
 
