@@ -471,7 +471,13 @@ export function addGroup(groupInfo) {
         addGroup(name:$name,sector:$sector, 
             description:$description,n_depth:$n_depth,
             parent_groupId:$parent_groupId){
-            name
+                id
+                name
+                color
+                description
+                n_depth
+                parent_groupId
+                bubble_id
     }}
     `;
 
@@ -514,9 +520,14 @@ export function editGroup(groupInfo) {
             description:$description,n_depth:$n_depth,
             parent_groupId:$parent_groupId,
             bubble_id:$bubble_id){
-            name
-    }}
-    `;
+                id
+                name
+                color # used for subgroup-title color
+                description
+                n_depth # needed for group editing, in case when needed
+                parent_groupId # needed for group editing, in case when needed
+                bubble_id # needed for bubble hierarchymn
+    }}`;
     
     const headers = {
         Authorization: localStorage.getItem('id_token'),

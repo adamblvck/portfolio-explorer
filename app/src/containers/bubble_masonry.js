@@ -44,6 +44,8 @@ class BubbleMasonry extends Component {
         this.renderDeleteGroup = this.renderDeleteGroup.bind(this);
 
         this.handleSpecialMenuItem = this.handleSpecialMenuItem.bind(this);
+        this.renderFormEditGroup = this.renderFormEditGroup.bind(this);
+        this.renderFormAddGroup = this.renderFormAddGroup.bind(this);
     }
 
     componentDidMount() {
@@ -75,32 +77,38 @@ class BubbleMasonry extends Component {
     renderFormAddGroup(component) {
         const { label, parent_groupId } = component;
 
+        const group_form_params = {
+            mode: "new",
+            initialValues: {name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}
+        };
+
         return (
-            // <FormEditGroup key={label}
-            //     n_depth={1}
-            //     parent_groupId={parent_groupId}
-
-            //     label={label}
-            //     mode="new"
-
-            //     // initialValues={{name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}}
-            //     // initialValues={{name: "FUCK YOURSELF ADD"}}
-            // />
-            <div></div>
+            <MenuItem
+                color="secondary" 
+                key={`addto-${parent_groupId}`}
+                onClick={() => this.props.openGroupForm(group_form_params)}
+            >
+                {label}
+            </MenuItem>
         );
     }
 
     renderFormEditGroup(component) {
         const { label, group } = component;
-        
-        return (
-            // <FormEditGroup key={label}
-            //     label={label}
-            //     mode="update"
 
-            //     initialValues={group}
-            // />
-            <div></div>
+        const group_form_params = {
+            mode: "update",
+            initialValues: group
+        };
+
+        return (
+            <MenuItem
+                color="secondary" 
+                key={`edit-${group.id}`}
+                onClick={() => this.props.openGroupForm(group_form_params)}
+            >
+                {label}
+            </MenuItem>
         );
     }
 
@@ -141,7 +149,8 @@ class BubbleMasonry extends Component {
                 >
                     <CardHeader
                         action={
-                            this.props.isAuthenticated && <MenuGroup 
+                            this.props.isAuthenticated && // if authenticated
+                            <MenuGroup 
                                 className="groupmenu-btn"
                                 isAuthenticated={this.props.isAuthenticated}
                                 components={ [
@@ -196,7 +205,8 @@ class BubbleMasonry extends Component {
             <Card className={classes.card} elevation={3}>
                 <CardHeader
                     action={
-                        this.props.isAuthenticated  && <MenuGroup 
+                        this.props.isAuthenticated && // if authenticated
+                        <MenuGroup 
                             className="groupmenu-btn"
                             isAuthenticated={this.props.isAuthenticated}
                             components={ [

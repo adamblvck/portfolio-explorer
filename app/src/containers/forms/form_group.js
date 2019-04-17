@@ -38,20 +38,20 @@ class FormEditGroup extends Component {
     };
 
     onSubmit(values){
-
-        console.log("Submitting values: ", values);
-
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
             this.props.addGroup({ 
                 ...values, 
-                n_depth:this.props.n_depth, 
-                parent_groupId:this.props.parent_groupId
+                // n_depth:this.props.n_depth, 
+                // parent_groupId:this.props.parent_groupId
             });
         }
         else if (this.props.mode == "update") {
             this.props.editGroup({...values });
         }
+
+        // and close form
+        this.props.closeGroupForm();
     }
 
     renderField(field) {
@@ -165,13 +165,11 @@ class FormEditGroup extends Component {
 }
 
 function validate(){
-    const errors = {}
+    const errors = {};
     return errors;
 }
 
 function mapStateToProps(state) {
-    console.log("MapSTOP GROUP", state.forms);
-
     if (state.forms && state.forms.form_type == "group"){
         return {
             open: state.forms.open,
@@ -188,4 +186,5 @@ export default connect(mapStateToProps, {addGroup, editGroup, closeGroupForm})(
         validate,
         form: 'EditGroupForm',
         enableReinitialize: true
-    })(FormEditGroup));
+    })(FormEditGroup)
+);

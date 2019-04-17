@@ -181,9 +181,73 @@ export default function (state = {}, action) {
 
         // GROUP MUTATIONS
         case ADD_GROUP:
-            return parseResponse(state, action);
+            if (action.payload.status == 200){
+
+                console.log("WOHOOO ADD GROUP", state, action);
+
+                const { addGroup } = action.payload.data.data;
+                const newState = {...state};
+
+                let group_id = addGroup.id;
+                let parent_group_id = addGroup.parent_groupId;
+
+                if (parent_group_id == null){
+                    newState.groups[group_id] = addGroup;
+                }
+                else {
+                    newState.groups[parent_group_id].groups[group_id] = addGroup;
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
+
+                console.log("new state because of edit_group", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't add concept, got ",action.payload.status);
+                return state;
+            }
+
         case EDIT_GROUP:
-            return parseResponse(state, action);
+            if (action.payload.status == 200){
+                console.log("WOHOOO EDIT GROUP", state, action);
+
+                const { updateGroup } = action.payload.data.data;
+                const newState = {...state};
+
+                let group_id = updateGroup.id;
+                let parent_group_id = updateGroup.parent_groupId;
+
+                // no parent id means we can alter a top-level group
+                if (parent_group_id == null){
+                    let prev_group = {
+                        ...newState.groups[group_id],
+                        ...updateGroup
+                    };
+                    newState.groups[group_id] = prev_group;
+                } 
+                
+                // if we have a parent_id, we need to dig a little deeper in the structure
+                else {
+                    let prev_group = {
+                        ...newState.groups[parent_group_id].groups[group_id],
+                        ...updateGroup
+                    };
+                    newState.groups[parent_group_id].groups[group_id] = prev_group;
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
+
+                console.log("new state because of edit_group", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't add concept, got ",action.payload.status);
+                return state;
+            }
+
         case DELETE_GROUP:
             return parseResponse(state, action);
 
