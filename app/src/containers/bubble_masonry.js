@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
 import { fetchConcepts, deleteGroup, fetchBubbleGroups } from '../actions';
+import { openGroupForm } from '../actions/form'
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -41,6 +42,8 @@ class BubbleMasonry extends Component {
         super(props);
 
         this.renderDeleteGroup = this.renderDeleteGroup.bind(this);
+
+        this.handleSpecialMenuItem = this.handleSpecialMenuItem.bind(this);
     }
 
     componentDidMount() {
@@ -73,16 +76,17 @@ class BubbleMasonry extends Component {
         const { label, parent_groupId } = component;
 
         return (
-            <FormEditGroup key={label}
-                n_depth={1}
-                parent_groupId={parent_groupId}
+            // <FormEditGroup key={label}
+            //     n_depth={1}
+            //     parent_groupId={parent_groupId}
 
-                label={label}
-                mode="new"
+            //     label={label}
+            //     mode="new"
 
-                // initialValues={{name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}}
-                // initialValues={{name: "FUCK YOURSELF ADD"}}
-            />
+            //     // initialValues={{name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}}
+            //     // initialValues={{name: "FUCK YOURSELF ADD"}}
+            // />
+            <div></div>
         );
     }
 
@@ -90,12 +94,13 @@ class BubbleMasonry extends Component {
         const { label, group } = component;
         
         return (
-            <FormEditGroup key={label}
-                label={label}
-                mode="update"
+            // <FormEditGroup key={label}
+            //     label={label}
+            //     mode="update"
 
-                initialValues={group}
-            />
+            //     initialValues={group}
+            // />
+            <div></div>
         );
     }
 
@@ -234,20 +239,33 @@ class BubbleMasonry extends Component {
         });
     }
 
+    handleSpecialMenuItem() {
+
+        const init_values = {
+            name: "New Subgroup",
+            n_depth: 1,
+            parent_groupId: "blaaaaayadadadada"
+        };
+
+        const wow = {
+            mode: "new",
+            initialValues: init_values
+        };
+
+        this.props.openGroupForm(wow);
+    };
+
     renderMasonry() {
         return (
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
+                    <MenuItem onClick={this.handleSpecialMenuItem} >
+                        CLICK ME FOR SPECIALNESS
+                    </MenuItem>
+                    
                     {this.renderGroups()}
-                    <FormEditGroup 
-                        n_depth={0}
-                        parent_groupId={null}
-                        label="New Group"
-                        mode="new"
-                        initialValues={{name:"New Group", n_depth: 0, parent_groupId: null}}
-                    />
                 </Masonry>
             </ResponsiveMasonry>
         );
@@ -281,5 +299,5 @@ BubbleMasonry.propTypes = {
 };
   
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchConcepts, fetchBubbleGroups, deleteGroup })(BubbleMasonry)
+    connect(mapStateToProps, { fetchConcepts, fetchBubbleGroups, deleteGroup, openGroupForm })(BubbleMasonry)
 );

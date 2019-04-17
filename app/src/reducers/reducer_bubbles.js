@@ -10,7 +10,9 @@ export default function (state = {}, action) {
         case FETCH_BUBBLES:
             let b = action.payload.data.data.bubbles;
             return _.mapKeys(b, 'id'); // made key-value store based on id
+            
         default:
             return state;
     }
 }
+

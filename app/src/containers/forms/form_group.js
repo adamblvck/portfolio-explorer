@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 
-import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
+import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
-import MenuItem from '@material-ui/core/MenuItem';
-
 import { connect } from 'react-redux';
 import { addGroup, editGroup } from '../../actions'
+import { closeGroupForm } from '../../actions/form';
 
 class FormEditGroup extends Component {
     constructor(props) {
@@ -25,15 +20,27 @@ class FormEditGroup extends Component {
         this.handleClose = this.handleClose.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        if (nextProps.open == true){ // if form receives props and this turns true
+            this.setState({
+                open: nextProps.open
+            });
+        }
+    }
+
     handleOpen = () => {
-        this.setState({ open: true });
+        // this.setState({ open: true });
     };
     
     handleClose = () => {
-        this.setState({ open: false });
+        // this.setState({ open: false });
+        this.props.closeGroupForm();
     };
 
-    onSubmit(values) {
+    onSubmit(values){
+
+        console.log("Submitting values: ", values);
+
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
             this.props.addGroup({ 
@@ -90,14 +97,16 @@ class FormEditGroup extends Component {
 
         return (
             <div>
-                <MenuItem onClick={this.handleOpen}>
+                {/* <MenuItem onClick={this.handleOpen}>
                     {this.props.label}
-                </MenuItem>
+                </MenuItem> */}
                 
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.state.open}
+
+                    // Both props and state need to be "open" to show the form
+                    open={this.props.open}
                     onClose={this.handleClose}
                 >
                     <div className="form-add-concept">
@@ -108,6 +117,7 @@ class FormEditGroup extends Component {
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
+
                                 <Field
                                     label="Name"
                                     name="name"
@@ -144,7 +154,7 @@ class FormEditGroup extends Component {
                                     component={this.renderField}
                                 />
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
-                                <Button type="cancel" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                                <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
                             </form>
                         </Paper>
                     </div>
@@ -156,16 +166,26 @@ class FormEditGroup extends Component {
 
 function validate(){
     const errors = {}
-
     return errors;
 }
 
-export default reduxForm({
-    validate,
-    form: 'EditGroupForm'
-})(
-    connect(
-        null,
-        {addGroup, editGroup}
-    )(FormEditGroup)
-);
+function mapStateToProps(state) {
+    console.log("MapSTOP GROUP", state.forms);
+
+    if (state.forms && state.forms.form_type == "group"){
+        return {
+            open: state.forms.open,
+            mode: state.forms.mode,
+            initialValues: state.forms.initialValues
+        };
+    }
+
+    return {};
+}
+
+export default connect(mapStateToProps, {addGroup, editGroup, closeGroupForm})(
+    reduxForm({
+        validate,
+        form: 'EditGroupForm',
+        enableReinitialize: true
+    })(FormEditGroup));

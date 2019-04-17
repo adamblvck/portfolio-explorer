@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import BubbleMasonry from '../containers/bubble_masonry';
 import ConceptDetails from '../containers/concept_details';
 
+import FormEditGroup from '../containers/forms/form_group';
+
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
 
@@ -87,8 +89,12 @@ export default class Bubble extends Component {
                     isAuthenticated={isAuthenticated}
                 />
 
-                
-
+                {/* Holds form for editing groups */}
+                <FormEditGroup
+                    label="default"
+                    mode="new"
+                    open={false}
+                />
             </div>
 		);
 	}
