@@ -5,7 +5,8 @@ import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
 import { fetchBubbles } from '../actions';
-import { openBubbleForm, closeBubbleForm } from '../actions/form';
+import { openBubbleForm } from '../actions/form';
+import { deleteBubble } from '../actions/bubble';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
@@ -20,7 +21,6 @@ import FormBubble from './forms/form_bubble';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import form_bubble from './forms/form_bubble';
 
 
 const styles = {
@@ -93,7 +93,7 @@ class BubblesOverview extends Component {
     }
 
     handleDeleteBubble(bubble){
-
+        this.props.deleteBubble(bubble);
     }
 
     renderFormEditBubble(component) {
@@ -195,11 +195,23 @@ class BubblesOverview extends Component {
             >
                 <Masonry gutter="0 auto 0 auto">
                     {this.renderBubbles()}
-                    {/* <FormAddGroup 
-                        n_depth={0}
-                        parent_groupId={null}
-                        addButtonText="Add Group"
-                    /> */}
+                    
+                    {/* TODO: Refactor below item into a function */}
+                    <MenuItem
+                        onClick={() => {
+                            const params = {
+                                mode: "new",
+                                initialValues: {
+                                    name: "New Bubble",
+                                    description: "Write description of your bubble here",
+                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)"}
+                            };
+
+                            this.props.openBubbleForm(params);
+                        }}>
+                        Add Group
+                    </MenuItem>
+
                 </Masonry>
             </ResponsiveMasonry>
         );
@@ -238,5 +250,5 @@ BubblesOverview.propTypes = {
 };
 
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchBubbles, openBubbleForm })(BubblesOverview)
+    connect(mapStateToProps, { fetchBubbles, openBubbleForm, deleteBubble })(BubblesOverview)
 );

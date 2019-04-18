@@ -5,6 +5,7 @@ import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 
 import { closeBubbleForm } from '../../actions/form';
+import { updateBubble, addBubble } from '../../actions/bubble';
 
 class FormBubble extends Component {
     constructor(props) {
@@ -57,10 +58,10 @@ class FormBubble extends Component {
     onSubmit(values) {
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
-            // this.props.addConcept( { ...values } );
+            this.props.addBubble( { ...values } );
         }
         else if (this.props.mode == "update") {
-            // this.props.updateConcept( {...values} );
+            this.props.updateBubble( {...values} );
         }
 
         // and close the form
@@ -121,14 +122,11 @@ class FormBubble extends Component {
 }
 
 function validate(){
-    const errors = {}
-
+    const errors = {};
     return errors;
 }
 
 function mapStateToProps(state) {
-    console.log("mapSTOP bubble", state);
-
     if (state.forms && state.forms.form_type == "bubble"){
         return {
             open: state.forms.open,
@@ -140,7 +138,7 @@ function mapStateToProps(state) {
     return {}; 
 }
 
-export default connect(mapStateToProps, { closeBubbleForm })(
+export default connect(mapStateToProps, { closeBubbleForm, updateBubble, addBubble })(
     reduxForm({
         validate,
         form: 'EditBubble',

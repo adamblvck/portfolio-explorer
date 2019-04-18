@@ -261,6 +261,8 @@ class BubbleMasonry extends Component {
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
+                    {this.renderGroups()}
+
                     {/* TODO: Refactor below item into a function */}
                     <MenuItem
                         onClick={() => {
@@ -277,10 +279,6 @@ class BubbleMasonry extends Component {
                         }}>
                         Add Group
                     </MenuItem>
-                    
-            
-
-                    {this.renderGroups()}
                 </Masonry>
             </ResponsiveMasonry>
         );
