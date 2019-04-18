@@ -410,16 +410,7 @@ class ConceptDetails extends Component {
     renderCardActions(concept){
         return (
             <CardActions>
-                {this.props.isAuthenticated && 
-                    // <FormEditConcept
-                    //     groupId={concept.group.id}
-                    //     groupName={concept.group.name}
-                    //     key="editConcept"
-                    //     logo_url={concept.logo_url} // hacky but works, used in the constructor
-                    //     initialValues={{...concept}} // , groupIds: concept.group.id
-                    //     label="Edit"
-                    //     mode="update"
-                    // />
+                { this.props.isAuthenticated && 
                     <Button
                         type="Edit" 
                         onClick={this.handleEditConcept}
