@@ -5,6 +5,7 @@ import BubbleMasonry from '../containers/bubble_masonry';
 import ConceptDetails from '../containers/concept_details';
 
 import FormEditGroup from '../containers/forms/form_group';
+import FormEditConcept from '../containers/forms/form_concept';
 
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
@@ -89,12 +90,20 @@ export default class Bubble extends Component {
                     isAuthenticated={isAuthenticated}
                 />
 
-                {/* Holds form for editing groups */}
+                {/* Holds form for creating/editing groups */}
                 <FormEditGroup
                     label="default"
                     mode="new"
                     open={false}
                 />
+
+                {/* Holds form for creating/editing concepts */}
+                <FormEditConcept
+                    label="default"
+                    mode="new"
+                    open={false}
+                />
+
             </div>
 		);
 	}

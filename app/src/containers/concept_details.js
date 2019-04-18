@@ -21,9 +21,12 @@ import LinkIcon from '@material-ui/icons/LinkRounded';
 // my components
 import FormEditConcept from './forms/form_concept';
 import MenuGroup from './menus/menu_groups';
-import { deleteConcept, fetchCryptoPrices } from '../actions';
 import CryptoChart from './crypto_chart';
 import MindmapViewer from './mindmap_viewer';
+
+// Actions
+import { deleteConcept, fetchCryptoPrices } from '../actions';
+import { openConceptForm } from '../actions/form';
 
 // charting components
 import ReactEcharts from 'echarts-for-react'; 
@@ -118,6 +121,9 @@ class ConceptDetails extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleAnimationClose = this.handleAnimationClose.bind(this);
         this.handleShowMore = this.handleShowMore.bind(this);
+        this.handleEditConcept = this.handleEditConcept.bind(this);
+
+        this.renderFormEditConcept = this.renderFormEditConcept.bind(this);
 
         this.renderFormDeleteConcept = this.renderFormDeleteConcept.bind(this);
         this.renderContentCard = this.renderContentCard.bind(this);
@@ -221,20 +227,32 @@ class ConceptDetails extends Component {
         )
     }
 
+    handleEditConcept(){
+        console.log("wow openconceptform");
+        const params = {
+            mode: "update",
+            initialValues: this.props.concept
+        };
+
+        this.props.openConceptForm(params);
+    }
+
     renderFormEditConcept(component) {
-        const { concept } = component;
+        const { label, concept } = component;
+
+        const params = {
+            mode: "update",
+            initialValues: concept
+        };
 
         return (
-            <FormEditConcept
-                groupId={concept.group.id}
-                groupName={concept.group.name}
-                key="editConcept"
-                logo_url={concept.logo_url} // hacky but works, used in the constructor
-                initialValues={{...concept, groupId: concept.group.id}}
-
-                mode="update"
-                label="Edit"
-            />
+            <MenuItem
+                color="secondary" 
+                key={`editConceptT-${concept.id}`}
+                onClick={() => this.props.openConceptForm(params)}
+            >
+                {label}
+            </MenuItem>
         );
     }
 
@@ -297,15 +315,15 @@ class ConceptDetails extends Component {
                         isAuthenticated={this.props.isAuthenticated}
                         components={ [
                             {
-                                label:"Edit Concept",
+                                label: "Edit Concept",
                                 concept: concept,
-                                render:this.renderFormEditConcept,
+                                render: this.renderFormEditConcept,
                                 needAuth: true
                             },
                             {
-                                label:"Delete Concept",
+                                label: "Delete Concept",
                                 concept: concept,
-                                render:this.renderFormDeleteConcept,
+                                render: this.renderFormDeleteConcept,
                                 needAuth: true
                             }
                         ]}
@@ -391,21 +409,28 @@ class ConceptDetails extends Component {
     
     renderCardActions(concept){
         return (
-            <CardActions
-                // style={{float:'right'}}
-            >
-                {this.props.isAuthenticated && <FormEditConcept
-                    groupId={concept.group.id}
-                    groupName={concept.group.name}
-                    key="editConcept"
-                    logo_url={concept.logo_url} // hacky but works, used in the constructor
-                    initialValues={{...concept}} // , groupIds: concept.group.id
-                    label="Edit"
-                    mode="update"
-                />}
+            <CardActions>
+                {this.props.isAuthenticated && 
+                    // <FormEditConcept
+                    //     groupId={concept.group.id}
+                    //     groupName={concept.group.name}
+                    //     key="editConcept"
+                    //     logo_url={concept.logo_url} // hacky but works, used in the constructor
+                    //     initialValues={{...concept}} // , groupIds: concept.group.id
+                    //     label="Edit"
+                    //     mode="update"
+                    // />
+                    <Button
+                        type="Edit" 
+                        onClick={this.handleEditConcept}
+                    >
+                        Edit
+                    </Button> 
+                }
                 <Button
                     type="Back" 
-                    onClick={this.handleClose}>
+                    onClick={this.handleClose}
+                >
                     Back
                 </Button>                
             </CardActions>
@@ -508,7 +533,12 @@ function mapStateToProps (state) {
     };
 }
 
-export default connect( mapStateToProps, {deleteConcept, fetchCryptoPrices})(ConceptDetails);
+export default connect( mapStateToProps, {
+    // actions
+    deleteConcept, 
+    fetchCryptoPrices, 
+    openConceptForm
+})(ConceptDetails);
 
 
 

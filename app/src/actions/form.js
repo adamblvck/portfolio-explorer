@@ -34,7 +34,7 @@ export function openConceptForm(params) {
     };
 
     return {
-        type: OPEN_GROUP_FORM,
+        type: OPEN_CONCEPT_FORM,
         payload: payload
     }
 }

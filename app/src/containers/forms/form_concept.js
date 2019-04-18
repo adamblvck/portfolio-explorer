@@ -11,6 +11,7 @@ import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
 import { addConcept, updateConcept } from '../../actions'
+import { closeConceptForm } from '../../actions/form';
 
 // to make multi-column layouts
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -40,25 +41,27 @@ class FormEditConcept extends Component {
 
     // Event Handlers
     handleOpen = () => {
-        this.setState({ open: true });
+        // this.setState({ open: true });
     };
     
     handleClose = () => {
-        this.setState({ open: false });
+        this.props.closeConceptForm();
     };
 
     onSubmit(values, groupId) {
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
-            this.props.addConcept( { ...values, groupId: groupId } );
+            this.props.addConcept( { ...values } );
         }
         else if (this.props.mode == "update") {
-            this.props.updateConcept(values);
+            this.props.updateConcept( {...values} );
         }
+
+        // and close the form
+        this.props.closeConceptForm();
     }
 
     // Render functions
-
     renderField(field) {
         const { meta : { touched, error } } = field;
         const className = `form-group ${touched && error ? 'has-danger' : ''}`;
@@ -203,17 +206,17 @@ class FormEditConcept extends Component {
                     Edit
                 </MenuItem> */}
 
-                <Button 
+                {/* <Button 
                     tabIndex={-1}
                     onClick={this.handleOpen}
                 >
                     {this.props.label}
-                </Button>
+                </Button> */}
 
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.state.open}
+                    open={this.props.open}
                     onClose={this.handleClose}
                     className="forms-class"
                 >
@@ -318,7 +321,7 @@ class FormEditConcept extends Component {
                                         />
                                         
                                         <Button type="submit" variant="outlined" color="primary">Submit</Button>
-                                        <Button type="cancel" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                                        <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
                                     </Row>
                                 </Grid>
                             </form>
@@ -336,18 +339,22 @@ function validate(){
     return errors;
 }
 
-// function mapStateToProps(state, ownProps) {
-//     return {
-//         initialValues: initValsTest
-//     }    
-// }
+function mapStateToProps(state) {
+    if (state.forms && state.forms.form_type == "concept"){
+        return {
+            open: state.forms.open,
+            mode: state.forms.mode,
+            initialValues: state.forms.initialValues
+        };
+    }
 
-export default reduxForm({
-    validate,
-    form: 'EditConceptForm'
-})(
-    connect(
-        null,
-        {addConcept, updateConcept}
-    )(FormEditConcept)
+    return {}; 
+}
+
+export default connect(mapStateToProps, {addConcept, updateConcept, closeConceptForm})(
+    reduxForm({
+        validate,
+        form: 'EditConceptForm',
+        enableReinitialize: true
+    })(FormEditConcept)
 );

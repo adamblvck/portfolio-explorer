@@ -33,7 +33,6 @@ class FormEditGroup extends Component {
     };
     
     handleClose = () => {
-        // this.setState({ open: false });
         this.props.closeGroupForm();
     };
 

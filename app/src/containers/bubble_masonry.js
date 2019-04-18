@@ -5,13 +5,14 @@ import _ from 'lodash';
 // Actions performed in Bubble Masonry
 import { fetchConcepts, deleteGroup, fetchBubbleGroups } from '../actions';
 import { openGroupForm } from '../actions/form'
+import { openConceptForm } from '../actions/form';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 // Material Design Graphics
 import PropTypes from 'prop-types';
-import { Card, CardContent, withStyles, CardHeader, MenuItem } from '@material-ui/core';
+import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu } from '@material-ui/core';
 
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
@@ -44,6 +45,7 @@ class BubbleMasonry extends Component {
         this.renderDeleteGroup = this.renderDeleteGroup.bind(this);
         this.renderFormEditGroup = this.renderFormEditGroup.bind(this);
         this.renderFormAddSubgroup = this.renderFormAddSubgroup.bind(this);
+        this.renderFormAddConcept = this.renderFormAddConcept.bind(this);
     }
 
     componentDidMount() {
@@ -55,16 +57,21 @@ class BubbleMasonry extends Component {
     */
 
     renderFormAddConcept(component) {
-        const { label, groupName, groupId } = component;
+        const { label, group } = component;
+
+        const params = {
+            mode: "new",
+            initialValues: {groupIds: [group.id]}
+        };
+
         return (
-            <FormEditConcept
-                groupId={groupId}
-                groupName={groupName}
-                key={label}
-                label={label}
-                mode="new"
-                initialValues={{groupIds: [groupId]}}
-            />
+            <MenuItem
+                color="secondary" 
+                key={`addConceptTo-${group.id}`}
+                onClick={() => this.props.openConceptForm(params)}
+            >
+                {label}
+            </MenuItem>
         );
     }
 
@@ -155,8 +162,7 @@ class BubbleMasonry extends Component {
                                 components={ [
                                     {
                                         label: "Add Concept",
-                                        groupId: group.id,
-                                        groupName: group.name,
+                                        group: group,
                                         needAuth: true,
                                         render: this.renderFormAddConcept
                                     },
@@ -308,5 +314,12 @@ BubbleMasonry.propTypes = {
 };
   
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchConcepts, fetchBubbleGroups, deleteGroup, openGroupForm })(BubbleMasonry)
+    connect(mapStateToProps, {
+        // actions
+        fetchConcepts, 
+        fetchBubbleGroups, 
+        deleteGroup, 
+        openGroupForm, 
+        openConceptForm
+    })(BubbleMasonry)
 );
