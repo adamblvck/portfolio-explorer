@@ -87,7 +87,7 @@ export default class Bubble extends Component {
                 {/* Holds concept details component */}
                 <ConceptDetails 
                     id="concept-detail-popper"
-                    isAuthenticated={isAuthenticated}
+                    isAuthenticated={isAuthenticated()}
                 />
 
                 {/* Holds form for creating/editing groups */}

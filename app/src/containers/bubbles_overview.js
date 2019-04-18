@@ -141,7 +141,7 @@ class BubblesOverview extends Component {
             <Card className={classes.card} elevation={3}>
                 <CardHeader
                     action={
-                        this.props.auth && // if authenticated
+                        this.props.auth.isAuthenticated() && // if authenticated
                         <MenuGroup 
                             className="groupmenu-btn"
                             isAuthenticated={this.props.auth}
@@ -188,7 +188,7 @@ class BubblesOverview extends Component {
         });
     }
 
-    renderMasonry() {
+    renderMasonry(isAuthenticated) {
         return (
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
@@ -197,20 +197,23 @@ class BubblesOverview extends Component {
                     {this.renderBubbles()}
                     
                     {/* TODO: Refactor below item into a function */}
-                    <MenuItem
-                        onClick={() => {
-                            const params = {
-                                mode: "new",
-                                initialValues: {
-                                    name: "New Bubble",
-                                    description: "Write description of your bubble here",
-                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)"}
-                            };
+                    { isAuthenticated() && 
+                        <MenuItem
+                            onClick={() => {
+                                const params = {
+                                    mode: "new",
+                                    initialValues: {
+                                        name: "New Bubble",
+                                        description: "Write description of your bubble here",
+                                        background:"linear-gradient(45deg, #4532E6, #1cb5e0)"}
+                                };
 
-                            this.props.openBubbleForm(params);
-                        }}>
-                        Add Group
-                    </MenuItem>
+                                this.props.openBubbleForm(params);
+                            }}
+                        >
+                            Add Group
+                        </MenuItem>
+                    }
 
                 </Masonry>
             </ResponsiveMasonry>
@@ -226,7 +229,7 @@ class BubblesOverview extends Component {
                 {this.renderAppBar(isAuthenticated)}
 
                 {/* Holds the overview of all bubbles*/}
-                { this.renderMasonry() }
+                { this.renderMasonry(isAuthenticated) }
 
                 {/* Holds form for creating/editing concepts */}
                 <FormBubble
