@@ -39,14 +39,10 @@ class FormEditGroup extends Component {
     onSubmit(values){
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
-            this.props.addGroup({ 
-                ...values, 
-                // n_depth:this.props.n_depth, 
-                // parent_groupId:this.props.parent_groupId
-            });
+            this.props.addGroup({ ...values });
         }
         else if (this.props.mode == "update") {
-            this.props.editGroup({...values });
+            this.props.editGroup({ ...values });
         }
 
         // and close form
