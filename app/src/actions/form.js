@@ -4,6 +4,9 @@ export const CLOSE_GROUP_FORM = "close_group_form";
 export const OPEN_CONCEPT_FORM = "open_concept_form";
 export const CLOSE_CONCEPT_FORM = "close_concept_form";
 
+export const OPEN_BUBBLE_FORM = "open_bubble_form";
+export const CLOSE_BUBBLE_FORM = "close_bubble_form";
+
 export function openGroupForm(params) {
     const payload = {
         mode: params.mode,
@@ -42,6 +45,27 @@ export function openConceptForm(params) {
 export function closeConceptForm() {
     return {
         type: CLOSE_CONCEPT_FORM,
+        payload: {}
+    }
+}
+
+export function openBubbleForm(params) {
+    const payload = {
+        mode: params.mode,
+        open: true,
+        form_type: "bubble",
+        initialValues: params.initialValues
+    };
+
+    return {
+        type: OPEN_BUBBLE_FORM,
+        payload: payload
+    }
+}
+
+export function closeBubbleForm() {
+    return {
+        type: CLOSE_BUBBLE_FORM,
         payload: {}
     }
 }

@@ -5,16 +5,23 @@ import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
 import { fetchBubbles } from '../actions';
+import { openBubbleForm, closeBubbleForm } from '../actions/form';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
 
 // Import material-design toolbar
 import PropTypes from 'prop-types';
-import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles} from '@material-ui/core';
+import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles, MenuItem } from '@material-ui/core';
+
+import MenuGroup from './menus/menu_groups';
+
+import FormBubble from './forms/form_bubble';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import form_bubble from './forms/form_bubble';
+
 
 const styles = {
     card: {
@@ -36,6 +43,10 @@ class BubblesOverview extends Component {
 
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleDeleteBubble = this.handleDeleteBubble.bind(this);
+
+        this.renderFormEditBubble = this.renderFormEditBubble.bind(this);
+        this.renderDeleteBubble = this.renderDeleteBubble.bind(this);
     }
 
     componentDidMount(){
@@ -49,10 +60,6 @@ class BubblesOverview extends Component {
     handleLogout() {
         this.props.auth.logout();
         this.forceUpdate();
-    }
-
-    handleBlockchainClick(){
-        
     }
 
     renderAppBar(isAuthenticated){        
@@ -85,6 +92,43 @@ class BubblesOverview extends Component {
         );
     }
 
+    handleDeleteBubble(bubble){
+
+    }
+
+    renderFormEditBubble(component) {
+        const { label, bubble } = component;
+
+        const params = {
+            mode: "update",
+            initialValues: bubble
+        };
+
+        return (
+            <MenuItem
+                color="secondary" 
+                key={`editBubble-${bubble.id}`}
+                onClick={() => this.props.openBubbleForm(params)}
+            >
+                {label}
+            </MenuItem>
+        );
+    }
+
+    renderDeleteBubble(component) {
+        const { label, bubble } = component;
+
+        return (
+            <MenuItem
+                color="secondary" 
+                key={`deleteBubble-${bubble.id}`}
+                onClick={() => this.handleDeleteBubble(bubble)}
+            >
+                {label}
+            </MenuItem>
+        );
+    }
+
     renderCard(bubble){
         const { classes } = this.props;
 
@@ -96,6 +140,27 @@ class BubblesOverview extends Component {
         return (
             <Card className={classes.card} elevation={3}>
                 <CardHeader
+                    action={
+                        this.props.auth && // if authenticated
+                        <MenuGroup 
+                            className="groupmenu-btn"
+                            isAuthenticated={this.props.auth}
+                            components={ [
+                                {
+                                    label: "Edit Bubble",
+                                    needAuth: true,
+                                    bubble: bubble,
+                                    render: this.renderFormEditBubble
+                                },
+                                {
+                                    label: "Delete Bubble",
+                                    needAuth: true,
+                                    bubble: bubble,
+                                    render: this.renderDeleteBubble
+                                }
+                            ]}
+                        />
+                    }
                     title={bubble.name}
                     subheader={bubble.description}
                     style={{backgroundColor: background_color, background: background_color}}
@@ -150,6 +215,13 @@ class BubblesOverview extends Component {
 
                 {/* Holds the overview of all bubbles*/}
                 { this.renderMasonry() }
+
+                {/* Holds form for creating/editing concepts */}
+                <FormBubble
+                    label="default"
+                    mode="new"
+                    open={false}
+                />
             </div>
         )
     }
@@ -166,5 +238,5 @@ BubblesOverview.propTypes = {
 };
 
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchBubbles})(BubblesOverview)
+    connect(mapStateToProps, { fetchBubbles, openBubbleForm })(BubblesOverview)
 );

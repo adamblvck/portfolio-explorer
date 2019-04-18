@@ -264,7 +264,7 @@ class ConceptDetails extends Component {
                 color="secondary" 
                 key="deleteConcept"
                 onClick={() => this.handleDelete(concept)}>
-                Delete concept
+                Delete Concept
             </MenuItem>
         );
     }

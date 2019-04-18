@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 
-import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
@@ -19,14 +14,11 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 
-const initValsTest = `{"name":"a","logo_url":"b","meta":{"color":"c"},"details":{"title":"d","summary":"e\n\n#  fuk the police","reference_links":[{"name":"testboi","url":"accurate"}]},"groupId":"5b898603fb1d5855aad156d2"}`;
-
 class FormEditConcept extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            open: false,
             logo_url: props.logo_url
         }
 
@@ -40,15 +32,15 @@ class FormEditConcept extends Component {
     }
 
     // Event Handlers
-    handleOpen = () => {
+    handleOpen() {
         // this.setState({ open: true });
     };
     
-    handleClose = () => {
+    handleClose() {
         this.props.closeConceptForm();
     };
 
-    onSubmit(values, groupId) {
+    onSubmit(values) {
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
             this.props.addConcept( { ...values } );
@@ -199,20 +191,6 @@ class FormEditConcept extends Component {
 
         return (
             <div>
-                {/* <MenuItem
-                    tabIndex={-1}
-                    onClick={this.handleOpen}
-                >
-                    Edit
-                </MenuItem> */}
-
-                {/* <Button 
-                    tabIndex={-1}
-                    onClick={this.handleOpen}
-                >
-                    {this.props.label}
-                </Button> */}
-
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
@@ -227,7 +205,7 @@ class FormEditConcept extends Component {
                                 { this.props.mode == "new" && <p>New Concept</p> }
                             </Typography>
                             <form
-                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values, this.props.groupId);} ) }
+                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }
                             >
                                 <Grid>
 
