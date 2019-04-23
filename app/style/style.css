@@ -250,9 +250,9 @@ li [class*="MuiSvgIcon"] {
     font-size: 18px;
 }
 
-concept-short-copy-header {
-    font-size: 16px;
-    font-weight: 200;
+.concept-short-copy-header {
+    font-size: 16px !important;
+    font-weight: 200 !important;
 }
 
 .trade-off-icon {

@@ -1,4 +1,4 @@
-import { SHOW_CONCEPT_DETAIL, FETCH_AND_SHOW_CONCEPT_DETAIL, UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT } from '../actions';
+import { SHOW_CONCEPT_DETAIL, CLOSE_CONCEPT_DETAIL, FETCH_AND_SHOW_CONCEPT_DETAIL, UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT } from '../actions';
 import {reset} from 'redux-form';
 import { STATES } from 'mongoose';
 
@@ -36,9 +36,12 @@ export default function(state = null, action) {
 
         case SHOW_CONCEPT_DETAIL:
             console.log("show_concept_detail triggered! WOHOOO", state, action);
-            return {concept: action.payload, background: action.payload.background, open: true};
+            return {concept: action.payload, 
+                background: action.payload.background, 
+                open: true};
 
-        
+        case CLOSE_CONCEPT_DETAIL:
+            return {...state, open: false};
 
         default:
             return state;

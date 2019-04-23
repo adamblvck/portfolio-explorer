@@ -102,7 +102,7 @@ const init = async() => {
         },
     });
 
-    // register static file serving (REACT)
+    // register static file serving (for REACT)
     await server.register(require('inert'));
 
     await server.route({

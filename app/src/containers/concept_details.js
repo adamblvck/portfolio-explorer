@@ -25,7 +25,7 @@ import CryptoChart from './crypto_chart';
 import MindmapViewer from './mindmap_viewer';
 
 // Actions
-import { deleteConcept, fetchCryptoPrices } from '../actions';
+import { deleteConcept, fetchCryptoPrices, closeConceptDetail } from '../actions';
 import { openConceptForm } from '../actions/form';
 
 // charting components
@@ -148,7 +148,8 @@ class ConceptDetails extends Component {
     }
 
     handleClose = () => {
-        this.setState({ animation: false });
+        // this.setState({ animation: false });
+        this.props.closeConceptDetail();
     };
 
     handleAnimationClose() {
@@ -429,11 +430,11 @@ class ConceptDetails extends Component {
     }
 
     renderContentCard(concept, headerBackground){
-        // if (concept !== undefined) {
-        //     return (<div></div>);
-        // }
+        console.log("concept_details info: ", concept);
 
-        console.log(concept);
+        if (concept === undefined) {
+            return (<div></div>);
+        }
 
         return (
             <Card className="concept-detail-card">
@@ -480,7 +481,13 @@ class ConceptDetails extends Component {
         // assign open/ anchorEl/concept if activeConcept exists.. otherwise apply default values
         const headerBackground = show_details ? activeConcept.background : null;
 
-        if ((!show_details) && (!this.state.open)){
+        // if ((!show_details) && (!this.state.open)){
+        //     return (
+        //         <div></div>
+        //     );
+        // }
+
+        if ((!show_details) && (!this.props.open)){
             return (
                 <div></div>
             );
@@ -490,7 +497,7 @@ class ConceptDetails extends Component {
             <Modal
                 aria-labelledby="concept-detail"
                 aria-describedby="concept-detail-description"
-                open={this.state.open}
+                open={this.props.open}
                 onClose={this.handleClose}
                 BackdropComponent={this.renderAnimatedBackdrop}
                 disableAutoFocus={false}
@@ -514,13 +521,15 @@ function mapStateToProps (state) {
         return {
             concept: state.groups.concepts[state.activeConcept.concept.conceptID],
             activeConcept: state.activeConcept,
-            concepts: state.groups.concepts
+            concepts: state.groups.concepts,
+            open: state.activeConcept.open
         };
     }
 
     return {
         concepts: state.groups.concepts,
-        modified: state.groups.modified
+        modified: state.groups.modified,
+        open: false
     };
 }
 
@@ -528,7 +537,8 @@ export default connect( mapStateToProps, {
     // actions
     deleteConcept, 
     fetchCryptoPrices, 
-    openConceptForm
+    openConceptForm,
+    closeConceptDetail
 })(ConceptDetails);
 
 

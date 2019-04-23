@@ -9,6 +9,7 @@ export const FETCH_ROOT_GROUPS_AND_CONCEPTS = 'fetch_rootgroup_and_concepts';
 export const FETCH_BUBBLE_GROUPS = 'fetch_bubble_groups';
 
 export const SHOW_CONCEPT_DETAIL = 'show_concept_detail';
+export const CLOSE_CONCEPT_DETAIL = 'close_concept_detail';
 export const FETCH_AND_SHOW_CONCEPT_DETAIL = 'fetch_and_show_concept_detail';
 
 export const ADD_CONCEPT = 'add_concept';
@@ -232,6 +233,13 @@ export function showConceptDetail(concept) {
     return {
         type: SHOW_CONCEPT_DETAIL,
         payload: concept
+    }
+}
+
+export function closeConceptDetail() {
+    return {
+        type: CLOSE_CONCEPT_DETAIL,
+        payload: {}
     }
 }
 

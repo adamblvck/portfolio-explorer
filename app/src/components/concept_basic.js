@@ -19,7 +19,7 @@ class ConceptBasic extends Component {
         const { currentTarget } = event;
 
         // we contain the concept in our props, so just pass on the information
-        this.props.showConceptDetail( { conceptID: this.props.concept.id, background: this.props.background } );
+        this.props.showConceptDetail( { conceptID: this.props.concept.id, background: this.props.background, open: true } );
     }
 
     render(){
