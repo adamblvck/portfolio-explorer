@@ -1,6 +1,6 @@
 /*
   Author: Adam Blvck (adamblvck.com)
-  Product: Blockchain Ecosystem Explorer
+  Product: Data Bubble
   Year: 2019  Smartie.be
 */
 
