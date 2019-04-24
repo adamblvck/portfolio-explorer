@@ -121,25 +121,45 @@ export default class MindmapViewer extends Component {
                 trigger: 'item',
                 triggerOn: 'mousemove'
             },
+            toolbox: {
+                show: true,
+                feature: {
+                    // dataView: {readOnly: false},
+                    // magicType: {type: ['line', 'bar']},
+                    restore: {
+                        title: "Restore"
+                    },
+                    saveAsImage: {
+                        title: "Save img"
+                    }
+                }
+            },
             series: [
                 {
                     type: 'tree',
     
                     data: [mindmap_data],
     
-                    top: '1%',
-                    left: '7%',
+                    top: '5%',
+                    left: '20%',
                     bottom: '1%',
                     right: '20%',
     
-                    symbolSize: 7,
+                    symbolSize: 10,
+
+                    roam: 'move',
     
                     label: {
                         normal: {
-                            position: 'left',
+                            position: 'top',
                             verticalAlign: 'middle',
-                            align: 'right',
-                            fontSize: 9
+                            align: 'middle',
+                            offset: [0, -4],
+                            fontSize: 12,
+                            fontFamily: '"Nunito", "Roboto", "Helvetica", "Arial"',
+                            rich: {
+                                width: 10
+                            }
                         }
                     },
     
@@ -148,14 +168,16 @@ export default class MindmapViewer extends Component {
                             normal: {
                                 position: 'right',
                                 verticalAlign: 'middle',
-                                align: 'left'
+                                align: 'left',
+                                offset: [0, 0]
                             }
                         }
                     },
     
+                    initialTreeDepth: 1,
                     expandAndCollapse: true,
-                    animationDuration: 550,
-                    animationDurationUpdate: 750
+                    animationDuration: 250,
+                    animationDurationUpdate: 250
                 }
             ]
         }
