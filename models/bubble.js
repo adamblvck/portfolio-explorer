@@ -10,7 +10,7 @@ const Schema = mongoose.Schema;
 
 var BubbleSchema = new Schema({ 
     name: String,
-    color: String,
+    bubble_id: String,
     background: String,
     description: String
 });

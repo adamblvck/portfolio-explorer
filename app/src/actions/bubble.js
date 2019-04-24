@@ -13,19 +13,19 @@ export function addBubble(bubbleInfo) {
     let query = `
     mutation addBubble (
         $name:String,
-        $color: String,
+        $bubble_id: String,
         $background: String,
         $description: String,
     ) {
         addBubble(
             name:$name,
-            color:$color,
+            bubble_id:$bubble_id,
             background:$background,
             description:$description
         ) {
             id
             name
-            color
+            bubble_id
             background
             description
         }
@@ -56,22 +56,22 @@ export function updateBubble(bubbleInfo) {
     // FETCH_BUBBLES
     let query = `
     mutation updateBubble (
-        $id:ID!,
-        $name:String,
-        $color: String,
+        $id: ID!,
+        $name: String,
+        $bubble_id: String,
         $background: String,
         $description: String,
     ) {
         updateBubble(
             id:$id,
             name:$name,
-            color:$color,
+            bubble_id:$bubble_id,
             background:$background,
             description:$description
         ) {
             id
             name
-            color
+            bubble_id
             background
             description
         }

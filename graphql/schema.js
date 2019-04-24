@@ -109,7 +109,7 @@ const Mutation = new GraphQLObjectType({
             type: BubbleType,
             args: {
                 name: { type: GraphQLString },
-                color: { type: GraphQLString },
+                bubble_id: { type: GraphQLString },
                 background: { type: GraphQLString },
                 description: { type: GraphQLString },
             },
@@ -129,7 +129,7 @@ const Mutation = new GraphQLObjectType({
                 // create new bubble
                 let bubble = new Bubble({
                     name: args.name,
-                    color: args.color,
+                    bubble_id: args.bubble_id,
                     background: args.background,
                     description: args.description,
                 });
@@ -219,7 +219,7 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)},
                 name: { type: GraphQLString},
-                color:  { type: GraphQLString },
+                bubble_id:  { type: GraphQLString },
                 background:  { type: GraphQLString },
                 description: { type: GraphQLString },
             },
@@ -239,7 +239,7 @@ const Mutation = new GraphQLObjectType({
                 // query resolve
                 let mod = {}
                 if (args.name) mod.name = args.name;
-                if (args.color) mod.color = args.color;
+                if (args.bubble_id) mod.bubble_id = args.bubble_id;
                 if (args.background) mod.background = args.background;
                 if (args.description) mod.description = args.description;
 

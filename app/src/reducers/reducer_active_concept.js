@@ -1,6 +1,4 @@
-import { SHOW_CONCEPT_DETAIL, CLOSE_CONCEPT_DETAIL, FETCH_AND_SHOW_CONCEPT_DETAIL, UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT } from '../actions';
-import {reset} from 'redux-form';
-import { STATES } from 'mongoose';
+import { SHOW_CONCEPT_DETAIL, CLOSE_CONCEPT_DETAIL, FETCH_AND_SHOW_CONCEPT_DETAIL } from '../actions/concept';
 
 function parseResponse(state, action){
     if (action && action.payload && action.payload.request){

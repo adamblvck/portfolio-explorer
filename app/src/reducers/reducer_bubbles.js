@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { FETCH_BUBBLES } from '../actions';
+import { FETCH_BUBBLES } from '../actions/fetching_public';
 import { ADD_BUBBLE, EDIT_BUBBLE, DELETE_BUBBLE } from '../actions/bubble';
 
 function handleErrors(response){
@@ -42,6 +42,9 @@ export default function (state = {}, action) {
 
         case EDIT_BUBBLE:
             const { updateBubble } = action.payload.data.data;
+
+            console.log(updateBubble);
+
             return { ...state, [updateBubble.id]:updateBubble};
 
         case DELETE_BUBBLE:

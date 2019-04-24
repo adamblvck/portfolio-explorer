@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Paper, Card, CardContent, CardHeader } from '@material-ui/core';
 
 // actions
-import { fetchAndShowConceptDetails, showConceptDetail} from '../actions';
+import { showConceptDetail } from '../actions/concept';
 
 class ConceptBasic extends Component {
     constructor(props) {
@@ -49,4 +49,4 @@ class ConceptBasic extends Component {
 }
 
 // attach ACTION fetchAndShowConceptDetails to ConceptBasic
-export default connect(null, { fetchAndShowConceptDetails, showConceptDetail })(ConceptBasic);
+export default connect(null, { showConceptDetail })(ConceptBasic);

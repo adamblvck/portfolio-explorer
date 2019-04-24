@@ -7,6 +7,10 @@ export const CLOSE_CONCEPT_FORM = "close_concept_form";
 export const OPEN_BUBBLE_FORM = "open_bubble_form";
 export const CLOSE_BUBBLE_FORM = "close_bubble_form";
 
+// Local development has a different url than when deployed on heroku
+const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
+const ROOT_URL = isLOCALHOST ? 'http://localhost:4000/graphql' : '/graphql';
+
 export function openGroupForm(params) {
     const payload = {
         mode: params.mode,

@@ -2,7 +2,7 @@
   Author: Adam Blvck (adamblvck.com)
   Product: Blockchain Ecosystem Explorer
   Year: 2018
-  Smartie.be
+  For Smartie.be
 */
 
 import React from 'react';

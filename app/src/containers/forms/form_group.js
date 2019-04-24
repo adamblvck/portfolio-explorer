@@ -5,7 +5,7 @@ import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
-import { addGroup, editGroup } from '../../actions'
+import { addGroup, editGroup } from '../../actions/group'
 import { closeGroupForm } from '../../actions/form';
 
 class FormEditGroup extends Component {

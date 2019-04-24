@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { FETCH_CONCEPTS, FETCH_ROOT_GROUPS_AND_CONCEPTS, UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT, ADD_GROUP, EDIT_GROUP, DELETE_GROUP, FETCH_BUBBLE_GROUPS} from '../actions';
+import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
+import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
+import { FETCH_BUBBLE_GROUPS} from '../actions/fetching_public';
 
 
 function mapKeysRecursive(root_groups){

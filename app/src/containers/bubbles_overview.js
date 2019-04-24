@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
-import { fetchBubbles } from '../actions';
+import { fetchBubbles } from '../actions/fetching_public';
 import { openBubbleForm } from '../actions/form';
 import { deleteBubble } from '../actions/bubble';
 
@@ -93,7 +93,9 @@ class BubblesOverview extends Component {
     }
 
     handleDeleteBubble(bubble){
-        this.props.deleteBubble(bubble);
+        if( confirm('Sure want to delete?')) {
+            this.props.deleteBubble(bubble);
+        }
     }
 
     renderFormEditBubble(component) {
@@ -133,9 +135,9 @@ class BubblesOverview extends Component {
         const { classes } = this.props;
 
         const default_background = "linear-gradient(45deg, rgb(40, 48, 72), rgb(133, 147, 152))"
-        const background_color =  default_background; //bubble.color ? bubble.background : default_background;
+        const background_color = bubble.background ? bubble.background : default_background;
 
-        const link_to_bubble = `/b/${bubble.name}`;
+        const link_to_bubble = `/b/${bubble.bubble_id}`;
 
         return (
             <Card className={classes.card} elevation={3}>
@@ -204,8 +206,9 @@ class BubblesOverview extends Component {
                                     mode: "new",
                                     initialValues: {
                                         name: "New Bubble",
+                                        bubble_id: "unique bubble identifier",
                                         description: "Write description of your bubble here",
-                                        background:"linear-gradient(45deg, #4532E6, #1cb5e0)"}
+                                        background: "linear-gradient(45deg, #4532E6, #1cb5e0)"}
                                 };
 
                                 this.props.openBubbleForm(params);

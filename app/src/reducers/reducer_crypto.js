@@ -1,4 +1,4 @@
-import { FETCH_CRYPTO_PRICES} from '../actions';
+import { FETCH_CRYPTO_PRICES} from '../actions/fetching_public';
 
 export default function(state = null, action) {
     switch(action.type) {

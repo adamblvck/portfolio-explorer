@@ -61,7 +61,7 @@ class FormBubble extends Component {
             this.props.addBubble( { ...values } );
         }
         else if (this.props.mode == "update") {
-            this.props.updateBubble( {...values} );
+            this.props.updateBubble( { ...values } );
         }
 
         // and close the form
@@ -96,8 +96,8 @@ class FormBubble extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
-                                    label="Color"
-                                    name="color"
+                                    label="Bubble ID"
+                                    name="bubble_id"
                                     component={this.renderField}
                                 />
                                 <Field

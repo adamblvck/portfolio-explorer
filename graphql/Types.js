@@ -172,7 +172,7 @@ const BubbleType = new GraphQLObjectType({
 
         // Mongoose Schema
         name: { type: GraphQLString },
-        color: { type: GraphQLString },
+        bubble_id: { type: GraphQLString },
         background: { type: GraphQLString },
         description: { type: GraphQLString },
 

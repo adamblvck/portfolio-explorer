@@ -20,7 +20,7 @@ export default class Bubble extends Component {
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
 
-        this.bubbleID = "blockchains"
+        this.bubbleID = "blockchain"
 
         if (this.props.match.params)
             this.bubbleID = this.props.match.params['id'];
@@ -81,7 +81,7 @@ export default class Bubble extends Component {
 
                 {/* Groups Overview */}
                 <div className="groups-masonry">
-                    <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID} />
+                    <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID.toLowerCase()} />
                 </div>
 
                 {/* Holds concept details component */}

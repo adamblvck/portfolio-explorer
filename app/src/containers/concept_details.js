@@ -7,8 +7,8 @@ import ReactDOM from "react-dom";
 import markdown from "marked";
 
 // material design imports
-import { Card, CardHeader, CardContent, CardMedia, CardActionArea, CardActions, Modal, MenuItem } from '@material-ui/core';
-import { Button, Popper, Paper, Fade, Typography } from '@material-ui/core';
+import { Card, CardHeader, CardContent, CardActions, Modal, MenuItem } from '@material-ui/core';
+import { Button, Paper } from '@material-ui/core';
 
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,17 +19,14 @@ import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
 
 // my components
-import FormEditConcept from './forms/form_concept';
 import MenuGroup from './menus/menu_groups';
 import CryptoChart from './crypto_chart';
 import MindmapViewer from './mindmap_viewer';
 
 // Actions
-import { deleteConcept, fetchCryptoPrices, closeConceptDetail } from '../actions';
+import { deleteConcept, closeConceptDetail } from '../actions/concept';
+import { fetchCryptoPrices } from '../actions/fetching_public'
 import { openConceptForm } from '../actions/form';
-
-// charting components
-import ReactEcharts from 'echarts-for-react'; 
 
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
@@ -535,8 +532,8 @@ function mapStateToProps (state) {
 
 export default connect( mapStateToProps, {
     // actions
-    deleteConcept, 
-    fetchCryptoPrices, 
+    fetchCryptoPrices,
+    deleteConcept,
     openConceptForm,
     closeConceptDetail
 })(ConceptDetails);

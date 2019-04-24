@@ -5,7 +5,7 @@ import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
-import { addConcept, updateConcept } from '../../actions'
+import { addConcept, updateConcept } from '../../actions/concept'
 import { closeConceptForm } from '../../actions/form';
 
 // to make multi-column layouts
@@ -230,11 +230,11 @@ class FormEditConcept extends Component {
                                         </Col>
                                         <Col md={5}>
                                             <FormSection name="meta">
-                                                <Field
+                                                {/* <Field
                                                     label="Header Color"
                                                     name="color"
                                                     component={this.renderField}
-                                                />
+                                                /> */}
                                                 <Field
                                                     label="Currency Symbol (if applicable)"
                                                     name="symbol"

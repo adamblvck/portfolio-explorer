@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
-import { fetchConcepts, deleteGroup, fetchBubbleGroups } from '../actions';
-import { openGroupForm } from '../actions/form'
-import { openConceptForm } from '../actions/form';
+import { deleteGroup } from '../actions/group';
+import { fetchBubbleGroups } from '../actions/fetching_public';
+import { openGroupForm, openConceptForm } from '../actions/form';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -314,7 +314,6 @@ BubbleMasonry.propTypes = {
 export default withStyles(styles)(
     connect(mapStateToProps, {
         // actions
-        fetchConcepts, 
         fetchBubbleGroups, 
         deleteGroup, 
         openGroupForm, 
