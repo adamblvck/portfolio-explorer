@@ -4,6 +4,8 @@ export const ADD_GROUP = 'add_group';
 export const EDIT_GROUP = 'edit_group';
 export const DELETE_GROUP = 'delete_group';
 
+const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
+const ROOT_URL = isLOCALHOST ? 'http://localhost:4000/graphql' : '/graphql';
 
 export function addGroup(groupInfo) {
     let query = `

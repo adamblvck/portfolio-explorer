@@ -50,35 +50,34 @@ const myTheme = createMuiTheme({
 ReactDOM.render(
     <MuiThemeProvider theme={myTheme}>
         <Provider store={createStoreWithMiddleware(reducers)}>
-        <Router history={history}>
-            <div>
-                {/* Switch matches only a single Route */}
-                <Switch> 
-                    {/* callback for auth */}
-                    <Route 
-                        path="/callback" 
-                        render={(props) => {
-                            handleAuthentication(props);
-                            return <Callback {...props} />
-                    }}/>
-                    {/* Show specific bubble */}
-                    <Route 
-                        path="/b/:id" 
-                        render={
-                            (props) => <Bubble auth={auth} {...props} />
-                        }    
-                    />
-                    {/* Show bubbles */}
-                    <Route 
-                        path="/" 
-                        render={
-                            (props) => <BubbleOverview auth={auth} {...props} />
-                        }    
-                    />
-                </Switch>
-            </div>
-        </Router>
-
+            <Router history={history}>
+                <div>
+                    {/* Switch matches only a single Route */}
+                    <Switch> 
+                        {/* callback for auth */}
+                        <Route 
+                            path="/callback" 
+                            render={(props) => {
+                                handleAuthentication(props);
+                                return <Callback {...props} />
+                        }}/>
+                        {/* Show specific bubble */}
+                        <Route 
+                            path="/b/:id" 
+                            render={
+                                (props) => <Bubble auth={auth} {...props} />
+                            }    
+                        />
+                        {/* Show bubbles */}
+                        <Route 
+                            path="/" 
+                            render={
+                                (props) => <BubbleOverview auth={auth} {...props} />
+                            }    
+                        />
+                    </Switch>
+                </div>
+            </Router>
         </Provider>
 
         <Particles

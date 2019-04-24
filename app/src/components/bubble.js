@@ -6,6 +6,7 @@ import ConceptDetails from '../containers/concept_details';
 
 import FormEditGroup from '../containers/forms/form_group';
 import FormEditConcept from '../containers/forms/form_concept';
+import Footer from './footer';
 
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
@@ -76,12 +77,19 @@ export default class Bubble extends Component {
 
 		return (
             <div>
+            {/* <div style={{'position': 'relative', 'min-height': '100vh'}}> */}
                 {/* Toolbar */}
                 {this.renderAppBar(isAuthenticated)}
 
-                {/* Groups Overview */}
-                <div className="groups-masonry">
-                    <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID.toLowerCase()} />
+                <div style={{'position':'relative'}}>
+
+                    {/* Groups Overview */}
+                    <div className="groups-masonry">
+                        <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID.toLowerCase()} />
+                    </div>
+
+                    {/* Bottom bar */}
+                    <Footer/>
                 </div>
 
                 {/* Holds concept details component */}

@@ -46,10 +46,36 @@ body {
     margin-top: 3px !important;
 }
 
+.footer{
+    margin-left: -5%;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.footer-image{
+    height:50px;
+}
+
+.footer-typography{
+    flex-grow: 1;
+    color: rgba(0, 0, 0, 0.87);
+    text-align: center;
+    font-weight: 200 !important;
+    font-size: 1rem !important;
+
+    margin-left: 0px !important;
+    margin-top: 3px !important;
+}
+
 /* Groups */
 .groups-masonry {
+    /* Space for header */
     margin-top: 64px;
     padding-top: 10px;
+
+    /* Space for footer */
+    padding-bottom: 40px;
 }
 
 .bubble_overview_bubble{

@@ -16,12 +16,11 @@ import PropTypes from 'prop-types';
 import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles, MenuItem } from '@material-ui/core';
 
 import MenuGroup from './menus/menu_groups';
-
 import FormBubble from './forms/form_bubble';
+import Footer from '../components/footer';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-
 
 const styles = {
     card: {
@@ -240,6 +239,9 @@ class BubblesOverview extends Component {
                     mode="new"
                     open={false}
                 />
+
+                {/* Render Footer */}
+                <Footer/>
             </div>
         )
     }
