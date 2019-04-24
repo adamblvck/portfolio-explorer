@@ -25,6 +25,7 @@ const Bubble = require('../models/bubble');
 
 // GraphQL Schemas
 const {
+    UserType,
     ConceptType, 
     ConceptDetailType, 
     ConceptDetailInputType, 
@@ -38,6 +39,23 @@ const {
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
+        // return user info
+        user: {
+            type: UserType,
+            args: {},
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                // get out the mail information
+                const email = credentials.payload.email;
+
+                return UserType.find({email: email});
+            }
+        },
+
         // return specific group
         group: {
             type: GroupType,
@@ -55,10 +73,9 @@ const RootQuery = new GraphQLObjectType({
             }
         },
 
-        bubbles: {
+        bubbles: { // all bubbles in the database
             type: new GraphQLList(BubbleType),
             resolve(parent, args){
-                // return where n_depth=0 and bubble_id matches the one in arg
                 return Bubble.find();
             }
         },
@@ -119,10 +136,11 @@ const Mutation = new GraphQLObjectType({
                     throw new Error('User needs to be authenticated to make changes to the database');
                 }
 
-                console.log("Logged in email:", credentials.payload.email);
+                const email = credentials.payload.email;
+                console.log("Logged in email:", email);
 
                 // check if user is allowed to create new bubble
-                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                if (email != 'eragon.blizzard@gmail.com'){
                     throw new Error('User has no permissions to add groups to the database');
                 }
 

@@ -13,7 +13,8 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLInt,
-    GraphQLID
+    GraphQLID,
+    GraphQLBoolean
 } = graphql;
 
 // mongoose schemas
@@ -186,13 +187,30 @@ const BubbleType = new GraphQLObjectType({
     })
 });
 
+const UserType = new GraphQLObjectType({
+    name: 'User',
+    fields: () => ({
+        // Graphql ID
+        id: { type: GraphQLID },
+
+        // user insight
+        email: { type: GraphQLString },
+        email_confirmed: { type: GraphQLBoolean },
+        display_name: { type: GraphQLString },
+        role: { type: GraphQLString }
+    })
+});
+
 module.exports = {
     BubbleType,
     GroupType,
+    
     ConceptType,
     ConceptDetailType,
     ConceptDetailInputType,
     MetaInputType,
     MetaType,
-    LinkType
+    LinkType,
+
+    UserType,
 };

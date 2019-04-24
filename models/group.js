@@ -1,8 +1,7 @@
 /*
   Author: Adam Blvck (adamblvck.com)
   Product: Blockchain Ecosystem Explorer
-  Year: 2018
-  Smartie.be
+  Year: 2019  Smartie.be
 */
 
 const mongoose = require('mongoose');
