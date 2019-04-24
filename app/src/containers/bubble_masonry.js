@@ -17,11 +17,6 @@ import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu } from '@mate
 // Components and Containers
 import ConceptsMasonry from './concepts_masonry';
 
-// Forms
-import FormEditConcept from './forms/form_concept';
-
-import FormEditGroup from './forms/form_group';
-
 import MenuGroup from './menus/menu_groups';
 
 const styles = {
@@ -203,7 +198,7 @@ class BubbleMasonry extends Component {
     renderCard(group){
         const { classes } = this.props;
         return (
-            <Card className={classes.card} elevation={3}>
+            <Card className={`${classes.card} bubble_group_card`} elevation={3}>
                 <CardHeader
                     action={
                         this.props.isAuthenticated && // if authenticated

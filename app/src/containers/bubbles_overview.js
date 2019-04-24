@@ -140,7 +140,7 @@ class BubblesOverview extends Component {
         const link_to_bubble = `/b/${bubble.bubble_id}`;
 
         return (
-            <Card className={classes.card} elevation={3}>
+            <Card className={`${classes.card} bubble_overview_bubble`} elevation={3}>
                 <CardHeader
                     action={
                         this.props.auth.isAuthenticated() && // if authenticated

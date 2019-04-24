@@ -140,12 +140,12 @@ class ConceptDetails extends Component {
     handleDelete(concept){
         if( confirm('Sure want to delete?')) {
             this.setState({open:false});
-            this.props.deleteConcept(concept);
+            this.props.deleteConcept(concept); // delete concept
+            this.props.closeConceptDetail(); // close concept details
         }
     }
 
     handleClose = () => {
-        // this.setState({ animation: false });
         this.props.closeConceptDetail();
     };
 
