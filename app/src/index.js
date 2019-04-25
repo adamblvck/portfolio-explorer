@@ -13,15 +13,14 @@ import promise from 'redux-promise';
 
 import { Route, Router, BrowserRouter, Switch} from 'react-router-dom';
 
-import reducers from './reducers';
-
 import Bubble from './components/bubble';
 import BubbleOverview from './containers/bubbles_overview';
+import NewUser from './components/newuser';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+// const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 // Stylish background 
 import Particles from 'react-particles-js';
@@ -29,6 +28,12 @@ import particlesConfig from '../configs/particlesjs-config';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
+import store from './store';
+
+// create redux store
+// const store = createStoreWithMiddleware(reducers);
+
+// create authentication handler
 const auth = new Auth();
 
 const handleAuthentication = (nextState, replace) => {
@@ -49,7 +54,7 @@ const myTheme = createMuiTheme({
 
 ReactDOM.render(
     <MuiThemeProvider theme={myTheme}>
-        <Provider store={createStoreWithMiddleware(reducers)}>
+        <Provider store={store}>
             <Router history={history}>
                 <div>
                     {/* Switch matches only a single Route */}
@@ -61,6 +66,15 @@ ReactDOM.render(
                                 handleAuthentication(props);
                                 return <Callback {...props} />
                         }}/>
+
+                        {/* Show specific bubble */}
+                        <Route 
+                            path="/u/new" 
+                            render={
+                                (props) => <NewUser auth={auth} {...props} />
+                            }
+                        />
+
                         {/* Show specific bubble */}
                         <Route 
                             path="/b/:id" 
@@ -68,6 +82,7 @@ ReactDOM.render(
                                 (props) => <Bubble auth={auth} {...props} />
                             }    
                         />
+
                         {/* Show bubbles */}
                         <Route 
                             path="/" 

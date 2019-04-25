@@ -1,6 +1,10 @@
 import auth0 from 'auth0-js';
 import history from '../history';
 
+import { getUserInfo } from  '../actions/user';
+
+import store from '../store';
+
 const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
 const CALLBACK_URL = isLOCALHOST
     ? 'http://localhost:8080/callback'
@@ -15,6 +19,29 @@ export default class Auth {
         scope: 'openid email'
     });
 
+    constructor(){
+        this.handleStoreChange = this.handleStoreChange.bind(this);
+
+        this.unsubscribe = store.subscribe(this.handleStoreChange);
+        this.prevauth = store.getState().auth;
+    }
+
+    handleStoreChange(){
+        const auth = store.getState().auth;
+        if (this.prevauth != auth){
+            console.log("auth store change:", auth);
+
+            this.prevauth = {...auth};
+
+            if (auth.user.id == null){
+                history.replace('/u/new');
+            } else {
+                localStorage.setItem('user', auth.user);
+                history.replace('/');
+            }
+        }
+    }
+
     login() {
         this.auth0.authorize();
     }    
@@ -24,7 +51,10 @@ export default class Auth {
             // authResult contains info returned in the URL on /callback
             if (authResult && authResult.accessToken && authResult.idToken) {
                 this.setSession(authResult);
-                history.replace('/');
+
+                store.dispatch(getUserInfo(authResult));
+
+                //history.replace('/');
             } 
             // on error
             else if (err) {
@@ -42,7 +72,7 @@ export default class Auth {
         localStorage.setItem('expires_at', expiresAt);
         localStorage.setItem('is_authenticated', true);
 
-        history.replace('/'); // navigate home
+        // history.replace('/'); // navigate home
     }
 
     logout() {
@@ -50,6 +80,7 @@ export default class Auth {
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('is_authenticated');
+        localStorage.removeItem('user');
         localStorage.setItem('expires_at', 0);
     }
 

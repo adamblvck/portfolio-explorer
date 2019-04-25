@@ -22,6 +22,12 @@ body {
     z-index: -2;
 }
 
+.loading-sign{
+    top: 50%;
+    position: absolute;
+    left: 50%;
+}
+
 /* Menus*/
 .menubar {
     background-color: transparent !important;

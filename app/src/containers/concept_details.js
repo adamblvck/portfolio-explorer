@@ -21,7 +21,7 @@ import LinkIcon from '@material-ui/icons/LinkRounded';
 // my components
 import MenuGroup from './menus/menu_groups';
 import CryptoChart from './crypto_chart';
-import MindmapViewer from './mindmap_viewer';
+import MindmapViewer from '../components/mindmap_viewer';
 
 // Actions
 import { deleteConcept, closeConceptDetail } from '../actions/concept';

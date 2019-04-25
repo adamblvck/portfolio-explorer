@@ -19,7 +19,6 @@ function handleErrors(response){
 export default function (state = {}, action) {
     // state is the application state before belows switches
     // action.payload contains the data
-
     var error = false;
 
     // Handle Errors
@@ -30,6 +29,11 @@ export default function (state = {}, action) {
 
     if (error)
         return state;
+
+    if (action.error){
+        console.log(action.payload);
+        return state;
+    }
 
     switch(action.type) {
         case FETCH_BUBBLES:

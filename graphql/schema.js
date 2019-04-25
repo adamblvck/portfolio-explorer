@@ -22,6 +22,7 @@ const {
 const Group = require('../models/group');
 const Concept = require('../models/concept');
 const Bubble = require('../models/bubble');
+const User = require('../models/user');
 
 // GraphQL Schemas
 const {
@@ -52,7 +53,7 @@ const RootQuery = new GraphQLObjectType({
                 // get out the mail information
                 const email = credentials.payload.email;
 
-                return UserType.find({email: email});
+                return User.find({email: email});
             }
         },
 
