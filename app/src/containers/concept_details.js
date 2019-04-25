@@ -19,9 +19,9 @@ import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
 
 // my components
-import MenuGroup from './menus/menu_groups';
-import CryptoChart from './crypto_chart';
+import MenuGroup from '../components/menus/menu_groups';
 import MindmapViewer from '../components/mindmap_viewer';
+import CryptoChart from './crypto_chart';
 
 // Actions
 import { deleteConcept, closeConceptDetail } from '../actions/concept';

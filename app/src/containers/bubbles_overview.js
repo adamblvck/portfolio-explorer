@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles, MenuItem } from '@material-ui/core';
 
-import MenuGroup from './menus/menu_groups';
+import MenuGroup from '../components/menus/menu_groups';
 import FormBubble from './forms/form_bubble';
 import Footer from '../components/footer';
 

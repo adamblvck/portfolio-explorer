@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import Masonry from "react-responsive-masonry"
 
-import ConceptBasic from '../components/concept_basic';
+import ConceptBasic from './concept_basic';
 
 class ConceptsMasonry extends Component {
     constructor (props) {
