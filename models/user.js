@@ -10,8 +10,8 @@ const Schema = mongoose.Schema;
 
 var UserSchema = new Schema({ 
     email: String,
-    email_confirmed: Boolean,
-    display_name: String,
+    email_verified: Boolean,
+    username: String,
     role: String // admin, contributor, bubbleadmin
     // bubbles: [Bubble] // Personal bubbles of this user
 });

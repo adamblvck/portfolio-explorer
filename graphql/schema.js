@@ -1,7 +1,7 @@
 /*
   Author: Adam Blvck (adamblvck.com)
   Product: Blockchain Ecosystem Explorer
-  Year: 2018
+  Year: 2018-2019
   Smartie.be
 */
 
@@ -9,13 +9,13 @@ const graphql = require('graphql');
 
 const {
     GraphQLObjectType,
-    GraphQLInputObjectType,
     GraphQLString,
     GraphQLSchema,
     GraphQLList,
     GraphQLInt,
     GraphQLID,
-    GraphQLNonNull
+    GraphQLNonNull,
+    GraphQLBoolean
 } = graphql;
 
 // mongoose schemas
@@ -36,24 +36,47 @@ const {
     BubbleType
 } = require('./Types');
 
-
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        // return user info
+        // return user info currently logged in (contained in credentials param)
         user: {
             type: UserType,
             args: {},
             resolve(parent, args, {isAuthenticated, credentials}){
+                
                 // authentication check
                 if (!isAuthenticated) {
                     throw new Error('User needs to be authenticated to make changes to the database');
                 }
 
                 // get out the mail information
-                const email = credentials.payload.email;
+                const { email } = credentials.payload;
 
-                return User.find({email: email});
+                console.log("wow dude", email);
+
+                //return User.find({email: email});
+                return User.findOne({email:email});
+            }
+        },
+
+        // check if a user exists
+        usernameavailable: {
+            type: GraphQLBoolean,
+            args: { username: { type: new GraphQLNonNull(GraphQLString)}},
+            async resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                const user = await User.findOne({username: args.username});
+
+                // if we didn't find a user, we return true (available!)
+                if (user === null)
+                    return true;
+                else
+                    return false;
             }
         },
 
@@ -121,6 +144,71 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: { // store different kind of mutations we want to make
+
+        // add new user
+        addUser: {
+            type: UserType,
+            args: {
+                username: { type: new GraphQLNonNull(GraphQLString)},
+            },
+            async resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                // extract information
+                const { email, email_verified} = credentials.payload;
+                console.log("Logged in email:", email);
+
+                // check if user already has matching user account (based on credentials)
+                const user = await User.findOne({email: email});
+
+                // if we found a user, return that one
+                if (user !== null)
+                    return user;
+
+                // if we didn't find a user, create a new one
+                else{
+                    // create new user
+                    let user = new User({
+                        email: email,
+                        email_verified: email_verified,
+                        username: args.username,
+                        role: "user"
+                    });
+
+                    // save to DB
+                    return user.save();
+                }
+
+            }
+        },
+        
+        removeUser: {
+            type: UserType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID)}
+            },
+            resolve(parent, args, {isAuthenticated, credentials}){
+                // authentication check
+                if (!isAuthenticated) {
+                    throw new Error('User needs to be authenticated to make changes to the database');
+                }
+
+                console.log("Logged in email:", credentials.payload.email);
+
+                // check if logged in user is owner of account (look-up)
+                if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+                    throw new Error('User has no permissions to delete groups from the database');
+                }
+
+                // query resolve
+                return User.findByIdAndRemove(
+                    args.id
+                );
+            }
+        },
 
         // add new bubble
         addBubble: {

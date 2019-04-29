@@ -1,4 +1,4 @@
-import { GETUSERINFO } from '../actions/user';
+import { GETUSERINFO, CREATEUSER, CHECKUSERNAME } from '../actions/user';
 
 function handleErrors(response){
     const obj = JSON.parse(response);
@@ -36,10 +36,26 @@ export default function(state = null, action) {
     //// handle axtions
 
     switch(action.type) {
-        case GETUSERINFO:
-            console.log("auth reducer", action.payload.data.data.user);
+        case CREATEUSER:
+            // console.log("create username", action.payload.data.data.checkusername);
+            console.log("created username", action.payload.data.data.addUser);
+            return { user: action.payload.data.data.addUser};
 
+        case GETUSERINFO:
             return { user: action.payload.data.data.user} ;
+
+        case CHECKUSERNAME:
+            const { usernameavailable } = action.payload.data.data;
+
+            const newState = {...state, usernameavailable: usernameavailable};
+
+            if (newState.modified == null)
+                newState.modified = 0;
+            else 
+                newState.modified++;
+
+            return newState;
+
         default:
             return state;
     }

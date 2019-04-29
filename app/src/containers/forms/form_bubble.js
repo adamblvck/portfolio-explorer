@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 
 import { closeBubbleForm } from '../../actions/form';

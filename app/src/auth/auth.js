@@ -24,6 +24,11 @@ export default class Auth {
 
         this.unsubscribe = store.subscribe(this.handleStoreChange);
         this.prevauth = store.getState().auth;
+
+        // check if still authenticated, if not, reset tokenstore
+        if (!this.isAuthenticated()){
+            this.logout();
+        }
     }
 
     handleStoreChange(){
@@ -33,7 +38,10 @@ export default class Auth {
 
             this.prevauth = {...auth};
 
-            if (auth.user.id == null){
+            // if (history.location.pathname.localeCompare("/u/new"))
+            //     return;
+
+            if (auth.user == null){
                 history.replace('/u/new');
             } else {
                 localStorage.setItem('user', auth.user);
@@ -86,6 +94,12 @@ export default class Auth {
 
     isAuthenticated() {
         let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+
+        if (expiresAt == null){
+            this.logout();
+            return false;
+        }
+
         const isAuth = new Date().getTime() < expiresAt;
         isAuth ? localStorage.setItem('is_authenticated', true) : localStorage.removeItem('is_authenticated');
         return isAuth;

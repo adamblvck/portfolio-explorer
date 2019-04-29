@@ -28,6 +28,15 @@ body {
     left: 50%;
 }
 
+.form-newuser {
+    top: 20%;
+    width: 80%;
+    position: absolute;
+    margin-left: 10%;
+    margin-right: 10%;
+    left: 0px;
+}
+
 /* Menus*/
 .menubar {
     background-color: transparent !important;

@@ -195,13 +195,14 @@ const UserType = new GraphQLObjectType({
 
         // user insight
         email: { type: GraphQLString },
-        email_confirmed: { type: GraphQLBoolean },
-        display_name: { type: GraphQLString },
+        email_verified: { type: GraphQLBoolean },
+        username: { type: GraphQLString },
         role: { type: GraphQLString }
     })
 });
 
 module.exports = {
+    UserType,
     BubbleType,
     GroupType,
     
@@ -210,7 +211,5 @@ module.exports = {
     ConceptDetailInputType,
     MetaInputType,
     MetaType,
-    LinkType,
-
-    UserType,
+    LinkType
 };

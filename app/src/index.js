@@ -15,7 +15,7 @@ import { Route, Router, BrowserRouter, Switch} from 'react-router-dom';
 
 import Bubble from './components/bubble';
 import BubbleOverview from './containers/bubbles_overview';
-import NewUser from './components/newuser';
+import FormNewUser from './containers/forms/form_newuser';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';
@@ -71,7 +71,7 @@ ReactDOM.render(
                         <Route 
                             path="/u/new" 
                             render={
-                                (props) => <NewUser auth={auth} {...props} />
+                                (props) => <FormNewUser auth={auth} {...props} />
                             }
                         />
 
