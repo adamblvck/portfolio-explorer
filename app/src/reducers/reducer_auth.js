@@ -42,9 +42,22 @@ export default function(state = null, action) {
             return { user: action.payload.data.data.addUser};
 
         case GETUSERINFO:
-            return { user: action.payload.data.data.user} ;
+            console.log("Get user info", action.payload.data.data.addUser);
+
+            const {user} = action.payload.data.data;
+
+            const newState0 = {...state, user: user};
+            if (newState0.modified == null)
+                newState0.modified = 0;
+            else 
+                newState0.modified++;
+
+            console.log("newstate", newState0);
+
+            return newState0;
 
         case CHECKUSERNAME:
+            console.log("created username", action.payload.data.data.addUser);
             const { usernameavailable } = action.payload.data.data;
 
             const newState = {...state, usernameavailable: usernameavailable};

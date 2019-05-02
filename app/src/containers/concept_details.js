@@ -380,7 +380,7 @@ class ConceptDetails extends Component {
 
                             <div style={{textAlign: 'center'}} >
                                 {!this.state.fullscreen && 
-                                    (<Button onClick={this.handleShowMore} variant="outlined" style={{'margin-bottom':'20px'}}>
+                                    (<Button onClick={this.handleShowMore} variant="outlined" style={{'marginBottom':'20px'}}>
                                         Read More
                                     </Button>)
                                 }

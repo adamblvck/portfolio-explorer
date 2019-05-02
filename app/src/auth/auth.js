@@ -10,6 +10,24 @@ const CALLBACK_URL = isLOCALHOST
     ? 'http://localhost:8080/callback'
     : 'https://blockchain-ecosystem-explorer.herokuapp.com/callback';
 
+const shallowCompare = (obj1, obj2) =>
+    Object.keys(obj1).length === Object.keys(obj2).length &&
+    Object.keys(obj1).every(key => 
+      obj2.hasOwnProperty(key) && obj1[key] === obj2[key]
+    );
+
+function shallow(o1, o2){
+    if (o1 === null && o2 !== null)
+        return true;
+    if (o2 === null && o1 !== null)
+        return true;
+
+    if (o1.modified != o2.modified)
+        return true;
+    else
+        return false;
+}
+
 export default class Auth {
     auth0 = new auth0.WebAuth({
         domain: 'blockchainexplorer.eu.auth0.com',
@@ -33,8 +51,11 @@ export default class Auth {
 
     handleStoreChange(){
         const auth = store.getState().auth;
-        if (this.prevauth != auth){
-            console.log("auth store change:", auth);
+        if ( auth === undefined || auth === null)
+            return;
+
+        if (shallow(this.prevauth, auth)){
+            console.log("auth store change:", this.prevauth, auth);
 
             this.prevauth = {...auth};
 
