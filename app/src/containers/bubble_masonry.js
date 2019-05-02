@@ -20,7 +20,8 @@ import MenuGroup from '../components/menus/menu_groups';
 
 const styles = {
         card: {
-        maxWidth: 450,
+        maxWidth: 400,
+        minWidth: 250,
         margin: 7.5
     },
     media: {
@@ -252,7 +253,7 @@ class BubbleMasonry extends Component {
     renderMasonry() {
         return (
             <ResponsiveMasonry
-                columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
+                columnsCountBreakPoints={{350: 1, 600: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
                     {this.renderGroups()}

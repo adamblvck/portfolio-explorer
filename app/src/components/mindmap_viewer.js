@@ -199,7 +199,9 @@ export default class MindmapViewer extends Component {
         var {mindmapData} = this.props;
         
         return (
-            <div>{mindmapData && this.render_mindmap(mindmapData)}</div>
+            <div className="mindmap-container">
+            {mindmapData && this.render_mindmap(mindmapData)}
+            </div>
         )
     }
 

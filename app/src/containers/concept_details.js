@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import _ from 'lodash';
 import posed from 'react-pose';
-import ReactDOM from "react-dom";
 import markdown from "marked";
 
 // material design imports
@@ -58,8 +57,8 @@ const Frame = posed.div({
 
 const SummaryDiv = posed.div({
     summary:{
-        width: 'auto',
-        height: 'auto',
+        width: '100%',
+        height: '100%',
         position: 'static',
         transition: transition,
         flip: true,
@@ -123,7 +122,7 @@ class ConceptDetails extends Component {
         this.renderFormEditConcept = this.renderFormEditConcept.bind(this);
 
         this.renderFormDeleteConcept = this.renderFormDeleteConcept.bind(this);
-        this.renderContentCard = this.renderContentCard.bind(this);
+        this.renderCard = this.renderCard.bind(this);
         this.renderAnimatedBackdrop = this.renderAnimatedBackdrop.bind(this);
     };
 
@@ -146,12 +145,15 @@ class ConceptDetails extends Component {
     }
 
     handleClose = () => {
-        this.props.closeConceptDetail();
+        // this.props.closeConceptDetail();
+        this.setState({ animation: false });
     };
 
     handleAnimationClose() {
-        if (this.state.animation == false)
-            this.setState({ open: false });
+        if (this.state.animation == false){
+            this.props.closeConceptDetail();
+            // this.setState({ open: false });
+        }
     }
 
     handleShowMore() {
@@ -172,13 +174,13 @@ class ConceptDetails extends Component {
                     <a // anchor
                         href={ref_link.url} 
                         target="_blank"
+                        style={{color: 'white'}}
                     >
                         <LinkIcon style={{verticalAlign: 'middle'}}/>{ref_link.name}
                     </a>
                 </li>
-            )
+            );
         });
-
     }
 
     renderList(items, component){
@@ -204,14 +206,28 @@ class ConceptDetails extends Component {
 
         return(
             <div>
-                <div style={{marginBottom:'10px'}}>
+                <Row>
+                    <Col xs={12} md={6}>
+                        <div style={{marginBottom:'10px'}}>
+                            <h2>Pro's</h2>
+                            {this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
+                        </div>
+                    </Col>
+                    <Col xs={12} md={6}>
+                        <div style={{marginBottom:'10px'}}>
+                            <h2>Con's</h2>
+                            {this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
+                        </div>
+                    </Col>
+                </Row>
+                {/* <div style={{marginBottom:'10px'}}>
                     <h2>Pro's</h2>
                     {this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
                 </div>
                 <div style={{marginBottom:'10px'}}>
                     <h2>Con's</h2>
                     {this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -310,23 +326,23 @@ class ConceptDetails extends Component {
             style={{backgroundColor: headerBackground, background: headerBackground}}
             action={
                 this.props.isAuthenticated && <MenuGroup 
-                        isAuthenticated={this.props.isAuthenticated}
-                        components={ [
-                            {
-                                label: "Edit Concept",
-                                concept: concept,
-                                render: this.renderFormEditConcept,
-                                needAuth: true
-                            },
-                            {
-                                label: "Delete Concept",
-                                concept: concept,
-                                render: this.renderFormDeleteConcept,
-                                needAuth: true
-                            }
-                        ]}
-                    />
-                }
+                    isAuthenticated={this.props.isAuthenticated}
+                    components={ [
+                        {
+                            label: "Edit Concept",
+                            concept: concept,
+                            render: this.renderFormEditConcept,
+                            needAuth: true
+                        },
+                        {
+                            label: "Delete Concept",
+                            concept: concept,
+                            render: this.renderFormDeleteConcept,
+                            needAuth: true
+                        }
+                    ]}
+                />
+            }
         />);
     }
 
@@ -338,8 +354,10 @@ class ConceptDetails extends Component {
 
         const { short_copy, mindmap } = concept.details;
 
-        return (<CardContent className="concept-detail-content">
+        return (
+        <CardContent className="concept-detail-content">
             <Grid>
+                {/* Core Row with core information */}
                 <Row>
                     <Col xs={12} md={6}>
                         {/* render summary */}
@@ -353,56 +371,55 @@ class ConceptDetails extends Component {
                                 zIndex: 3
                             }}
                         /> */}
-                        <SummaryDiv
-                            className="summary-animated-anim"
-                            initialPose='summary'
-                            pose={this.state.fullscreen ? 'fullscreen' : 'summary'}
-                            style={{
-                                zIndex: 3
-                            }}
-                        >
-                            {/* Render short_copy or markdown in fullscreen */}
+                        
+                        <div>
                             <div>
-
-                                {this.state.fullscreen && this.renderFullscreenMarkdown(concept.name, headerBackground, md_summary)}
-
+                                <h2>Summary</h2>
                                 { !this.state.fullscreen && (<h3 className="concept-short-copy-header">{short_copy}</h3>) }
-
                             </div>
-                            <div
-                                style={{textAlign: 'center'}}
-                            >
+
+                            <div style={{textAlign: 'center'}} >
                                 {!this.state.fullscreen && 
-                                    (<Button onClick={this.handleShowMore} variant="outlined">
+                                    (<Button onClick={this.handleShowMore} variant="outlined" style={{'margin-bottom':'20px'}}>
                                         Read More
                                     </Button>)
                                 }
                             </div>
-                        </SummaryDiv>
-                        
-
+                        </div>
                     </Col>
+
                     <Col xs={12} md={6}>
                     
                         <Row className="details-column">
+                            <h2>Mindmap</h2>
                             <MindmapViewer mindmapData={mindmap}/>
                         </Row>
 
-                        <Row className="details-column">
-                            {/* {this.renderCryptoChart(concept.meta)} */}
-                        </Row>
-                        {/* Reference links */}
-                        <Row className="details-column">
-                            {this.renderReferenceLinks(concept.details)}
-                        </Row>
-                        {/* Pro's & Cons */}
-                        <Row className="details-column">
-                            {this.renderProsAndCons(concept.details)}
-                        </Row>                         
                     </Col>
                 </Row>
+
+
+
+                {/* Details Row with extra information */}
+                <Row>
+                        {/* <Row className="details-column">
+                            {this.renderCryptoChart(concept.meta)}
+                        </Row> */}
+                        
+                    {/* <Col> */}
+                        {/* Reference links */}
+                        {/* {this.renderReferenceLinks(concept.details)} */}
+                        
+                    {/* </Col> */}
+
+                    <Col>
+                        {/* Pro's & Cons */}
+                        {this.renderProsAndCons(concept.details)}
+                    </Col>
+
+                </Row>
             </Grid>
-        </CardContent>);
+        </CardContent>)
     }
     
     renderCardActions(concept){
@@ -426,7 +443,7 @@ class ConceptDetails extends Component {
         );
     }
 
-    renderContentCard(concept, headerBackground){
+    renderCard(concept, headerBackground){
         console.log("concept_details info: ", concept);
 
         if (concept === undefined) {
@@ -445,6 +462,10 @@ class ConceptDetails extends Component {
                         <img src={concept.logo_url} />
                     </Paper>
                 </LogoAnimated>
+
+                <div className="reference-links">
+                    {this.renderReferenceLinks(concept.details)}
+                </div>
 
                 {/* Card Header */}
                 {this.renderCardHeader(concept,  headerBackground)}
@@ -506,7 +527,7 @@ class ConceptDetails extends Component {
                     onPoseComplete={this.handleAnimationClose}
                 >
                     {/* Render Content Card */}
-                    {this.renderContentCard(this.props.concept, headerBackground)}
+                    {this.renderCard(this.props.concept, headerBackground)}
                 </ModalAnimated>
             </Modal>                            
         );
