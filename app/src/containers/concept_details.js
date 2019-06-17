@@ -21,11 +21,13 @@ import LinkIcon from '@material-ui/icons/LinkRounded';
 import MenuGroup from '../components/menus/menu_groups';
 import MindmapViewer from '../components/mindmap_viewer';
 import CryptoChart from './crypto_chart';
+import MarkdownPopup from '../containers/forms/form_markdown';
 
 // Actions
 import { deleteConcept, closeConceptDetail } from '../actions/concept';
 import { fetchCryptoPrices } from '../actions/fetching_public'
 import { openConceptForm } from '../actions/form';
+import { showFullscreenMarkdown } from '../actions/markdown';
 
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
@@ -156,8 +158,9 @@ class ConceptDetails extends Component {
         }
     }
 
-    handleShowMore() {
-        this.setState({ fullscreen: !this.state.fullscreen });
+    handleShowMore(markdown_text) {
+        // this.setState({ fullscreen: !this.state.fullscreen });
+        this.props.showFullscreenMarkdown(markdown_text);
     }
 
     renderReferenceLinks(details){
@@ -375,15 +378,13 @@ class ConceptDetails extends Component {
                         <div>
                             <div>
                                 <h2>Summary</h2>
-                                { !this.state.fullscreen && (<h3 className="concept-short-copy-header">{short_copy}</h3>) }
+                                { !this.state.fullscreen && (<p className="concept-short-copy-header">{short_copy}</p>) }
                             </div>
 
                             <div style={{textAlign: 'center'}} >
-                                {!this.state.fullscreen && 
-                                    (<Button onClick={this.handleShowMore} variant="outlined" style={{'marginBottom':'20px'}}>
-                                        Read More
-                                    </Button>)
-                                }
+                                <Button onClick={() => this.handleShowMore(md_summary)} variant="outlined" style={{'marginBottom':'20px'}}>
+                                    Read More
+                                </Button>
                             </div>
                         </div>
                     </Col>
@@ -528,6 +529,11 @@ class ConceptDetails extends Component {
                 >
                     {/* Render Content Card */}
                     {this.renderCard(this.props.concept, headerBackground)}
+
+                    <MarkdownPopup
+                        markdown={{open:false}}
+                    />
+
                 </ModalAnimated>
             </Modal>                            
         );
@@ -556,7 +562,8 @@ export default connect( mapStateToProps, {
     fetchCryptoPrices,
     deleteConcept,
     openConceptForm,
-    closeConceptDetail
+    closeConceptDetail,
+    showFullscreenMarkdown
 })(ConceptDetails);
 
 

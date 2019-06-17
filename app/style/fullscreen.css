@@ -1,5 +1,17 @@
 .fullscreen-read-card{
     /* max-height: 600px; */
+    position: absolute;
+    top: 4%;
+    /* left: 20%; */
+    /* right: 20%; */
+    /* width: 80%; */
+    max-width: 750px;
+    max-height: 600px;
+    width: 95%;
+    height: auto;
+    overflow: visible !important;
+    /* position: absolute; */
+    margin: auto;
 }
 
 .fullscreen-read-card-header [class*="MuiCardHeader-title"]{
@@ -10,7 +22,7 @@
 
 .fullscreen-read-card-content {
     overflow-y: scroll;
-    max-height: 600px;
+    max-height: 400px;
     font-family: "Nunito","Roboto", "Helvetica", "Arial";
 }
 

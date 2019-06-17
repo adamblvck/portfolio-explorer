@@ -325,7 +325,6 @@ function mapStateToProps(state) {
             initialValues: state.forms.initialValues
         };
     }
-
     return {}; 
 }
 

@@ -124,7 +124,6 @@ body {
     margin-bottom: 15px;
 }
 
-
 .subgroup-header [class*="MuiCardHeader-subheader"] {
     color: var(--parent-color);
     font-size: 1.5rem;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 // Core components, containing and rendering Groups
 import BubbleMasonry from '../containers/bubble_masonry';
@@ -8,18 +9,25 @@ import FormEditGroup from '../containers/forms/form_group';
 import FormEditConcept from '../containers/forms/form_concept';
 import Footer from './footer';
 
+import FormNoteTaker from '../containers/forms/forms_noteditor';
+
+import MarkdownPopup from '../containers/forms/form_markdown';
+
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
 
-export default class Bubble extends Component {
+import { NewNoteInNotetaker } from '../actions/notetaker';
+
+class Bubble extends Component {
     constructor(props){
         super(props);
 
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleNewNote = this.handleNewNote.bind(this);
 
         this.bubbleID = "blockchain"
 
@@ -40,6 +48,10 @@ export default class Bubble extends Component {
         this.forceUpdate();
     }
 
+    handleNewNote() {
+        this.props.NewNoteInNotetaker({});
+    }
+
     renderAppBar(isAuthenticated){
 
         return (
@@ -55,6 +67,8 @@ export default class Bubble extends Component {
                         <Typography variant="title" className="menubar-header">
                             /b/{this.bubbleID}
                         </Typography>
+
+                        <Button onClick={this.handleNewNote}> New Note </Button>
 
                         {
                             isAuthenticated() && (
@@ -112,7 +126,13 @@ export default class Bubble extends Component {
                     open={false}
                 />
 
+                <FormNoteTaker
+                    open={false}
+                />
+
             </div>
 		);
 	}
 }
+
+export default connect(null, { NewNoteInNotetaker })(Bubble);

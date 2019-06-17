@@ -75,6 +75,8 @@ class BubblesOverview extends Component {
                         Bubbles
                     </Typography>
 
+                    <Button> New Note </Button>
+
                     {
                         isAuthenticated() && (
                             <Button onClick={this.handleLogout} > Logout </Button>

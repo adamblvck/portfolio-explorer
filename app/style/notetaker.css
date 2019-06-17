@@ -1,0 +1,54 @@
+.noteditor_main_div {
+    /* Dimensions */
+    max-width: 485px;
+    min-height: 300px;
+
+    /* Horizontal Middle */
+    margin: auto;
+
+    /* Vertical Middle */
+    position: relative;
+    top: 50%;
+    transform: perspective(1px) translateY(-50%);
+}
+
+.noteditor-paper {
+    /* min-height: 300px; */
+
+    padding: 15px 30px 15px 30px;
+
+    margin-bottom: 15px;
+}
+
+.notetaker-header {
+    /* Put header in the middle */
+    margin: auto;
+
+    /* push header down a little */
+    padding-top: 8px;
+}
+
+
+.modal-background [class*="MuiBackdrop"] {
+    background-color: rgba(210, 210, 210, 0.6);
+}
+
+.note-action-button {
+    /* Pretty align below paper, AND IN HORIZONTAL MIDDLE OF CARD */
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: white !important;
+    padding: 8px;
+}
+
+.note-action-button-left {
+    position: absolute !important;
+    top: 10px;
+    right: -70px;
+
+    background-color: white !important;
+    padding: 8px;
+}
