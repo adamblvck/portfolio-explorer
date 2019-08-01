@@ -10,6 +10,14 @@
     position: relative;
     top: 50%;
     transform: perspective(1px) translateY(-50%);
+    
+    /* Make area scrollab
+    e */
+    overflow: auto;
+
+    height: 100%;
+
+    /* /height: 200px; */
 }
 
 .noteditor-paper {
@@ -33,22 +41,75 @@
     background-color: rgba(210, 210, 210, 0.6);
 }
 
-.note-action-button {
+.note-action-button-bottom {
     /* Pretty align below paper, AND IN HORIZONTAL MIDDLE OF CARD */
     position: absolute;
-    bottom: -25px;
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
 
+    /* Looks */
     background-color: white !important;
-    padding: 8px;
+    padding: 4px;
+    min-width: 4px !important;
+
+    /* Shadow */
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
 
-.note-action-button-left {
+.note-action-button-right {
     position: absolute !important;
-    top: 10px;
+
+    /* Position in the cemter Y axis */
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* Position to the right of card */
     right: -70px;
 
+    /* Looks */
     background-color: white !important;
     padding: 8px;
+    min-width: 4px !important;
+
+    /* Shadow */
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
+
+/* Rows in which the notes appear */
+.noteblock-row-container {
+    position: relative;
+    width: 600px;
+    height: 75px;
+}
+
+/* Noteblock containers in which the notes appear */
+.noteblock-container {
+    position: relative;
+    /* min-width: 300px; */
+    /* padding: 5%; */
+}
+
+/* here we change the min-width, depending on the actual width of the screen */
+
+        /* on mobile */
+        @media only screen and (max-width: 600px) {
+            .noteblock-container {
+                padding: 3%;
+            }
+        }
+
+        /* on bigger than mobile */
+        @media only screen and (min-width: 600px) {
+            .noteblock-container {
+                padding: 3%;
+            }
+        }
+
+        /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and (min-width: 768px) {
+            .noteblock-container {
+                padding: 2%;
+            }
+        } 
+

@@ -6,18 +6,24 @@ import { Button, Paper } from '@material-ui/core';
 
 import Editor from 'draft-js-plugins-editor';
 import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
+
+import {stateFromMarkdown} from 'draft-js-import-markdown';
 
 const plugins = [
     createMarkdownShortcutsPlugin()
 ];
 
-export default class NoteBlock extends Component{
+export default class NoteBlock extends Component {
     constructor(props) {
         super(props);
 
+        console.log(props);
+
+        //let contentState = stateFromMarkdown(markdown);
+
         this.state = {
-            editorState: EditorState.createEmpty()
+            editorState: EditorState.createWithContent(stateFromMarkdown(props.text))
         };
     }
 
@@ -40,7 +46,9 @@ export default class NoteBlock extends Component{
                         onChange={this.onChange}
                         plugins={plugins}
                     />
-                    
+
+                    <Button onClick={this.handleAddBlock} className="note-action-button-right">/</Button>
+
                 </Paper>
             // </div>
         );

@@ -12,6 +12,29 @@ import NoteBlock from './note_block';
 
 import _ from 'lodash';
 
+import uuidv1 from  'uuid/v1';
+
+const start_note = {
+    1: {
+        1: {id:"test"}
+    }
+};
+
+const start_note_b = {
+    1: {
+        id: "1",
+        content: "# Big realistic title\nwojew wojew wojew wojew and die weet niet eens waarom dat een ding was om over zorgen te maken"
+    },
+    2: {
+        id: "2",
+        content: "Simple boring yet effective text"
+    },
+    3: {
+        id: "3",
+        content: "why not go where there is fire and always something to ponder and try to consider"
+    },
+};
+
 class FormNoteTaker extends Component{
 
     constructor(props) {
@@ -19,7 +42,7 @@ class FormNoteTaker extends Component{
 
         this.state = { 
             open: false,
-            notes: [{id: "fafa"}, {id:"wuripqjna"}],
+            notes: start_note_b,
             static: true
         };
 
@@ -35,18 +58,57 @@ class FormNoteTaker extends Component{
 
     handleAddBlock() {
         console.log("adding block");
-        this.setState({ notes: [...this.state.notes, {}] });
+
+        let new_id = uuidv1();
+
+        this.setState({ 
+            notes: {
+                ...this.state.notes,
+                [new_id]: {id: new_id, content: "new block"}
+            }
+        });
     }
 
     drawNotes() {
-        console.log(this.state.notes);
-        return _.map(this.state.notes, note => {
+        // console.log(this.state.notes);
+        return _.map(this.state.notes, (note, keyrow) => {
+            console.log(keyrow);
+
             return (
-                <div key={note.id}>
-                    <NoteBlock/>
-                    <Button onClick={this.handleAddRightBlock} className="note-action-button-left">+</Button>
+
+                <div className="noteblock-container" key={`note-${note.id}`}>
+                    <NoteBlock text={note.content} />
                 </div>
+
+            // <div className="noteblock-row-container" key={`noterow-${notesinrow.id}`}>
+            //     {
+            //         <div className="noteblock-container" key={`note-${note.id}`}>
+            //             <NoteBlock/>
+            //         </div>
+
+            //         // _.map(notesinrow, (note, key) => {
+            //         //     console.log(note);
+            //         //     return (
+            //         //         <div className="noteblock-container" key={`note-${note.id}`}>
+            //         //             <NoteBlock/>
+            //         //         </div>
+            //         //     );
+            //         // })
+            //     }
+            //     <Button onClick={this.handleAddRightBlock} className="note-action-button-left">+</Button>
+            // </div
             );
+            
+            
+            // _.map(notesinrow, (note, key) => {
+            //     console.log(note);
+            //     return (
+            //         <div className="noteblock-container" key={note.id}>
+            //             <NoteBlock/>
+            //             <Button onClick={this.handleAddRightBlock} className="note-action-button-left">+</Button>
+            //         </div>
+            //     );
+            // });
         });
     }
 
@@ -64,20 +126,15 @@ class FormNoteTaker extends Component{
                 >
                     
                     <div className="noteditor_main_div">
-                        {/* <GridLayout className="layout" cols={6} rowHeight={60} width={1200}>
-                            <div key="a" data-grid={{x: 0, y: 0, w: 1, h: 2}}>a</div>
-                            <div key="b" data-grid={{x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4}}>b</div>
-                            <div key="c" data-grid={{x: 4, y: 0, w: 1, h: 2}}>c</div>
-                            <div key="d" data-grid={{x: 0, y: 2, w: 6, h: 2, static: this.state.static}}> <NoteBlock/> </div>
-                        </GridLayout> */}
 
+                        <div className="note-padding-for-space-above" style={{'height':'30%'}}/>
                         {this.drawNotes()}
-
-
-                        {/* <NoteBlock/> */}
-                        <Button onClick={this.handleAddBlock} className="note-action-button">+</Button>
+                        <Button onClick={this.handleAddBlock} className="note-action-button-bottom">+</Button>
+                        <div className="note-padding-for-space-above" style={{'height':'30%'}}/>
                         
                     </div>
+
+                    
                 </Modal>
             </div>
         );
