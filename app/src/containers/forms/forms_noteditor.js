@@ -23,15 +23,29 @@ const start_note = {
 const start_note_b = {
     1: {
         id: "1",
-        content: "# Big realistic title\nwojew wojew wojew wojew and die weet niet eens waarom dat een ding was om over zorgen te maken"
+        content: "# Big Realistic Title\nwojew wojew wojew wojew and die weet niet eens waarom dat een ding was om over zorgen te maken",
+        details: {}
     },
     2: {
         id: "2",
-        content: "Simple boring yet effective text"
+        content: "Simple boring yet effective text",
+        details: {
+            11: {
+                id: "11",
+                content: "HMMMM HMMM HMMMM"
+            },
+            12: {
+                id: "12",
+                content: "HMMMM HMMM HMMMM"
+            }
+        }
     },
     3: {
         id: "3",
-        content: "why not go where there is fire and always something to ponder and try to consider"
+        content: "why not go where there is fire and always something to ponder and try to consider",
+        details: {
+
+        }
     },
 };
 
@@ -77,7 +91,7 @@ class FormNoteTaker extends Component{
             return (
 
                 <div className="noteblock-container" key={`note-${note.id}`}>
-                    <NoteBlock text={note.content} />
+                    <NoteBlock note={note} />
                 </div>
 
             // <div className="noteblock-row-container" key={`noterow-${notesinrow.id}`}>
@@ -128,8 +142,8 @@ class FormNoteTaker extends Component{
                     <div className="noteditor_main_div">
 
                         <div className="note-padding-for-space-above" style={{'height':'30%'}}/>
-                        {this.drawNotes()}
-                        <Button onClick={this.handleAddBlock} className="note-action-button-bottom">+</Button>
+                            { this.drawNotes() }
+                            <Button onClick={this.handleAddBlock} className="note-action-button-bottom">+</Button>
                         <div className="note-padding-for-space-above" style={{'height':'30%'}}/>
                         
                     </div>

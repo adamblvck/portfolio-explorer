@@ -5,11 +5,15 @@
 
     /* Horizontal Middle */
     margin: auto;
+    padding-left: 5px;
+    padding-right: 5px;
 
     /* Vertical Middle */
     position: relative;
-    top: 50%;
-    transform: perspective(1px) translateY(-50%);
+
+
+    /* top: 50%; */
+    /* transform: perspective(1px) translateY(-50%); */
     
     /* Make area scrollab
     e */
@@ -65,7 +69,7 @@
     transform: translateY(-50%);
 
     /* Position to the right of card */
-    right: -70px;
+    right: -5px;
 
     /* Looks */
     background-color: white !important;

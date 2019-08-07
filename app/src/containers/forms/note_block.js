@@ -23,8 +23,10 @@ export default class NoteBlock extends Component {
         //let contentState = stateFromMarkdown(markdown);
 
         this.state = {
-            editorState: EditorState.createWithContent(stateFromMarkdown(props.text))
+            editorState: EditorState.createWithContent(stateFromMarkdown(props.note.content))
         };
+
+        this.handleAddAir = this.handleAddAir.bind(this);
     }
 
     onChange = (editorState) => {
@@ -33,24 +35,21 @@ export default class NoteBlock extends Component {
         });
     };
 
+    handleAddAir() {
+        console.log(this.props.note);
+    }
+
     render(){
         return (
-            // <div key={this.props.key} data-grid={this.props.dataGrid}>
-                <Paper className="noteditor-paper">
-                    {/* <Typography classname="notetaker-header" gutterBottom variant="title" component="h1" align="center">
-                        
-                    </Typography> */}
+            <Paper className="noteditor-paper">
+                <Editor
+                    editorState={this.state.editorState}
+                    onChange={this.onChange}
+                    plugins={plugins}
+                />
 
-                    <Editor
-                        editorState={this.state.editorState}
-                        onChange={this.onChange}
-                        plugins={plugins}
-                    />
-
-                    <Button onClick={this.handleAddBlock} className="note-action-button-right">/</Button>
-
-                </Paper>
-            // </div>
+                <Button onClick={this.handleAddAir} className="note-action-button-right">/</Button>
+            </Paper>
         );
     }
 }
