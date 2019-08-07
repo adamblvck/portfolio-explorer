@@ -28,7 +28,7 @@ var ConceptSchema = new Schema({
             cons: [String],
         }
     },
-    groupIds: [String]  // links to many group,
+    groupIds: [String]  // links to many group
 });
 
 module.exports = mongoose.model('Concept', ConceptSchema);
