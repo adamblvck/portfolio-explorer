@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
-import { deleteGroup } from '../actions/group';
-import { fetchBubbleGroups } from '../actions/fetching_public';
-import { openGroupForm, openConceptForm } from '../actions/form';
+import { deleteGroup } from '../../actions/group';
+import { fetchBubbleGroups } from '../../actions/fetching_public';
+import { openGroupForm, openConceptForm } from '../../actions/form';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -15,8 +15,8 @@ import PropTypes from 'prop-types';
 import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu } from '@material-ui/core';
 
 // Components and Containers
-import ConceptsMasonry from '../components/concepts_masonry';
-import MenuGroup from '../components/menus/menu_groups';
+import ConceptMasonry from '../concept/concept_masonry';
+import MenuGroup from '../../components/menus/menu_groups';
 
 const styles = {
         card: {
@@ -33,7 +33,7 @@ const styles = {
     }
 };
 
-class BubbleMasonry extends Component {
+class BoardMasonry extends Component {
     constructor(props) {
         super(props);
 
@@ -44,7 +44,7 @@ class BubbleMasonry extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchBubbleGroups(this.props.bubbleID);
+        this.props.fetchBubbleGroups(this.props.boardID);
     }
 
     /* 
@@ -143,6 +143,7 @@ class BubbleMasonry extends Component {
         // extract root color
         const { rootColor, background } = group;
 
+        // for every subgroup present, render a `CardHeader` and a `ConceptMasonry`
         return _.map(group.groups, (group) => {
             return (
                 <div
@@ -157,8 +158,8 @@ class BubbleMasonry extends Component {
                                 components={ [
                                     {
                                         label: "Add Concept",
-                                        group: group,
                                         needAuth: true,
+                                        group: group,
                                         render: this.renderFormAddConcept
                                     },
                                     {
@@ -184,7 +185,7 @@ class BubbleMasonry extends Component {
                             '--parent-color': rootColor
                         }}
                     />
-                    <ConceptsMasonry
+                    <ConceptMasonry
                         conceptIDs={group.concepts}
                         concepts={concepts}
                         background={background}
@@ -256,15 +257,17 @@ class BubbleMasonry extends Component {
                 columnsCountBreakPoints={{350: 1, 600: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
+
+                    {/* Render Groups */}
                     {this.renderGroups()}
 
-                    {/* TODO: Refactor below item into a function */}
+                    {/* Add Group Button */}
                     <MenuItem
                         onClick={() => {
                             const params = {
                                 mode: "new",
                                 initialValues: {
-                                    bubble_id: this.props.bubbleID,
+                                    bubble_id: this.props.boardID,
                                     background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
                                     n_depth:0,
                                     parent_groupId:null}
@@ -274,6 +277,7 @@ class BubbleMasonry extends Component {
                         }}>
                         Add Group
                     </MenuItem>
+
                 </Masonry>
             </ResponsiveMasonry>
         );
@@ -302,7 +306,7 @@ function mapStateToProps (state) {
 }
 
 // export default connect(mapStateToProps, { fetchConcepts })(GroupsMasonry);
-BubbleMasonry.propTypes = {
+BoardMasonry.propTypes = {
     classes: PropTypes.object.isRequired,
 };
   
@@ -313,5 +317,5 @@ export default withStyles(styles)(
         deleteGroup, 
         openGroupForm, 
         openConceptForm
-    })(BubbleMasonry)
+    })(BoardMasonry)
 );

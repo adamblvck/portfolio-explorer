@@ -13,10 +13,16 @@ import promise from 'redux-promise';
 
 import { Route, Router, BrowserRouter, Switch} from 'react-router-dom';
 
-import Bubble from './components/bubble';
-import BubbleOverview from './containers/bubbles_overview';
+import HomeOverview from './containers/overview/home_overview';
+import Board from './containers/board/board';
+
+// Forms
 import FormNewUser from './containers/forms/form_newuser';
+
+// Callback information (after a webhook call)
 import Callback from './callback/callback';
+
+// Authentication information
 import Auth from './auth/auth';
 import history from './history';
 
@@ -79,7 +85,7 @@ ReactDOM.render(
                         <Route 
                             path="/b/:id" 
                             render={
-                                (props) => <Bubble auth={auth} {...props} />
+                                (props) => <Board auth={auth} {...props} />
                             }    
                         />
 
@@ -87,7 +93,7 @@ ReactDOM.render(
                         <Route 
                             path="/" 
                             render={
-                                (props) => <BubbleOverview auth={auth} {...props} />
+                                (props) => <HomeOverview auth={auth} {...props} />
                             }    
                         />
                     </Switch>

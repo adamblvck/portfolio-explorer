@@ -2,16 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // Core components, containing and rendering Groups
-import BubbleMasonry from '../containers/bubble_masonry';
-import ConceptDetails from '../containers/concept_details';
+import BoardMasonry from './board_masonry';
 
-import FormEditGroup from '../containers/forms/form_group';
-import FormEditConcept from '../containers/forms/form_concept';
-import Footer from './footer';
+// Modal to display concept details
+import ConceptModalFixed from '../concept/concept_modal_fixed';
+import ConceptModalMarkdown from '../concept/concept_modal_markdown';
 
-import FormNoteTaker from '../containers/forms/forms_noteditor';
+// Forms
+import FormEditGroup from '../forms/form_group';
+import FormEditConcept from '../forms/form_concept';
 
-import MarkdownPopup from '../containers/forms/form_markdown';
+
+import Footer from '../../components/footer';
+
+import FormNoteTaker from '../forms/forms_noteditor';
+
+import MarkdownPopup from '../forms/form_markdown';
 
 // Import material-design toolbar
 import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
@@ -19,9 +25,9 @@ import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
 
-import { NewNoteInNotetaker } from '../actions/notetaker';
+import { NewNoteInNotetaker } from '../../actions/notetaker';
 
-class Bubble extends Component {
+class Board extends Component {
     constructor(props){
         super(props);
 
@@ -29,10 +35,10 @@ class Bubble extends Component {
         this.handleLogout = this.handleLogout.bind(this);
         this.handleNewNote = this.handleNewNote.bind(this);
 
-        this.bubbleID = "blockchain"
+        this.boardID = "blockchain"
 
         if (this.props.match.params)
-            this.bubbleID = this.props.match.params['id'];
+            this.boardID = this.props.match.params['id'];
     }
 
     componentDidMount(){
@@ -56,33 +62,32 @@ class Bubble extends Component {
 
         return (
             <AppBar className="menubar">
-                    <Toolbar className="toolbar">
+                <Toolbar className="toolbar">
+                    <Link to="/">
+                        <Button type="button">
+                            Home
+                        </Button>
+                    </Link>
 
-                        <Link to="/">
-                            <Button type="button">
-                                Home
-                            </Button>
-                        </Link>
+                    <Typography variant="title" className="menubar-header">
+                        /b/{this.boardID}
+                    </Typography>
 
-                        <Typography variant="title" className="menubar-header">
-                            /b/{this.bubbleID}
-                        </Typography>
+                    <Button onClick={this.handleNewNote}> New Note </Button>
 
-                        <Button onClick={this.handleNewNote}> New Note </Button>
+                    {
+                        isAuthenticated() && (
+                            <Button onClick={this.handleLogout} > Logout </Button>
+                        )
+                    }
 
-                        {
-                            isAuthenticated() && (
-                                <Button onClick={this.handleLogout} > Logout </Button>
-                            )
-                        }
-
-                        {
-                            !isAuthenticated() && (
-                                <Button onClick={this.handleLogin} > Login </Button>
-                            )
-                        }
-                    </Toolbar>
-                </AppBar>
+                    {
+                        !isAuthenticated() && (
+                            <Button onClick={this.handleLogin} > Login </Button>
+                        )
+                    }
+                </Toolbar>
+            </AppBar>
         );
     }
 
@@ -99,7 +104,7 @@ class Bubble extends Component {
 
                     {/* Groups Overview */}
                     <div className="groups-masonry">
-                        <BubbleMasonry isAuthenticated={isAuthenticated()} bubbleID={this.bubbleID.toLowerCase()} />
+                        <BoardMasonry isAuthenticated={isAuthenticated()} boardID={this.boardID.toLowerCase()} />
                     </div>
 
                     {/* Bottom bar */}
@@ -107,7 +112,7 @@ class Bubble extends Component {
                 </div>
 
                 {/* Holds concept details component */}
-                <ConceptDetails 
+                <ConceptModalFixed 
                     id="concept-detail-popper"
                     isAuthenticated={isAuthenticated()}
                 />
@@ -135,4 +140,4 @@ class Bubble extends Component {
 	}
 }
 
-export default connect(null, { NewNoteInNotetaker })(Bubble);
+export default connect(null, { NewNoteInNotetaker })(Board);

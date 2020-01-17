@@ -18,16 +18,16 @@ import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
 
 // my components
-import MenuGroup from '../components/menus/menu_groups';
-import MindmapViewer from '../components/mindmap_viewer';
+import MenuGroup from '../../components/menus/menu_groups';
+import MindmapViewer from './mindmap_viewer';
 import CryptoChart from './crypto_chart';
-import MarkdownPopup from '../containers/forms/form_markdown';
+import MarkdownPopup from '../forms/form_markdown';
 
 // Actions
-import { deleteConcept, closeConceptDetail } from '../actions/concept';
-import { fetchCryptoPrices } from '../actions/fetching_public'
-import { openConceptForm } from '../actions/form';
-import { showFullscreenMarkdown } from '../actions/markdown';
+import { deleteConcept, closeConceptDetail } from '../../actions/concept';
+import { fetchCryptoPrices } from '../../actions/fetching_public'
+import { openConceptForm } from '../../actions/form';
+import { showFullscreenMarkdown } from '../../actions/markdown';
 
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
@@ -105,7 +105,7 @@ const ModalAnimated = posed.div({
     }
 });
 
-class ConceptDetails extends Component {
+class ConceptModalMD extends Component {
     constructor(props) {
         super(props);
 
@@ -564,7 +564,7 @@ export default connect( mapStateToProps, {
     openConceptForm,
     closeConceptDetail,
     showFullscreenMarkdown
-})(ConceptDetails);
+})(ConceptModalMD);
 
 
 

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import Masonry from "react-responsive-masonry"
 
-import ConceptBasic from './concept_basic';
+import ConceptMasonryButton from './concept_masonry_button';
 
-class ConceptsMasonry extends Component {
+class ConceptMasonry extends Component {
     constructor (props) {
         super(props);
 
@@ -21,7 +21,7 @@ class ConceptsMasonry extends Component {
                     key={conceptID} 
                     className="concept-masonry-item">
                     
-                    <ConceptBasic
+                    <ConceptMasonryButton
                         concept={concepts[conceptID]}
                         background={background}
                     />
@@ -39,4 +39,4 @@ class ConceptsMasonry extends Component {
     }
 }
 
-export default ConceptsMasonry;
+export default ConceptMasonry;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { fetchCryptoPrices } from '../actions/fetching_public';
+import { fetchCryptoPrices } from '../../actions/fetching_public';
 
 import { Sparklines, SparklinesCurve, SparklinesSpots, SparklinesReferenceLine } from 'react-sparklines';
 

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions performed in Bubble Masonry
-import { fetchBubbles } from '../actions/fetching_public';
-import { openBubbleForm } from '../actions/form';
-import { deleteBubble } from '../actions/bubble';
+import { fetchBubbles } from '../../actions/fetching_public';
+import { openBubbleForm } from '../../actions/form';
+import { deleteBubble } from '../../actions/bubble';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
@@ -15,9 +15,9 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles, MenuItem } from '@material-ui/core';
 
-import MenuGroup from '../components/menus/menu_groups';
-import FormBubble from './forms/form_bubble';
-import Footer from '../components/footer';
+import MenuGroup from '../../components/menus/menu_groups';
+import FormBubble from '../forms/form_bubble';
+import Footer from '../../components/footer';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -36,7 +36,7 @@ const styles = {
     }
 };
 
-class BubblesOverview extends Component {
+class HomeOverview extends Component {
     constructor(props){
         super(props);
 
@@ -255,10 +255,10 @@ function mapStateToProps(state) {
     };
 }
 
-BubblesOverview.propTypes = {
+HomeOverview.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchBubbles, openBubbleForm, deleteBubble })(BubblesOverview)
+    connect(mapStateToProps, { fetchBubbles, openBubbleForm, deleteBubble })(HomeOverview)
 );
