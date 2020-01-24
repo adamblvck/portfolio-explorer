@@ -244,6 +244,13 @@ class FormEditConcept extends Component {
                                         </Col>
                                     </Row>
 
+                                        <Field
+                                            label="Markdown"
+                                            name="markdown"
+                                            component={this.renderTextField}
+                                            tabIndex={0}
+                                        />
+
                                         <FormSection name="details">
                                             <Row>
                                                 <Col md={2}/>
