@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu } from '@material-ui/core';
 
 // Components and Containers
-import ConceptMasonry from '../concept/concept_masonry';
+import ConceptMasonry from './concept_masonry';
 import MenuGroup from '../../components/menus/menu_groups';
 
 const styles = {

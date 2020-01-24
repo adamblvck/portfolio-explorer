@@ -112,7 +112,7 @@ class Board extends Component {
                 </div>
 
                 {/* Holds concept details component */}
-                <ConceptModalFixed 
+                <ConceptModalMarkdown 
                     id="concept-detail-popper"
                     isAuthenticated={isAuthenticated()}
                 />
