@@ -113,6 +113,11 @@ const ConceptType = new GraphQLObjectType({
         name : { type: GraphQLString },
         logo_url: { type: GraphQLString },
         meta : { type: MetaType},
+
+        // WOOOOAAA
+        markdown: { type: GraphQLString},
+
+        // Concept details - to be replaced by markdown
         details: { type: ConceptDetailType },
 
         group: {

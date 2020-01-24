@@ -293,6 +293,7 @@ const Mutation = new GraphQLObjectType({
                 name: { type: GraphQLString },
                 logo_url: { type: GraphQLString },
                 meta: { type: MetaInputType },
+                markdown: { type: GraphQLString },
                 details: { type: ConceptDetailInputType },
                 groupIds: { type: new GraphQLList(GraphQLString)}
             },
@@ -313,6 +314,7 @@ const Mutation = new GraphQLObjectType({
                     name: args.name,
                     logo_url: args.logo_url,
                     meta: args.meta,
+                    markdown: args.markdown,
                     details: args.details,
                     groupIds: args.groupIds
                 });
@@ -419,6 +421,7 @@ const Mutation = new GraphQLObjectType({
                 name: { type: GraphQLString },
                 logo_url: { type: GraphQLString },
                 meta: { type: MetaInputType },
+                markdown: { type: GraphQLString },
                 details: { type: ConceptDetailInputType },
                 groupIds: { type: new GraphQLList(GraphQLString)}
             },
@@ -440,6 +443,7 @@ const Mutation = new GraphQLObjectType({
                 if (args.name)      mods.name = args.name;
                 if (args.logo_url)  mods.logo_url = args.logo_url;
                 if (args.meta)      mods.meta = args.meta;
+                if (args.markdown)   mods.markdown = args.markdown;
                 if (args.details)   mods.details = args.details;
                 if (args.groupIds)  mods.groupIds = args.groupIds;
 

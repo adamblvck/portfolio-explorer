@@ -565,6 +565,3 @@ export default connect( mapStateToProps, {
     closeConceptDetail,
     showFullscreenMarkdown
 })(ConceptModalMD);
-
-
-

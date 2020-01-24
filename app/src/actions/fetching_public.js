@@ -80,6 +80,7 @@ export function fetchBubbleGroups(bubble_id) {
                         color
                         symbol
                     }
+                    markdown
                     details {
                         summary
                         mindmap

@@ -15,6 +15,7 @@ var ConceptSchema = new Schema({
         color: String,
         symbol: String
     },
+    markdown: String,
     details: {
         summary: String,
         mindmap: String,

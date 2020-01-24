@@ -32,6 +32,7 @@ export function addConcept(conceptInfo) {
             $name:String,
             $logo_url: String,
             $meta: MetaInput,
+            $markdown: String,
             $details: ConceptDetailInput,
             $groupIds: [String]
         ) {
@@ -39,6 +40,7 @@ export function addConcept(conceptInfo) {
                 name:$name,
                 logo_url:$logo_url,
                 meta:$meta,
+                markdown:$markdown,
                 details:$details,
                 groupIds:$groupIds
             ) {
@@ -49,7 +51,8 @@ export function addConcept(conceptInfo) {
                     color
                     symbol
                 }
-                details{
+                markdown
+                details {
                     summary
                     mindmap
                     short_copy
@@ -96,6 +99,7 @@ export function updateConcept(updatedConceptInfo) {
         $name:String,
         $logo_url: String,
         $meta: MetaInput,
+        $markdown: String,
         $details: ConceptDetailInput,
         $groupIds: [String]
     ) {
@@ -104,6 +108,7 @@ export function updateConcept(updatedConceptInfo) {
             name:$name,
             logo_url:$logo_url,
             meta:$meta,
+            markdown:$markdown,
             details:$details,
             groupIds:$groupIds
         ) {
@@ -114,6 +119,7 @@ export function updateConcept(updatedConceptInfo) {
                 color
                 symbol
             }
+            markdown
             details{
                 summary
                 mindmap
