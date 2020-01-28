@@ -29,6 +29,9 @@ import { fetchCryptoPrices } from '../../actions/fetching_public'
 import { openConceptForm } from '../../actions/form';
 import { showFullscreenMarkdown } from '../../actions/markdown';
 
+// Markdown rendering of markdown components, specific for this application
+import MDSectionComponent from '../md_components/MDSectionComponent'
+
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
     hidden: { 
@@ -363,18 +366,6 @@ class ConceptModalMD extends Component {
                 {/* Core Row with core information */}
                 <Row>
                     <Col xs={12} md={6}>
-                        {/* render summary */}
-                        {/* <div dangerouslySetInnerHTML={{__html:md_summary}} /> */}
-
-                        {/* <Frame 
-                            pose={this.state.fullscreen ? 'fullscreen' : 'summary'} 
-                            initialPose='summary'
-                            className="frame"
-                            style={{
-                                zIndex: 3
-                            }}
-                        /> */}
-                        
                         <div>
                             <div>
                                 <h2>Summary</h2>
@@ -423,6 +414,14 @@ class ConceptModalMD extends Component {
         </CardContent>)
     }
     
+    renderCardContent_MD = (concept, headerBackground) => {
+        const { markdown } = concept;
+        console.log("rendering card content", markdown);
+        return (
+            <MDSectionComponent markdown={markdown}/>
+        )
+    }
+
     renderCardActions(concept){
         return (
             <CardActions>
@@ -472,7 +471,10 @@ class ConceptModalMD extends Component {
                 {this.renderCardHeader(concept,  headerBackground)}
 
                 {/* Card Content */}
-                {this.renderCardContent(concept, headerBackground)}
+                {/* {this.renderCardContent(concept, headerBackground)} */}
+
+                {/* Card Content - Markdown Based */}
+                {this.renderCardContent_MD(concept, headerBackground)}
 
                 {/* Card Actions, on the bottom */}
                 {this.renderCardActions(concept)}

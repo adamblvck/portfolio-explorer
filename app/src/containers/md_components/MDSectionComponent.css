@@ -1,0 +1,25 @@
+.subsection_paper {
+  min-width: 200px;
+}
+
+.section-card-render [class*="MuiCardHeader-title"] {
+  color: #fff;
+}
+
+.section-card-render [class*="MuiCardHeader-subheader"] {
+  color: #fff;
+}
+
+/* Blog Post Renderings */
+.blog_container {
+  display: flex;
+}
+
+.blog_side_item {
+  height: 100%;
+  width: 30%;
+}
+
+.blog_center {
+  flex-grow: 1;
+}
