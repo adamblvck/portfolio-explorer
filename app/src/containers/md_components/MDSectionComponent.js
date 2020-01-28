@@ -27,22 +27,44 @@ export default class MDSectionComponent extends Component {
 		super(props);
 	}
 
-	r_concept_subsections = (lines, depth) => {
-		let { _title, _tags, _rest_lines } = parse_first_line(lines, depth, false);
+	r_mindmap = () => {
+		return (
+			<div></div>
+		);
+	};
 
-		console.log("_tags", _tags);
+	r_procons = () => {
+		return (
+			<div></div>
+		);
+	};
+
+	r_links = () => {
+		return (
+			<div></div>
+		);
+	};
+
+	r_summary = () => {
+		return (
+			<div></div>
+		);
+	};
+
+	r_concept_subsection = (lines, depth) => {
+		let { _title, _tags, _rest_lines } = parse_first_line(lines, depth, false);
 
 		switch (_tags) {
 			case "mindmap":
-				return <div> {_rest_lines} </div>
+				return r_mindmap(_title, _rest_lines);
 			case "pro-cons":
-				return <div> {_rest_lines} </div>
+				return r_procons(_title, _rest_lines);
 			case "links":
-				return <div> {_rest_lines} </div>
+				return r_links(_title, _rest_lines);
 			case "summary":
-				return <div> {_rest_lines} </div>
+				return r_summary(_title, _rest_lines);
 			default:
-				return <div> {_rest_lines} </div>
+				return r_summary(_title, _rest_lines);
 		};
 	};
 
@@ -56,9 +78,6 @@ export default class MDSectionComponent extends Component {
 		// parse subsectionss
 		const { line_i_at_section, section_from_i_to_j } = parse_md_sections( _tags, _rest_lines, depth + 1 );
 
-		console.log(line_i_at_section);
-		console.log(section_from_i_to_j);
-
 		return (
 			<div>
 				{/* iterate through sections */}
@@ -70,7 +89,7 @@ export default class MDSectionComponent extends Component {
 						const subsection_lines = _rest_lines.slice(from, to);
 						return (
 							<div key={from + "" + to}>
-								{this.r_concept_subsections(subsection_lines, depth + 1)}
+								{this.r_concept_subsection(subsection_lines, depth + 1)}
 							</div>
 						);
 					}
