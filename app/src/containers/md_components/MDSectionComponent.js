@@ -67,8 +67,8 @@ export default class MDSectionComponent extends Component {
 		let cons = [];
 		for (let i = 0; i<rest_lines.length; i++){
 			const line = rest_lines[i];
-			if (line[0] == '+') pros.push(line);
-			else if (line[0] == '-') cons.push(line);
+			if (line[0] == '+') pros.push(line.slice(1));
+			else if (line[0] == '-') cons.push(line.slice(1));
 		}
 
 		return (
