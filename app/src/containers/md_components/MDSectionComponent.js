@@ -60,7 +60,7 @@ export default class MDSectionComponent extends Component {
 	};
 
 	r_procons = (title, rest_lines) => {
-		// returns a simple mindmap rendered from a tree-like structure
+		// returns a simple list with pros and cons
 
 		// first sort lines on positives vs negatives
 		let pros = [];
@@ -90,9 +90,14 @@ export default class MDSectionComponent extends Component {
 	};
 
 	r_links = (title, rest_lines) => {
-		// returns a simple list with links to websites
+		// returns a simple title header, and unparsed plaintext inside a paragraph
+		let md = rest_lines.join("\n");
+
 		return (
-			<div></div>
+			<div>
+				<h2>{title}</h2>
+				<p className="concept-short-copy-header">{md}</p>
+			</div>
 		);
 	};
 

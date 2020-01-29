@@ -21,7 +21,7 @@ export default class MindmapViewer extends Component {
             var current_name = line.substr(line.indexOf(' ')+1); // "tocirah sneab"
 
             // if the current level "recedes", we note down the changes
-            if (current_depth < depth){
+            if (current_depth < depth) {
                 return i;
             }
         }
@@ -40,7 +40,7 @@ export default class MindmapViewer extends Component {
             // when on depth level, add to parent node
             if (current_depth == depth){
                 // create node structure
-                var node = {name:current_name, children:[]};
+                var node = { name: current_name, children:[] };
 
                 // add node to parent
                 previous_node = node;
@@ -187,6 +187,7 @@ export default class MindmapViewer extends Component {
         var json_data = this.data_to_json(data)
         
         return <ReactEcharts
+            style={{'width':'100%', 'minHeight':'300px'}}
             option={this.echarts_mindmap_options(json_data)}
             notMerge={true}
             lazyUpdate={true}
@@ -200,7 +201,7 @@ export default class MindmapViewer extends Component {
         
         return (
             <div className="mindmap-container">
-            {mindmapData && this.render_mindmap(mindmapData)}
+                {mindmapData && this.render_mindmap(mindmapData)}
             </div>
         )
     }
