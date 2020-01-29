@@ -4,8 +4,14 @@ import ReactMarkdown, { types } from "react-markdown";
 import _ from "lodash";
 
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-
 import { parse_core_information, parse_md_sections, parse_first_line } from "./markdown_tools";
+import MindmapViewer from '../concept/mindmap_viewer';
+import { Grid, Row, Col } from 'react-bootstrap';
+
+// import icons
+import PlusIcon from '@material-ui/icons/AddCircleRounded';
+import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
+import LinkIcon from '@material-ui/icons/LinkRounded';
 
 import {
   Card,
@@ -27,27 +33,78 @@ export default class MDSectionComponent extends Component {
 		super(props);
 	}
 
-	r_mindmap = () => {
+	renderList = (items, component) => {
+        return _.map(items, item => {
+            return (
+                <li
+                    key={item}
+                    className="list-unstyled"
+                >   
+                    {component}
+                    {item}
+                </li>
+            )
+        });
+    }
+
+	r_mindmap = (title, rest_lines) => {
+		// returns a simple mindmap rendered from a tree-like structure
+		let md = rest_lines.join("\n");
+
+		return (
+			<div>
+				<h2>{title}</h2>
+				<MindmapViewer mindmapData={md}/>
+			</div>
+		);
+	};
+
+	r_procons = (title, rest_lines) => {
+		// returns a simple mindmap rendered from a tree-like structure
+
+		// first sort lines on positives vs negatives
+		let pros = [];
+		let cons = [];
+		for (let i = 0; i<rest_lines.length; i++){
+			const line = rest_lines[i];
+			if (line[0] == '+') pros.push(line);
+			else if (line[0] == '-') cons.push(line);
+		}
+
+		return (
+			<Row>
+				<Col xs={12} md={6}>
+					<div style={{marginBottom:'10px'}}>
+						<h2>Pro's</h2>
+						{this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
+					</div>
+				</Col>
+				<Col xs={12} md={6}>
+					<div style={{marginBottom:'10px'}}>
+						<h2>Con's</h2>
+						{this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
+					</div>
+				</Col>
+			</Row>
+		);
+	};
+
+	r_links = (title, rest_lines) => {
+		// returns a simple list with links to websites
 		return (
 			<div></div>
 		);
 	};
 
-	r_procons = () => {
-		return (
-			<div></div>
-		);
-	};
+	r_summary = (title, rest_lines) => {
+		// returns a simple title header, and unparsed plaintext inside a paragraph
+		let md = rest_lines.join("\n");
 
-	r_links = () => {
 		return (
-			<div></div>
-		);
-	};
-
-	r_summary = () => {
-		return (
-			<div></div>
+			<div>
+				<h2>{title}</h2>
+				<p className="concept-short-copy-header">{md}</p>
+			</div>
 		);
 	};
 
@@ -56,15 +113,15 @@ export default class MDSectionComponent extends Component {
 
 		switch (_tags) {
 			case "mindmap":
-				return r_mindmap(_title, _rest_lines);
+				return this.r_mindmap(_title, _rest_lines);
 			case "pro-cons":
-				return r_procons(_title, _rest_lines);
+				return this.r_procons(_title, _rest_lines);
 			case "links":
-				return r_links(_title, _rest_lines);
+				return this.r_links(_title, _rest_lines);
 			case "summary":
-				return r_summary(_title, _rest_lines);
+				return this.r_summary(_title, _rest_lines);
 			default:
-				return r_summary(_title, _rest_lines);
+				return this.r_summary(_title, _rest_lines);
 		};
 	};
 
@@ -80,20 +137,26 @@ export default class MDSectionComponent extends Component {
 
 		return (
 			<div>
-				{/* iterate through sections */}
-				{_.map(section_from_i_to_j, from_to => {
-					const { from, to } = from_to;
+				<CardContent className="concept-detail-content">
+					<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 600: 2}}>
+						<Masonry gutter="0 auto 0 auto">
+							{/* iterate through sections */}
+							{_.map(section_from_i_to_j, from_to => {
+								const { from, to } = from_to;
 
-					// are we parsing a section at this depth level?
-					if (line_i_at_section.includes(from)) {
-						const subsection_lines = _rest_lines.slice(from, to);
-						return (
-							<div key={from + "" + to}>
-								{this.r_concept_subsection(subsection_lines, depth + 1)}
-							</div>
-						);
-					}
-				})}
+								// are we parsing a section at this depth level?
+								if (line_i_at_section.includes(from)) {
+									const subsection_lines = _rest_lines.slice(from, to);
+									return (
+										<div key={from + "" + to}>
+											{this.r_concept_subsection(subsection_lines, depth + 1)}
+										</div>
+									);
+								}
+							})}
+						</Masonry>
+					</ResponsiveMasonry>
+				</CardContent>
 			</div>
 		);
 	};
