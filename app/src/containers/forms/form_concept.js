@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
-import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
+import { Typography, Modal, Button, Paper, TextField, CardActions} from '@material-ui/core';
+
+import { Card,
+    CardHeader,
+    CardContent } from '@material-ui/core';
 
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
@@ -15,11 +19,12 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 
 class FormEditConcept extends Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
-            logo_url: props.logo_url
+            logo_url: "https://getrandomimage.com"
         }
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -31,16 +36,27 @@ class FormEditConcept extends Component {
         this.onNewLogoUrl = this.onNewLogoUrl.bind(this);
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        console.log('form_concept.js nextProps', nextProps);
+        if (nextProps.initialValues) {
+            if (nextProps.initialValues.logo_url){
+                this.setState({
+                    logo_url: nextProps.initialValues.logo_url
+                });
+            }
+        }
+    }
+
     // Event Handlers
-    handleOpen() {
+    handleOpen = () => {
         // this.setState({ open: true });
     };
     
-    handleClose() {
+    handleClose = () => {
         this.props.closeConceptForm();
     };
 
-    onSubmit(values) {
+    onSubmit = (values) => {
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
             this.props.addConcept( { ...values } );
@@ -189,6 +205,20 @@ class FormEditConcept extends Component {
     render() {
         const { handleSubmit } = this.props;
 
+        const headerBackground = 'black';
+
+        // change the title depending on the mode of the form
+        let title = "Edit"
+        switch (this.props.mode){
+            case "submit":
+                title = "Editing Concept";
+                break;
+            case "new":
+                title = "New Concept";
+            default:
+                title = "Edit"
+        }
+
         return (
             <div>
                 <Modal
@@ -199,118 +229,87 @@ class FormEditConcept extends Component {
                     className="forms-class"
                 >
                     <div className="form-add-concept">
-                        <Paper className="form-add-concept-paper">
-                            <Typography gutterBottom variant="title" component="h1" align="center">
-                                { this.props.mode == "update" && <p>Editing Concept</p> }
-                                { this.props.mode == "new" && <p>New Concept</p> }
-                            </Typography>
-                            <form
-                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }
-                            >
-                                <Grid>
+                        {/* <Paper className="form-add-concept-paper"> */}
 
-                                    <Row>
-                                        <Col md={2}>
-                                            <img className="concept-logo-small" src={this.state.logo_url}></img>
-                                        </Col>
-                                        <Col md={5}>
+                        <Card className="form-add-concept-paper"> 
+
+                            <CardHeader
+                                className="concept-detail-card-header"
+                                title={title}
+                                style={{backgroundColor: headerBackground, background: headerBackground}}
+                            />
+
+                            <CardContent>
+                                <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) } >
+                                    <Grid>
+
+                                        <Row>
+                                            <Col md={2}>
+                                                <img className="concept-logo-small" src={this.state.logo_url}></img>
+                                            </Col>
+                                            <Col md={5}>
+                                                <Field
+                                                    label="Name"
+                                                    name="name"
+                                                    component={this.renderField}
+                                                    tabIndex={0}
+                                                />
+                                                <Field
+                                                    label="Image URL"
+                                                    name="logo_url"
+                                                    component={this.renderField}
+                                                    onChange={this.onNewLogoUrl}
+                                                    tabIndex={1}
+                                                />                                            
+                                            </Col>
+                                            <Col md={5}>
+                                                <FormSection name="meta">
+                                                    {/* <Field
+                                                        label="Header Color"
+                                                        name="color"
+                                                        component={this.renderField}
+                                                    /> */}
+                                                    <Field
+                                                        label="Currency Symbol (if applicable)"
+                                                        name="symbol"
+                                                        component={this.renderField}
+                                                    />
+                                                </FormSection>
+                                            </Col>
+                                        </Row>
+
                                             <Field
-                                                label="Name"
-                                                name="name"
-                                                component={this.renderField}
+                                                label="Markdown"
+                                                name="markdown"
+                                                component={this.renderTextField}
                                                 tabIndex={0}
                                             />
-                                            <Field
-                                                label="Logo URL"
-                                                name="logo_url"
-                                                component={this.renderField}
-                                                onChange={this.onNewLogoUrl}
-                                                tabIndex={1}
-                                            />                                            
-                                        </Col>
-                                        <Col md={5}>
-                                            <FormSection name="meta">
-                                                {/* <Field
-                                                    label="Header Color"
-                                                    name="color"
-                                                    component={this.renderField}
-                                                /> */}
-                                                <Field
-                                                    label="Currency Symbol (if applicable)"
-                                                    name="symbol"
-                                                    component={this.renderField}
-                                                />
-                                            </FormSection>
-                                        </Col>
-                                    </Row>
 
-                                        <Field
-                                            label="Markdown"
-                                            name="markdown"
-                                            component={this.renderTextField}
-                                            tabIndex={0}
-                                        />
+                                        <Row>
+                                            <FieldArray 
+                                                label="Group IDs"
+                                                name="groupIds" 
+                                                component={this.renderGroupIds} 
+                                            />
+                                            
+                                            
+                                        </Row>
+                                    </Grid>
+                                </form>
+                            </CardContent>
 
-                                        <FormSection name="details">
-                                            <Row>
-                                                <Col md={2}/>
+                            <CardActions>
+                                <Button type="submit" variant="outlined" color="primary">Submit</Button>
+                                <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                            </CardActions>
 
-                                                <Col md={10}>
-                                                    <Field
-                                                        label="Short Copy"
-                                                        name="short_copy"
-                                                        component={this.renderTextField}
-                                                    />
-                                                    <Field
-                                                        label="Mind Map"
-                                                        name="mindmap"
-                                                        component={this.renderTextField}
-                                                    />
-                                                    <Field
-                                                        label="Summary"
-                                                        name="summary"
-                                                        component={this.renderTextField}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col>
-                                                    <FormSection name="trade_off">
-                                                        <Col md={6}>
-                                                            <FieldArray 
-                                                                label="Pro's"
-                                                                name="pros" 
-                                                                component={this.renderProsCons}
-                                                            />
-                                                        </Col>
-                                                        <Col md={6}>
-                                                            <FieldArray 
-                                                                label="Con's"
-                                                                name="cons" 
-                                                                component={this.renderProsCons}
-                                                            />
-                                                        </Col>
-                                                    </FormSection>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <FieldArray name="reference_links" component={this.renderReferenceDetails} />
-                                            </Row>
-                                        </FormSection>
+                            {/* <Typography gutterBottom variant="title" component="h1" align="center">
+                                { this.props.mode == "update" && <p>Editing Concept</p> }
+                                { this.props.mode == "new" && <p>New Concept</p> }
+                            </Typography> */}
+                            
+                        </Card>
 
-                                    <Row>
-                                        <FieldArray 
-                                            label="Group IDs"
-                                            name="groupIds" 
-                                            component={this.renderGroupIds} 
-                                        />
-                                        
-                                        <Button type="submit" variant="outlined" color="primary">Submit</Button>
-                                        <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
-                                    </Row>
-                                </Grid>
-                            </form>
-                        </Paper>
                     </div>
                 </Modal>
             </div>
