@@ -18,6 +18,10 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 
+
+import Editor from 'draft-js-plugins-editor';
+
+
 class FormEditConcept extends Component {
 
     constructor(props) {
@@ -242,12 +246,13 @@ class FormEditConcept extends Component {
                             <CardContent>
                                 <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) } >
                                     <Grid>
-
                                         <Row>
                                             <Col md={2}>
-                                                <img className="concept-logo-small" src={this.state.logo_url}></img>
+                                                <Paper>
+                                                    <img className="concept-logo-small" src={this.state.logo_url}></img>
+                                                </Paper>
                                             </Col>
-                                            <Col md={5}>
+                                            <Col md={10}>
                                                 <Field
                                                     label="Name"
                                                     name="name"
@@ -261,20 +266,6 @@ class FormEditConcept extends Component {
                                                     onChange={this.onNewLogoUrl}
                                                     tabIndex={1}
                                                 />                                            
-                                            </Col>
-                                            <Col md={5}>
-                                                <FormSection name="meta">
-                                                    {/* <Field
-                                                        label="Header Color"
-                                                        name="color"
-                                                        component={this.renderField}
-                                                    /> */}
-                                                    <Field
-                                                        label="Currency Symbol (if applicable)"
-                                                        name="symbol"
-                                                        component={this.renderField}
-                                                    />
-                                                </FormSection>
                                             </Col>
                                         </Row>
 
