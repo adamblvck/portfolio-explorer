@@ -47,6 +47,10 @@ export default class MDSectionComponent extends Component {
         });
     }
 
+	r_marketfigures = (title_rest_lines) => {
+		
+	}
+
 	r_mindmap = (title, rest_lines) => {
 		// returns a simple mindmap rendered from a tree-like structure
 		let md = rest_lines.join("\n");
@@ -77,7 +81,7 @@ export default class MDSectionComponent extends Component {
 					<div style={{marginBottom:'10px'}}>
 						<h2>Pro's</h2>
 						{this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
-					</div>
+					</div>``
 				</Col>
 				<Col xs={12} md={6}>
 					<div style={{marginBottom:'10px'}}>
@@ -90,15 +94,49 @@ export default class MDSectionComponent extends Component {
 	};
 
 	r_links = (title, rest_lines) => {
-		// returns a simple title header, and unparsed plaintext inside a paragraph
-		let md = rest_lines.join("\n");
 
+		if (rest_lines.length < 1){
+			return (<div></div>)
+		}
+
+		let url_links = [];
+
+		// go through each line, extract the lines out of it
+		for (let i=0; i<rest_lines.length; i++) {
+			const line = rest_lines[i];
+			let url_title = line.match(/(?<=\[).+?(?=\])/);
+			let url = line.match(/(?<=\().+?(?=\))/);
+
+			// if the parsed title and url are non-zero, we can add them to an array containing everything
+			if (url_title.length > 0 && url.length > 0) {
+				url_links.push({'name':url_title[0], 'url':url[0]});
+			}
+		}
+
+		// go through parsed url_links and create HTML equivalents (React-based)
 		return (
 			<div>
 				<h2>{title}</h2>
-				<p className="concept-short-copy-header">{md}</p>
+				{
+					_.map(url_links, url_link => {
+						return (
+							<li // list item
+								key={url_link.url} 
+								className="list-unstyled">
+								<a // anchor
+									href={url_link.url} 
+									target="_blank"
+									style={{color: 'black'}}
+								>
+									<LinkIcon style={{verticalAlign: 'middle'}}/>{url_link.name}
+								</a>
+							</li>
+						);
+					})
+				}
 			</div>
 		);
+
 	};
 
 	r_summary = (title, rest_lines) => {
