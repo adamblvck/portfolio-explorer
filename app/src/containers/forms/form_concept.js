@@ -18,9 +18,8 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 
-import MarkdownInput from '@opuscapita/react-markdown'
-
-import Editor from 'for-editor'
+import ReactMde from "react-mde";
+import * as Showdown from "showdown";
 
 class FormEditConcept extends Component {
 
@@ -100,113 +99,59 @@ class FormEditConcept extends Component {
         // field.input.value = markdown;
     }
 
+    loadSuggestions = (text) => {
+        return new Promise((accept, reject) => {
+          setTimeout(() => {
+            const suggestions = [
+              {
+                preview: "Andre",
+                value: "@andre"
+              },
+              {
+                preview: "Angela",
+                value: "@angela"
+              },
+              {
+                preview: "David",
+                value: "@david"
+              },
+              {
+                preview: "Louise",
+                value: "@louise"
+              }
+            ].filter(i => i.preview.toLowerCase().includes(text.toLowerCase()));
+            accept(suggestions);
+          }, 250);
+        });
+    }
+
     renderTextField(field) {
         const { meta : { touched, error } } = field;
         const className = `form-group ${touched && error ? 'has-danger' : ''}`;
 
         console.log ( '...field.input', field.input );
 
+        // const [value, setValue] = React.useState("**Hello world!!!**");
+        // const [selectedTab, setSelectedTab] = React.useState("write");
+
+        const converter = new Showdown.Converter({
+            tables: true,
+            simplifiedAutoLink: true,
+            strikethrough: true,
+            tasklists: true
+        });
+
         return (
             <div className={className}>
-                <MarkdownInput
-                    {...field.input}               
-                    // onChange={_scope.handleValueChange}
-                    // onBlur={() => console.log('blur')}
-                    // value={_scope.state.markdownExample}
-                    autoFocus={true}
-                    readOnly={false}
-                    showFullScreenButton={false}
-                    hideToolbar={false}
-                    locale='en'
-                    additionalButtons={[
-                        {
-                        iconElement: (<i className="fa fa-search"></i>),
-                        handleButtonPress({ value, insertAtCursorPosition }) {
-                            setTimeout(() => {
-                            insertAtCursorPosition('#Product.new');
-                            }, 100);
-                        },
-                        },
-                        {
-                        handleButtonPress({ value, insertAtCursorPosition }) {
-                            insertAtCursorPosition('#Product.old');
-                        },
-                        label: 'Product'
-                        },
-                        {
-                        iconElement: (<i className="fa fa-search"></i>),
-                        handleButtonPress({ value, insertAtCursorPosition }) {
-                            insertAtCursorPosition('$Term.new');
-                        },
-                        label: 'Term'
-                        }
-                    ]}
-                    extensions={[
-                        {
-                        specialCharacter: '#',
-                        termRegex: /^\#(\w*)$/,
-                        searchItems(term) {
-                            const items = [
-                            {_objectLabel: 'a1'},
-                            {_objectLabel: 'a2'},
-                            {_objectLabel: 'a23'},
-                            {_objectLabel: 'b1'},
-                            {_objectLabel: 'ba2'},
-                            {_objectLabel: 'ba21'},
-                            {_objectLabel: 'ba222'},
-                            {_objectLabel: 'ba23'},
-                            {_objectLabel: 'ba24'},
-                            {_objectLabel: 'ba25'},
-                            {_objectLabel: 'ba255'},
-                            {_objectLabel: 'ba256'},
-                            {_objectLabel: 'ba257'}
-                            ];
-                            return new Promise(resolve => setTimeout(_ => resolve(items.filter(({ _objectLabel }) => _objectLabel.indexOf(term.substring(1)) === 0)), 1000));
-                        },
-                        markdownText(item) {
-                            return '#' + item._objectLabel + ' ';
-                        },
-                        renderItem: ({ item, isSelected }) => (
-                            <div
-                            className={`
-                                react-markdown--autocomplete-widget__item${isSelected ? ' react-markdown--autocomplete-widget__item--active' : ''}
-                            `}
-                            >
-                            <span>{item._objectLabel}</span>
-                            </div>
-                        )
-                        },
-                        {
-                        specialCharacter: '$',
-                        termRegex: /^\$(\w*|\[\w*\]?)$/,
-                        searchItems(term) {
-                            const termId = term.replace(/^\$(?:\[(\w*)\]|\[?(\w*))$/, '$1$2');
-                            const items = [
-                            {_objectLabel: 'a1'},
-                            {_objectLabel: 'a2'},
-                            {_objectLabel: 'a23'},
-                            {_objectLabel: 'b1'},
-                            {_objectLabel: 'ba2'},
-                            {_objectLabel: 'ba21'},
-                            {_objectLabel: 'ba222'},
-                            {_objectLabel: 'ba23'},
-                            {_objectLabel: 'ba24'},
-                            {_objectLabel: 'ba25'},
-                            {_objectLabel: 'ba255'},
-                            {_objectLabel: 'ba256'},
-                            {_objectLabel: 'ba257'}
-                            ];
-                            return Promise.resolve(items.filter(({_objectLabel}) => _objectLabel.startsWith(termId)));
-                        },
-                        markdownText(item, term) {
-                            return term[1] === '[' ?
-                            '$[' + item._objectLabel + '] ' :
-                            '$' + item._objectLabel + ' ';
-                        }
-                        }
-                    ]}
-                    />
-
+                <ReactMde
+                    {...field.input}
+                    // selectedTab={selectedTab}
+                    // onTabChange={setSelectedTab}
+                    generateMarkdownPreview={markdown =>
+                        Promise.resolve(converter.makeHtml(markdown))
+                    }
+                    loadSuggestions={this.loadSuggestions}
+                />
                 
 
                 {/* <Editor {...field.input} language='en' /> */}

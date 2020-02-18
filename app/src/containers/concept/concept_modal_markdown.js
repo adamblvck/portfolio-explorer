@@ -463,9 +463,10 @@ class ConceptModalMD extends Component {
                     </Paper>
                 </LogoAnimated>
 
-                <div className="reference-links">
+                {/* Reference linsk in header */}
+                {/* <div className="reference-links">
                     {this.renderReferenceLinks(concept.details)}
-                </div>
+                </div> */}
 
                 {/* Card Header */}
                 {this.renderCardHeader(concept,  headerBackground)}
