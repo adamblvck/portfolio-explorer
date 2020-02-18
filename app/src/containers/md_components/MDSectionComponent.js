@@ -56,7 +56,7 @@ export default class MDSectionComponent extends Component {
 		let md = rest_lines.join("\n");
 
 		return (
-			<div>
+			<div style={{width:'300px'}}>
 				<h2>{title}</h2>
 				<MindmapViewer mindmapData={md}/>
 			</div>
@@ -78,13 +78,13 @@ export default class MDSectionComponent extends Component {
 		return (
 			<Row>
 				<Col xs={12} md={6}>
-					<div style={{marginBottom:'10px'}}>
+					<div style={{marginBottom:'10px', marginLeft:'5px', marginRight:'5px'}}>
 						<h2>Pro's</h2>
 						{this.renderList(pros, <PlusIcon color="primary" className="trade-off-icon"/>)}
-					</div>``
+					</div>
 				</Col>
 				<Col xs={12} md={6}>
-					<div style={{marginBottom:'10px'}}>
+					<div style={{marginBottom:'10px', marginLeft:'5px', marginRight:'5px'}}>
 						<h2>Con's</h2>
 						{this.renderList(cons, <MinusIcon color="secondary" className="trade-off-icon"/>)}
 					</div>

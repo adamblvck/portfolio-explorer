@@ -104,20 +104,20 @@ class FormEditConcept extends Component {
           setTimeout(() => {
             const suggestions = [
               {
-                preview: "Andre",
-                value: "@andre"
+                preview: "Mindmap",
+                value: "[mindmap]"
               },
               {
-                preview: "Angela",
-                value: "@angela"
+                preview: "Pros & Cons",
+                value: "[pro-cons]"
               },
               {
-                preview: "David",
-                value: "@david"
+                preview: "Links",
+                value: "[links]"
               },
               {
-                preview: "Louise",
-                value: "@louise"
+                preview: "Post",
+                value: "[post]"
               }
             ].filter(i => i.preview.toLowerCase().includes(text.toLowerCase()));
             accept(suggestions);
@@ -132,7 +132,7 @@ class FormEditConcept extends Component {
         console.log ( '...field.input', field.input );
 
         // const [value, setValue] = React.useState("**Hello world!!!**");
-        // const [selectedTab, setSelectedTab] = React.useState("write");
+        const [selectedTab, setSelectedTab] = React.useState("write");
 
         const converter = new Showdown.Converter({
             tables: true,
@@ -145,8 +145,8 @@ class FormEditConcept extends Component {
             <div className={className}>
                 <ReactMde
                     {...field.input}
-                    // selectedTab={selectedTab}
-                    // onTabChange={setSelectedTab}
+                    selectedTab={selectedTab}
+                    onTabChange={setSelectedTab}
                     generateMarkdownPreview={markdown =>
                         Promise.resolve(converter.makeHtml(markdown))
                     }
@@ -276,7 +276,11 @@ class FormEditConcept extends Component {
     render() {
         const { handleSubmit } = this.props;
 
-        const headerBackground = 'black';
+        const { activeConcept } = this.props;
+        const show_details = !activeConcept ? false : true;
+        const headerBackground = show_details ? activeConcept.background : null;
+
+        // const headerBackground = 'black';
 
         // change the title depending on the mode of the form
         let title = "Edit"
@@ -302,7 +306,7 @@ class FormEditConcept extends Component {
                     <div className="form-add-concept">
                         {/* <Paper className="form-add-concept-paper"> */}
 
-                        <Card className="form-add-concept-paper"> 
+                        <Card className="form-add-concept-paper">
 
                             <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) } >
 
@@ -313,7 +317,7 @@ class FormEditConcept extends Component {
                             />
 
 
-                            <CardContent>
+                            <CardContent style={{'overflow-y':'auto', 'max-height':'500px'}}>
                                 
                                     <Grid>
                                         <Row>
@@ -391,7 +395,8 @@ function mapStateToProps(state) {
         return {
             open: state.forms.open,
             mode: state.forms.mode,
-            initialValues: state.forms.initialValues
+            initialValues: state.forms.initialValues,
+            activeConcept: state.activeConcept, // we'll be pickup up this state variable for background color (will be filled in our application)
         };
     }
     return {}; 
