@@ -107,8 +107,10 @@ export default class MDSectionComponent extends Component {
 			let url_title = line.match(/(?<=\[).+?(?=\])/);
 			let url = line.match(/(?<=\().+?(?=\))/);
 
+			console.log("rest_lines PARSE", 'url_title', url_title, 'url', url);
+
 			// if the parsed title and url are non-zero, we can add them to an array containing everything
-			if (url_title.length > 0 && url.length > 0) {
+			if (url_title !== null && url !== null && url_title.length > 0 && url.length > 0) {
 				url_links.push({'name':url_title[0], 'url':url[0]});
 			}
 		}
@@ -146,7 +148,8 @@ export default class MDSectionComponent extends Component {
 		return (
 			<div>
 				<h2>{title}</h2>
-				<p className="concept-short-copy-header">{md}</p>
+				{/* <p className="concept-short-copy-header">{md}</p> */}
+				<ReactMarkdown source={md} />
 			</div>
 		);
 	};

@@ -326,13 +326,15 @@ class FormEditConcept extends Component {
                                                     <img className="concept-logo-small" src={this.state.logo_url}></img>
                                                 </Paper>
                                             </Col>
-                                            <Col md={10}>
+                                            <Col md={3}>
                                                 <Field
                                                     label="Name"
                                                     name="name"
                                                     component={this.renderField}
                                                     tabIndex={0}
                                                 />
+                                            </Col>
+                                            <Col md={7}>
                                                 <Field
                                                     label="Image URL"
                                                     name="logo_url"
@@ -342,14 +344,12 @@ class FormEditConcept extends Component {
                                                 />                                            
                                             </Col>
                                         </Row>
-
                                             <Field
                                                 label="Markdown"
                                                 name="markdown"
                                                 component={this.renderTextField}
                                                 tabIndex={0}
                                             />
-
                                         <Row>
                                             <FieldArray 
                                                 label="Group IDs"
