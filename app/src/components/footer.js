@@ -9,7 +9,7 @@ export default class Bubble extends Component {
     render(){
         return(
             <div className="footer">
-                <Typography variant="subheading" className="footer-typography">
+                <Typography variant="subtitle1" className="footer-typography">
                     Powered by <img className="footer-image" src="http://www.smartie.be/wp-content/uploads/2019/04/Logo-Text-Shadow-LQ.png">
                     </img>
                 </Typography>

@@ -32,7 +32,9 @@ import history from './history';
 import Particles from 'react-particles-js';
 import particlesConfig from '../configs/particlesjs-config';
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+// import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import store from './store';
 
@@ -59,7 +61,7 @@ const myTheme = createMuiTheme({
  });
 
 ReactDOM.render(
-    <MuiThemeProvider theme={myTheme}>
+    <ThemeProvider theme={myTheme}>
         <Provider store={store}>
             <Router history={history}>
                 <div>
@@ -109,5 +111,5 @@ ReactDOM.render(
                     }}
                 />
 
-    </MuiThemeProvider>
+    </ThemeProvider>
     , document.querySelector('.container'));

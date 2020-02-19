@@ -28,7 +28,7 @@
     vertical-align: -.125em; }
   .mde-header ul.mde-header-group {
     margin: 0;
-    padding: 10px;
+    padding: 5px;
     list-style: none;
     display: flex;
     flex-wrap: nowrap; }
@@ -41,8 +41,8 @@
       .mde-header ul.mde-header-group li.mde-header-item button {
         text-align: left;
         cursor: pointer;
-        height: 22px;
-        padding: 4px;
+        height: 18px;
+        padding: 3px;
         margin: 0;
         border: none;
         background: none;

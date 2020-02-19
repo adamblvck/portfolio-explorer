@@ -325,7 +325,7 @@ li [class*="MuiSvgIcon"] {
 }
 
 .delete-button-edit-form {
-    margin-top: 23px !important;
+    margin-top: 2px !important;
 }
 
 .frame {
@@ -338,3 +338,7 @@ li [class*="MuiSvgIcon"] {
     background: white;
     transform: translateZ(0);
   }
+
+.add-group-id-button{
+    padding: 4px !important;
+}

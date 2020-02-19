@@ -71,7 +71,7 @@ class HomeOverview extends Component {
                         </Button>
                     </Link>
 
-                    <Typography variant="title" className="menubar-header">
+                    <Typography variant="h1" className="menubar-header">
                         Bubbles
                     </Typography>
 
