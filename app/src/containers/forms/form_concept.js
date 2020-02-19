@@ -175,6 +175,8 @@ class FormEditConcept extends Component {
                         Promise.resolve(this.converter.makeHtml(markdown))
                     }
                     loadSuggestions={this.loadSuggestions}
+                    minEditorHeight={300}
+                    maxEditorHeight={520}
                 />
             </div>
         );
@@ -189,8 +191,6 @@ class FormEditConcept extends Component {
                 className={className}
                 initialValue="# Hello!"
                 onChange={console.log}
-                minEditorHeight={15}
-                maxEditorHeight={25}
             />
         )
     }
