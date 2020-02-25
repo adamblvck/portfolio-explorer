@@ -245,7 +245,6 @@ class ConceptModalFixed extends Component {
     }
 
     handleEditConcept(){
-        console.log("wow openconceptform");
         const params = {
             mode: "update",
             initialValues: this.props.concept
@@ -445,7 +444,7 @@ class ConceptModalFixed extends Component {
     }
 
     renderCard(concept, headerBackground){
-        console.log("concept_details info: ", concept);
+        // console.log("concept_details info: ", concept);
 
         if (concept === undefined) {
             return (<div></div>);

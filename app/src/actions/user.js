@@ -17,7 +17,7 @@ export function getUserInfo(token) {
         }
     }`;
 
-    console.log("dispatched!", token.idToken);
+    console.log("dispatched user token", token.idToken);
 
     const headers = {
         Authorization: token.idToken,

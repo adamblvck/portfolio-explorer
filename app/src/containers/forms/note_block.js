@@ -18,7 +18,7 @@ export default class NoteBlock extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
+        // console.log(props);
 
         //let contentState = stateFromMarkdown(markdown);
 
@@ -36,7 +36,7 @@ export default class NoteBlock extends Component {
     };
 
     handleAddAir() {
-        console.log(this.props.note);
+        // console.log(this.props.note);
     }
 
     render(){

@@ -34,16 +34,20 @@ class ConceptMasonry extends Component {
     render() {
         return (
             <Container // drag and drop container
-                className="concept-masonry"
                 groupName="concept-holders"
                 dragClass="form-ghost"
                 dropClass="form-ghost-drop"
                 onDrop={this.onDrop}
                 nonDragAreaSelector=".field"
                 orientation="horizontal"
+                render={(setRef) => (
+                    <div className="concept-grid" ref={setRef}> 
+                        {this.renderConcepts()}
+                    </div>
+                )}
             >
-                {/* {this.generateForm(this.state.form)} */}
-                {this.renderConcepts()}
+                    {/* {this.generateForm(this.state.form)} */}
+                    
             </Container>
             // <Masonry className="concept-masonry">
             //     {this.renderConcepts()}

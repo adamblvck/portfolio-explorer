@@ -76,7 +76,7 @@ class FormEditConcept extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        console.log('form_concept.js nextProps', nextProps);
+        // console.log('form_concept.js nextProps', nextProps);
         if (nextProps.initialValues) {
             if (nextProps.initialValues.logo_url){
                 this.setState({

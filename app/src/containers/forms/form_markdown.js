@@ -22,7 +22,7 @@ class MarkdownPopup extends Component {
     }
 
     render() {
-        console.log(this.props);
+        // console.log(this.props);
 
         if (this.props.markdown === null)
             return(<div></div>);

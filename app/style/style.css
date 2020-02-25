@@ -97,8 +97,10 @@ body {
     border-radius: 44px !important;
 }
 
-.bubble_group_card{
+.board_group_card{
     border-radius: 22px !important;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .group-item {
@@ -131,6 +133,11 @@ body {
 }
 
 /* Concepts */
+
+.concept-grid {
+    margin-left: auto;
+    margin-right: auto;
+}
 
 .concept-masonry-item{
     margin-right: 6px;

@@ -21,6 +21,10 @@ import MenuGroup from '../../components/menus/menu_groups';
 import { Container, Draggable } from 'react-smooth-dnd';
 import { applyDrag } from './utils';
 
+import { chunk } from 'lodash';
+
+import { Grid, Row, Col } from 'react-bootstrap';
+
 const styles = {
         card: {
         maxWidth: 400,
@@ -44,6 +48,15 @@ class BoardMasonry extends Component {
         this.renderFormEditGroup = this.renderFormEditGroup.bind(this);
         this.renderFormAddSubgroup = this.renderFormAddSubgroup.bind(this);
         this.renderFormAddConcept = this.renderFormAddConcept.bind(this);
+
+        // // add object sizing
+        // Object.size = function(obj) {
+        //     var size = 0, key;
+        //     for (key in obj) {
+        //         if (obj.hasOwnProperty(key)) size++;
+        //     }
+        //     return size;
+        // };
     }
 
     componentDidMount() {
@@ -202,7 +215,7 @@ class BoardMasonry extends Component {
     renderCard(group){
         const { classes } = this.props;
         return (
-            <Card className={`${classes.card} bubble_group_card`} elevation={3}>
+            <Card className={`${classes.card} board_group_card`} elevation={3}>
                 <CardHeader
                     action={
                         this.props.isAuthenticated && // if authenticated
@@ -244,11 +257,16 @@ class BoardMasonry extends Component {
         );
     }
 
-    renderGroups() {
-        return _.map(this.props.groups, group => {
+    renderGroups(groups) {
+        return _.map(groups, group => {
+
+            const g = group[Object.keys(group)[0]]
+
+            console.log(g);
+
             return (
-                <Draggable key={group.id}>
-                    {this.renderCard(group)}
+                <Draggable key={g.id}>
+                    {this.renderCard(g)}
                 </Draggable>
             );
         });
@@ -283,23 +301,34 @@ class BoardMasonry extends Component {
 
                 </Masonry>
             </ResponsiveMasonry>
-            
         );
     }
 
     renderDraggableGrid() {
-        return (
-            <Container // drag and drop container
-                style={{ paddingBottom: '200px' }}
-                dragClass="form-ghost"
-                dropClass="form-ghost-drop"
-                onDrop={this.onDrop}
-                nonDragAreaSelector=".field"
-            >
-                {/* {this.generateForm(this.state.form)} */}
-                {this.renderGroups()}
-            </Container>
-        );
+
+        const { groups } = this.props;
+
+        if (groups == null){
+            return ( <div className="placeholder-css"/> ); // or placeholder
+        }
+
+        return _.map(groups, column => {
+            return (
+                <Col xs={6} md={6}>
+                    <Container // drag and drop container
+                        groupName="board-columns"
+                        style={{ paddingBottom: '200px' }}
+                        dragClass="form-ghost"
+                        dropClass="form-ghost-drop"
+                        onDrop={this.onDrop}
+                        nonDragAreaSelector=".field"
+                    >
+                        {/* {this.generateForm(this.state.form)} */}
+                        {this.renderGroups(column)}
+                    </Container>
+                </Col>
+            );
+        });
     }
 
     render() {
@@ -309,8 +338,10 @@ class BoardMasonry extends Component {
         return (
             <div>
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
-                { this.renderDraggableGrid() }
-                {/* { this.renderMasonry() } */}
+
+                <Grid>
+                    { this.renderDraggableGrid() }
+                </Grid>
             </div>
         );
 
@@ -318,8 +349,27 @@ class BoardMasonry extends Component {
 }
 
 function mapStateToProps (state) {
+    // add object sizing
+    Object.size = function(obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
+
+    // groups to chunks
+    let chunked_groups = [];
+    if (state.groups !== null && !_.isEmpty(state.groups)){ // only if groups exist, and result is NOT EMPTY
+
+        const groups = state.groups.groups;
+        const chunkSize = Object.size(groups) / 2;
+        const arrayFromObject = Object.entries(groups).map(([key, value]) => ({ [key]: value }));
+        chunked_groups = chunk(arrayFromObject, chunkSize);
+    }
+
     return {
-        groups: state.groups.groups,
+        groups: chunked_groups,
         concepts: state.groups.concepts,
         modified: state.groups.modified // increases with 1 if groups/concepts are modified
     };

@@ -248,7 +248,7 @@ class ConceptModalMD extends Component {
     }
 
     handleEditConcept(){
-        console.log("wow openconceptform");
+        // console.log("wow openconceptform");
         const params = {
             mode: "update",
             initialValues: this.props.concept
@@ -416,7 +416,7 @@ class ConceptModalMD extends Component {
     
     renderCardContent_MD = (concept, headerBackground) => {
         const { markdown } = concept;
-        console.log("rendering card content", markdown);
+        // console.log("rendering card content", markdown);
         return (
             <MDSectionComponent markdown={markdown}/>
         )
@@ -444,7 +444,7 @@ class ConceptModalMD extends Component {
     }
 
     renderCard(concept, headerBackground){
-        console.log("concept_details info: ", concept);
+        // console.log("concept_details info: ", concept);
 
         if (concept === undefined) {
             return (<div></div>);
