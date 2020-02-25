@@ -8,6 +8,9 @@ import { Paper, Card, CardContent, CardHeader } from '@material-ui/core';
 // actions
 import { showConceptDetail } from '../../actions/concept';
 
+// dragable DND div
+import { Container, Draggable } from 'react-smooth-dnd';
+
 class ConceptMasonryButton extends Component {
     constructor(props) {
         super(props);
@@ -24,17 +27,16 @@ class ConceptMasonryButton extends Component {
 
     render(){
         return (
-            <div>
-                <Card 
-                    //style={{zIndex:zIndex, position:'relative'}}
-                    elevation={0}
-                    className="concept-item"
-                >
+            <Card 
+                //style={{zIndex:zIndex, position:'relative'}}
+                elevation={0}
+                className="concept-item"
+            >
                     <CardContent
                         className="concept-item-content"
                         onClick={this.handleClick}
                     >
-                        <img className="concept-logo-small" src={this.props.concept.logo_url}></img>
+                            <img className="concept-logo-small" src={this.props.concept.logo_url} style={{'pointerEvents': 'none'}}></img>
                     </CardContent>
 
                     <CardHeader
@@ -43,8 +45,7 @@ class ConceptMasonryButton extends Component {
                         onClick={this.handleClick}
                         // style={{backgroundColor: this.props.background, background: this.props.background}}
                     />
-                </Card>
-            </div>
+            </Card>
         )
     } 
 }

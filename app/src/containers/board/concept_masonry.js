@@ -4,6 +4,9 @@ import Masonry from "react-responsive-masonry"
 
 import ConceptMasonryButton from './concept_masonry_button';
 
+import { Container, Draggable } from 'react-smooth-dnd';
+import { applyDrag } from './utils';
+
 class ConceptMasonry extends Component {
     constructor (props) {
         super(props);
@@ -17,24 +20,34 @@ class ConceptMasonry extends Component {
 
         return _.map(conceptIDs, (conceptID) => {
             return (
-                <div 
-                    key={conceptID} 
-                    className="concept-masonry-item">
-                    
+                <Draggable key={conceptID} className="concept-masonry-item">
                     <ConceptMasonryButton
                         concept={concepts[conceptID]}
                         background={background}
+                        key={conceptID}
                     />
-                </div>
+                </Draggable>
             )
         });
     }
 
     render() {
         return (
-            <Masonry className="concept-masonry">
+            <Container // drag and drop container
+                className="concept-masonry"
+                groupName="concept-holders"
+                dragClass="form-ghost"
+                dropClass="form-ghost-drop"
+                onDrop={this.onDrop}
+                nonDragAreaSelector=".field"
+                orientation="horizontal"
+            >
+                {/* {this.generateForm(this.state.form)} */}
                 {this.renderConcepts()}
-            </Masonry>
+            </Container>
+            // <Masonry className="concept-masonry">
+            //     {this.renderConcepts()}
+            // </Masonry>
         );
     }
 }

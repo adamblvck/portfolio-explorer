@@ -18,6 +18,9 @@ import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu } from '@mate
 import ConceptMasonry from './concept_masonry';
 import MenuGroup from '../../components/menus/menu_groups';
 
+import { Container, Draggable } from 'react-smooth-dnd';
+import { applyDrag } from './utils';
+
 const styles = {
         card: {
         maxWidth: 400,
@@ -35,7 +38,7 @@ const styles = {
 
 class BoardMasonry extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
         this.renderDeleteGroup = this.renderDeleteGroup.bind(this);
         this.renderFormEditGroup = this.renderFormEditGroup.bind(this);
@@ -244,9 +247,9 @@ class BoardMasonry extends Component {
     renderGroups() {
         return _.map(this.props.groups, group => {
             return (
-                <div key={group.id}>
+                <Draggable key={group.id}>
                     {this.renderCard(group)}
-                </div>
+                </Draggable>
             );
         });
     }
@@ -280,6 +283,22 @@ class BoardMasonry extends Component {
 
                 </Masonry>
             </ResponsiveMasonry>
+            
+        );
+    }
+
+    renderDraggableGrid() {
+        return (
+            <Container // drag and drop container
+                style={{ paddingBottom: '200px' }}
+                dragClass="form-ghost"
+                dropClass="form-ghost-drop"
+                onDrop={this.onDrop}
+                nonDragAreaSelector=".field"
+            >
+                {/* {this.generateForm(this.state.form)} */}
+                {this.renderGroups()}
+            </Container>
         );
     }
 
@@ -290,7 +309,8 @@ class BoardMasonry extends Component {
         return (
             <div>
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
-                { this.renderMasonry() }
+                { this.renderDraggableGrid() }
+                {/* { this.renderMasonry() } */}
             </div>
         );
 
