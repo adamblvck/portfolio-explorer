@@ -137,11 +137,9 @@ body {
 .concept-grid {
     margin-left: auto;
     margin-right: auto;
-}
 
-.concept-masonry-item{
-    margin-right: 6px;
-    margin-bottom: 6px;
+    display: block !important;
+    overflow-y: scroll;
 }
 
 .concept-logo-small {
@@ -159,6 +157,10 @@ body {
     box-shadow: 0 0px 0px rgba(0,0,0,0.15);
     transition: box-shadow 0.21s ease-in-out;
     cursor: pointer;
+
+    margin-right: 6px;
+    margin-left: 6px;
+    margin-bottom: 4px
 }
 
 .concept-item:hover{

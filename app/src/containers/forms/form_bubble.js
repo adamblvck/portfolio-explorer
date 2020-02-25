@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 
 import { closeBubbleForm } from '../../actions/form';
-import { updateBubble, addBubble } from '../../actions/bubble';
+import { updateBubble, addBubble } from '../../actions/board';
 
 class FormBubble extends Component {
     constructor(props) {

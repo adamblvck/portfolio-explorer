@@ -20,13 +20,19 @@ class ConceptMasonry extends Component {
 
         return _.map(conceptIDs, (conceptID) => {
             return (
-                <Draggable key={conceptID} className="concept-masonry-item">
-                    <ConceptMasonryButton
-                        concept={concepts[conceptID]}
-                        background={background}
-                        key={conceptID}
-                    />
-                </Draggable>
+                <Draggable
+                    key={`${conceptID}-draggable`}
+                    render={(setRef) => (
+                        <div ref={setRef}>
+                            <ConceptMasonryButton
+                                className="concept-masonry-item"
+                                concept={concepts[conceptID]}
+                                background={background}
+                                key={`${conceptID}-btn`}
+                            />
+                        </div>
+                    )}
+                />
             )
         });
     }
@@ -45,10 +51,7 @@ class ConceptMasonry extends Component {
                         {this.renderConcepts()}
                     </div>
                 )}
-            >
-                    {/* {this.generateForm(this.state.form)} */}
-                    
-            </Container>
+            />
             // <Masonry className="concept-masonry">
             //     {this.renderConcepts()}
             // </Masonry>

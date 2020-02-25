@@ -162,9 +162,7 @@ class BoardMasonry extends Component {
         // for every subgroup present, render a `CardHeader` and a `ConceptMasonry`
         return _.map(group.groups, (group) => {
             return (
-                <div
-                    key={group.id}
-                >
+                <Draggable key={group.id}>
                     <CardHeader
                         action={
                             this.props.isAuthenticated && // if authenticated
@@ -207,7 +205,7 @@ class BoardMasonry extends Component {
                         background={background}
                         isAuthenticated={this.props.isAuthenticated}
                     />
-                </div>
+                </Draggable>
             );
         });
     }
@@ -250,8 +248,21 @@ class BoardMasonry extends Component {
                     className='RootGroupHeader'
                 />
 
+                {/* Create container with draggable subgroups */}
                 <CardContent className={classes.content}>
-                    {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
+                    <Container // drag and drop container
+                        groupName={`board-subgroups`} // to group places where it's possible to drag and drop
+                        // style={{ paddingBottom: '200px' }}
+                        dragClass="form-ghost" // dragged class
+                        dropClass="form-ghost-drop" // drop region class
+                        // onDrop={dnd_results => this.dnd_onDrop(col_i, dnd_results)} // perform this on drop
+                        // getChildPayload={index => this.dnd_getConceptCard(col_i, index)} // get column index, and index of dragged item
+                        nonDragAreaSelector=".field"
+                        key={`draggable_subgroup_container_${group.id}`} // small key to make this one shine
+                    >
+                        {/* {this.generateForm(this.state.form)} */}
+                        {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
+                    </Container>
                 </CardContent>
             </Card>
         );
@@ -304,6 +315,18 @@ class BoardMasonry extends Component {
         );
     }
 
+    dnd_onDrop = (col_i, dnd_results) => {
+        console.log(dnd_results);
+
+        console.log(applyDrag(this.props.groups[col_i], dnd_results)); // this return the new array for col_i
+    }
+
+    dnd_getConceptCard = (column_ix, item_ix) => {
+        // column_ix = the column index of the dragged component
+        // item_ix = index of item in column
+        return this.props.groups[column_ix][item_ix];
+    }
+
     renderDraggableGrid() {
 
         const { groups } = this.props;
@@ -312,16 +335,18 @@ class BoardMasonry extends Component {
             return ( <div className="placeholder-css"/> ); // or placeholder
         }
 
-        return _.map(groups, column => {
+        return _.map(groups, (column, col_i) => {
             return (
-                <Col xs={6} md={6}>
+                <Col xs={4} md={4} key={`col_${col_i}`}>
                     <Container // drag and drop container
-                        groupName="board-columns"
+                        groupName="board-columns" // to group places where it's possible to drag and drop
                         style={{ paddingBottom: '200px' }}
-                        dragClass="form-ghost"
-                        dropClass="form-ghost-drop"
-                        onDrop={this.onDrop}
+                        dragClass="form-ghost" // dragged class
+                        dropClass="form-ghost-drop" // drop region class
+                        onDrop={dnd_results => this.dnd_onDrop(col_i, dnd_results)} // perform this on drop
+                        getChildPayload={index => this.dnd_getConceptCard(col_i, index)} // get column index, and index of dragged item
                         nonDragAreaSelector=".field"
+                        key={`draggable_in_${col_i}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderGroups(column)}
@@ -362,8 +387,9 @@ function mapStateToProps (state) {
     let chunked_groups = [];
     if (state.groups !== null && !_.isEmpty(state.groups)){ // only if groups exist, and result is NOT EMPTY
 
+        const col_count = 3;
         const groups = state.groups.groups;
-        const chunkSize = Object.size(groups) / 2;
+        const chunkSize = Object.size(groups) / col_count;
         const arrayFromObject = Object.entries(groups).map(([key, value]) => ({ [key]: value }));
         chunked_groups = chunk(arrayFromObject, chunkSize);
     }

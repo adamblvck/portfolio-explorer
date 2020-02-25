@@ -6,7 +6,7 @@ import _ from 'lodash';
 // Actions performed in Bubble Masonry
 import { fetchBubbles } from '../../actions/fetching_public';
 import { openBubbleForm } from '../../actions/form';
-import { deleteBubble } from '../../actions/bubble';
+import { deleteBubble } from '../../actions/board';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';

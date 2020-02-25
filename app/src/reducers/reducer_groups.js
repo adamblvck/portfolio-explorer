@@ -1,14 +1,16 @@
 import _ from 'lodash';
 import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
 import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
-import { FETCH_BUBBLE_GROUPS} from '../actions/fetching_public';
+import { FETCH_BUBBLE_GROUPS } from '../actions/fetching_public';
 
 
 function mapKeysRecursive(root_groups){
     // goes into subgroups of every groups and performs another id sorting thingy on it :)
-    
-
     var all_concepts = {};
+
+    const hmm = root_groups;
+
+    console.log('groups reducer', hmm);
 
     // Add <id, concept> value store, on the subgroups
     for(var key in root_groups) {
@@ -41,7 +43,7 @@ function mapKeysRecursive(root_groups){
     const reduced = {
         groups: _.mapKeys(root_groups, 'id'),
         concepts: all_concepts,
-        modified: 0
+        modified: Math.round(Math.random() * 10000)
     }
 
     return reduced;

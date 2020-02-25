@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { FETCH_BUBBLES } from '../actions/fetching_public';
-import { ADD_BUBBLE, EDIT_BUBBLE, DELETE_BUBBLE } from '../actions/bubble';
+import { ADD_BUBBLE, EDIT_BUBBLE, DELETE_BUBBLE } from '../actions/board';
 
 function handleErrors(response){
     const obj = JSON.parse(response);
