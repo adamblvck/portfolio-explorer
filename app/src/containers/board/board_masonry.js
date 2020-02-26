@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { deleteGroup } from '../../actions/group';
 import { fetchBubbleGroups } from '../../actions/fetching_public';
 import { openGroupForm, openConceptForm } from '../../actions/form';
+import { fetchBoard, updateBoardLayout} from '../../actions/board';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -49,18 +50,67 @@ class BoardMasonry extends Component {
         this.renderFormAddSubgroup = this.renderFormAddSubgroup.bind(this);
         this.renderFormAddConcept = this.renderFormAddConcept.bind(this);
 
-        // // add object sizing
-        // Object.size = function(obj) {
-        //     var size = 0, key;
-        //     for (key in obj) {
-        //         if (obj.hasOwnProperty(key)) size++;
-        //     }
-        //     return size;
-        // };
+        this.create_and_update_column_layout = this.create_and_update_column_layout.bind(this);
+        this.update_layout_from_state = this.update_layout_from_state.bind(this);
+
+        this.dnd_onDrop = this.dnd_onDrop.bind(this);
+
+        this.state = {
+            columns: 3,
+            new_layout: []
+        };
     }
 
-    componentDidMount() {
-        this.props.fetchBubbleGroups(this.props.boardID);
+    componentDidMount = () => {
+        this.props.fetchBoard(this.props.boardID);
+    }
+
+    // componentWillReceiveProps(nextProps) {
+    //     console.log('nextProps', nextProps);
+
+    //     const current_layout = nextProps.group_layouts[this.state.columns.toString()]['layout'];
+    //     console.log('current_layout',current_layout);
+    //     this.setState({new_layout: current_layout});
+    // }
+
+    create_and_update_column_layout = () => {
+        // add object sizing
+        Object.size = function(obj) {
+            var size = 0, key;
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) size++;
+            }
+            return size;
+        };
+        
+        const groups = this.props.groups;
+        const chunkSize = Object.size(groups) / this.state.columns;
+        const arrayFromObject = Object.entries(groups).map(([key, value]) => ( key ));
+        const chunked_groups = chunk(arrayFromObject, chunkSize);
+
+        console.log(chunked_groups);
+
+        const layout = {
+            name: this.state.columns.toString(),
+            layout: chunked_groups
+        }
+
+        this.props.updateBoardLayout({
+            id: this.props.board_id,
+            group_layouts: [layout]
+        });
+    }
+
+    update_layout_from_state = () => {
+        const layout = {
+            name: this.state.columns.toString(),
+            layout: this.state.new_layout
+        }
+
+        this.props.updateBoardLayout({
+            id: this.props.board_id,
+            group_layouts: [layout]
+        });
     }
 
     /* 
@@ -268,12 +318,9 @@ class BoardMasonry extends Component {
         );
     }
 
-    renderGroups(groups) {
-        return _.map(groups, group => {
-
-            const g = group[Object.keys(group)[0]]
-
-            console.log(g);
+    renderGroups(groups, column) {
+        return _.map(column, group_id => {
+            const g = groups[group_id]; // get corresponding group
 
             return (
                 <Draggable key={g.id}>
@@ -316,26 +363,57 @@ class BoardMasonry extends Component {
     }
 
     dnd_onDrop = (col_i, dnd_results) => {
-        console.log(dnd_results);
+        console.log(col_i, dnd_results);
 
-        console.log(applyDrag(this.props.groups[col_i], dnd_results)); // this return the new array for col_i
+        const active_col = this.props.group_layouts[this.state.columns]['layout'][col_i];
+
+        const new_col = applyDrag(active_col, dnd_results);
+
+        console.log(active_col, new_col);
+
+        if (col_i == 0){
+            this.setState({new_layout: [new_col] });
+        } else {
+            const new_layout = this.state.new_layout.concat([new_col]);
+            this.setState({new_layout: new_layout });
+        }
+
+        if (col_i == (this.state.columns-1) ) {
+            this.update_layout_from_state();
+        }
+
+        // console.log(applyDrag(this.props.this.props.group_layouts[this.state.columns][col_i], dnd_results)); // this return the new array for col_i
     }
 
     dnd_getConceptCard = (column_ix, item_ix) => {
         // column_ix = the column index of the dragged component
         // item_ix = index of item in column
-        return this.props.groups[column_ix][item_ix];
+        const active_layout = this.props.group_layouts[this.state.columns];
+        return active_layout['layout'][column_ix][item_ix];
     }
 
     renderDraggableGrid() {
+        const { groups, group_layouts } = this.props;
 
-        const { groups } = this.props;
+        console.log("props", this.props);
+        console.log(groups, group_layouts);
 
-        if (groups == null){
+        // check if we have a layout available, if not create one (send via server)
+        if (group_layouts !== undefined) {
+            if (group_layouts[this.state.columns.toString()] == null) {
+                console.log("no column layout defined!");
+                this.create_and_update_column_layout();
+
+                return ( <div className="placeholder-css"/> ); // or placeholder
+            }
+        } else {
             return ( <div className="placeholder-css"/> ); // or placeholder
         }
 
-        return _.map(groups, (column, col_i) => {
+        const fetched_layout_groups = group_layouts[this.state.columns.toString()].layout;
+        console.log('fetched_layout_groups', fetched_layout_groups);
+
+        return _.map(fetched_layout_groups, (column, col_i) => {
             return (
                 <Col xs={4} md={4} key={`col_${col_i}`}>
                     <Container // drag and drop container
@@ -349,7 +427,7 @@ class BoardMasonry extends Component {
                         key={`draggable_in_${col_i}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}
-                        {this.renderGroups(column)}
+                        {this.renderGroups(groups, column)}
                     </Container>
                 </Col>
             );
@@ -374,31 +452,20 @@ class BoardMasonry extends Component {
 }
 
 function mapStateToProps (state) {
-    // add object sizing
-    Object.size = function(obj) {
-        var size = 0, key;
-        for (key in obj) {
-            if (obj.hasOwnProperty(key)) size++;
-        }
-        return size;
-    };
 
-    // groups to chunks
-    let chunked_groups = [];
-    if (state.groups !== null && !_.isEmpty(state.groups)){ // only if groups exist, and result is NOT EMPTY
+    if (state.bubbles !== null && !_.isEmpty(state.bubbles) && !_.isEmpty(state.bubbles.groups)){ // only if groups exist, and result is NOT EMPTY
 
-        const col_count = 3;
-        const groups = state.groups.groups;
-        const chunkSize = Object.size(groups) / col_count;
-        const arrayFromObject = Object.entries(groups).map(([key, value]) => ({ [key]: value }));
-        chunked_groups = chunk(arrayFromObject, chunkSize);
+        return {
+            board_id: state.bubbles.id,
+            board_name: state.bubbles.bubble_id,
+            group_layouts: state.bubbles.group_layouts,
+            groups: state.bubbles.groups.groups,
+            concepts: state.bubbles.groups.concepts,
+            modified: state.bubbles.groups.modified // increases with 1 if groups/concepts are modified
+        };
     }
 
-    return {
-        groups: chunked_groups,
-        concepts: state.groups.concepts,
-        modified: state.groups.modified // increases with 1 if groups/concepts are modified
-    };
+    return {};
 }
 
 // export default connect(mapStateToProps, { fetchConcepts })(GroupsMasonry);
@@ -409,7 +476,11 @@ BoardMasonry.propTypes = {
 export default withStyles(styles)(
     connect(mapStateToProps, {
         // actions
-        fetchBubbleGroups, 
+        fetchBoard,
+        updateBoardLayout,
+
+        fetchBubbleGroups,
+
         deleteGroup, 
         openGroupForm, 
         openConceptForm

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
 import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
-import { FETCH_BUBBLE_GROUPS } from '../actions/fetching_public';
+import { FETCH_BUBBLE_GROUPS, FETCH_BOARD } from '../actions/fetching_public';
 
 
 function mapKeysRecursive(root_groups){
@@ -43,7 +43,7 @@ function mapKeysRecursive(root_groups){
     const reduced = {
         groups: _.mapKeys(root_groups, 'id'),
         concepts: all_concepts,
-        modified: Math.round(Math.random() * 10000)
+        modified: Math.round(Math.random() * 100000)
     }
 
     return reduced;
@@ -90,6 +90,23 @@ export default function (state = {}, action) {
     // because we're returning in each switch
     // we don't need a break in each case statement
     switch(action.type) {
+
+        // case FETCH_BOARD:
+        //     if (action.payload.status == 200 && action.payload.data){
+
+        //         console.log(action.payload.data.data.bubble);
+
+        //         const reduced = {
+        //             id: action.payload.data.data.bubble.id,
+        //             bubble_id: action.payload.data.data.bubble.bubble_id,
+        //             group_layouts: _.mapKeys(action.payload.data.data.bubble.group_layouts, 'name'),
+        //             groups: mapKeysRecursive(action.payload.data.data.bubble.groups)
+        //         }
+                
+        //         return reduced;
+        //     }
+        //     else
+        //         return state;
 
         // DATA QUERIES
         case FETCH_BUBBLE_GROUPS:

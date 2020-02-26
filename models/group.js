@@ -17,7 +17,12 @@ var GroupSchema = new Schema({
     parent_groupId: String, // link to parent group
     bubble_id: String, // link to upper bubble
 
-    layouts: [{
+    group_layouts: [{
+      name: String, // name of the layout
+      layout: [[String]]
+    }],
+    
+    concept_layouts: [{
       name: String, // name of the layout
       layout: [[String]]
     }]

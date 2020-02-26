@@ -14,9 +14,7 @@ import FormEditConcept from '../forms/form_concept';
 
 
 import Footer from '../../components/footer';
-
-import FormNoteTaker from '../forms/forms_noteditor';
-
+import FormNoteTaker from '../forms/forms_noteditor'
 import MarkdownPopup from '../forms/form_markdown';
 
 // Import material-design toolbar

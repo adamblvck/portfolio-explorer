@@ -147,6 +147,20 @@ const LayoutType = new GraphQLObjectType({
     })
 });
 
+const GroupLayout = new GraphQLObjectType({
+    name: 'GroupLayout',
+    fields: () => ({
+        layouts: { type: new GraphQLList(LayoutType) },
+        groups: {
+            type: new GraphQLList(GroupType),
+            resolve(parent, args){
+                // return subgroups where parent_groupId equal current id and n_depth is 1 deeper
+                return Group.find({parent_groupId: parent.id, n_depth: parent.n_depth+1});
+            }
+        }
+    })
+});
+
 const GroupType = new GraphQLObjectType({
     name: 'Group',
     fields: () => ({
@@ -164,7 +178,8 @@ const GroupType = new GraphQLObjectType({
         bubble_id: { type: GraphQLID },
 
         // saved layouts for 1,2,3,4 (or even different columns)
-        layouts: { type: new GraphQLList(LayoutType) },
+        group_layouts: { type: new GraphQLList(LayoutType) }, // groups
+        concept_layouts: { type: new GraphQLList(LayoutType) }, // concepts
 
         // concepts belonging to this group
         concepts: {
@@ -183,7 +198,7 @@ const GroupType = new GraphQLObjectType({
             type: new GraphQLList(GroupType),
             resolve(parent, args){
                 // return subgroups where parent_groupId equal current id and n_depth is 1 deeper
-                return Group.find({parent_groupId:parent.id, n_depth:parent.n_depth+1});
+                return Group.find({parent_groupId: parent.id, n_depth: parent.n_depth+1});
             }
         }
     })
@@ -201,11 +216,14 @@ const BubbleType = new GraphQLObjectType({
         background: { type: GraphQLString },
         description: { type: GraphQLString },
 
+        // get layouts for below groups
+        group_layouts: { type: new GraphQLList(LayoutType) },
+
         // Get "root groups" belonging to this bubble
         groups: {
             type: new GraphQLList(GroupType),
             resolve(parent, args){
-                return Group.find({n_depth:0, bubble_id:parent.id});
+                return Group.find({n_depth:0, bubble_id:parent.bubble_id});
             }
         }
     })

@@ -106,6 +106,15 @@ const RootQuery = new GraphQLObjectType({
             }
         },
 
+        bubble: { // get bubble from database
+            type: BubbleType,
+            args: { bubble_id: {type: GraphQLString} },
+            resolve(parent, args){
+                console.log(args.bubble_id);
+                return Bubble.findOne({bubble_id: args.bubble_id});
+            }
+        },
+
         // return root-level groups belonging 
         bubble_groups: {
             type: new GraphQLList(GroupType),
@@ -333,6 +342,7 @@ const Mutation = new GraphQLObjectType({
                 bubble_id:  { type: GraphQLString },
                 background:  { type: GraphQLString },
                 description: { type: GraphQLString },
+                group_layouts: {type: new GraphQLList(LayoutInputType)},
             },
             resolve(parent, args, {isAuthenticated, credentials}){
                 // authentication check
@@ -353,6 +363,7 @@ const Mutation = new GraphQLObjectType({
                 if (args.bubble_id) mod.bubble_id = args.bubble_id;
                 if (args.background) mod.background = args.background;
                 if (args.description) mod.description = args.description;
+                if (args.group_layouts) mod.group_layouts = args.group_layouts;
 
                 return Bubble.findByIdAndUpdate(
                     args.id,
@@ -375,7 +386,8 @@ const Mutation = new GraphQLObjectType({
                 n_depth: { type: GraphQLInt },
                 parent_groupId: { type: GraphQLID },
                 bubble_id: { type: GraphQLID },
-                layouts: {type: new GraphQLList(LayoutInputType)}
+                group_layouts: {type: new GraphQLList(LayoutInputType)},
+                concept_layouts: {type: new GraphQLList(LayoutInputType)}
             },
             resolve(parent, args, {isAuthenticated, credentials}){
                 // authentication check
@@ -399,7 +411,8 @@ const Mutation = new GraphQLObjectType({
                 if (args.n_depth) mod.n_depth = args.n_depth;
                 if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;
                 if (args.bubble_id) mod.bubble_id = args.bubble_id;
-                if (args.layouts) mod.layouts = args.layouts;
+                if (args.group_layouts) mod.group_layouts = args.group_layouts;
+                if (args.concept_layouts) mod.concept_layouts = args.concept_layouts;
 
                 console.log(mod);
 
@@ -485,7 +498,7 @@ const Mutation = new GraphQLObjectType({
         },
 
         // delete a group
-        deleteGroup:{
+        deleteGroup: {
             type: GroupType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
@@ -509,7 +522,7 @@ const Mutation = new GraphQLObjectType({
             }
         },
 
-        deleteBubble:{
+        deleteBubble: {
             type: BubbleType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
