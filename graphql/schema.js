@@ -33,7 +33,9 @@ const {
     MetaInputType, 
     MetaType, 
     GroupType,
-    BubbleType
+    BubbleType,
+    LayoutType,
+    LayoutInputType
 } = require('./Types');
 
 const RootQuery = new GraphQLObjectType({
@@ -373,6 +375,7 @@ const Mutation = new GraphQLObjectType({
                 n_depth: { type: GraphQLInt },
                 parent_groupId: { type: GraphQLID },
                 bubble_id: { type: GraphQLID },
+                layouts: {type: new GraphQLList(LayoutInputType)}
             },
             resolve(parent, args, {isAuthenticated, credentials}){
                 // authentication check
@@ -396,13 +399,14 @@ const Mutation = new GraphQLObjectType({
                 if (args.n_depth) mod.n_depth = args.n_depth;
                 if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;
                 if (args.bubble_id) mod.bubble_id = args.bubble_id;
+                if (args.layouts) mod.layouts = args.layouts;
 
                 console.log(mod);
 
                 return Group.findByIdAndUpdate(
                     args.id,
-                    { $set: mod},
-                    { new: true}
+                    { $set: mod },
+                    { new: true }
                 );
 
                 // return Group.findOneAndUpdate(

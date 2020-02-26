@@ -131,6 +131,22 @@ const ConceptType = new GraphQLObjectType({
     })
 });
 
+const LayoutInputType = new GraphQLInputObjectType({
+    name: 'LayoutInput',
+    fields: () => ({
+        name: { type: GraphQLString },
+        layout: { type: new GraphQLList(new GraphQLList(GraphQLString)) }
+    })
+});
+
+const LayoutType = new GraphQLObjectType({
+    name: 'Layout',
+    fields: () => ({
+        name: { type: GraphQLString },
+        layout: { type: new GraphQLList(new GraphQLList(GraphQLString)) }
+    })
+});
+
 const GroupType = new GraphQLObjectType({
     name: 'Group',
     fields: () => ({
@@ -146,6 +162,9 @@ const GroupType = new GraphQLObjectType({
         n_depth: { type: GraphQLInt },
         parent_groupId: { type: GraphQLID },
         bubble_id: { type: GraphQLID },
+
+        // saved layouts for 1,2,3,4 (or even different columns)
+        layouts: { type: new GraphQLList(LayoutType) },
 
         // concepts belonging to this group
         concepts: {
@@ -211,6 +230,9 @@ module.exports = {
     BubbleType,
     GroupType,
     
+    LayoutType,
+    LayoutInputType,
+
     ConceptType,
     ConceptDetailType,
     ConceptDetailInputType,

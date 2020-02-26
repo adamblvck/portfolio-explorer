@@ -15,7 +15,12 @@ var GroupSchema = new Schema({
     color: String,
     n_depth: { type: Number, min: 0, max: 3 }, // specifies group depth
     parent_groupId: String, // link to parent group
-    bubble_id: String // link to upper bubble
+    bubble_id: String, // link to upper bubble
+
+    layouts: [{
+      name: String, // name of the layout
+      layout: [[String]]
+    }]
 });
 
 module.exports = mongoose.model('Group', GroupSchema);
