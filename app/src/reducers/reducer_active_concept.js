@@ -34,7 +34,9 @@ export default function(state = null, action) {
 
         case SHOW_CONCEPT_DETAIL:
             console.log("show_concept_detail triggered! WOHOOO", state, action);
-            return {concept: action.payload, 
+            return {
+                ...state,
+                concept: action.payload, 
                 background: action.payload.background, 
                 open: true};
 

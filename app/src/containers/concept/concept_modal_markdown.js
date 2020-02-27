@@ -536,7 +536,6 @@ class ConceptModalMD extends Component {
                     <MarkdownPopup
                         markdown={{open:false}}
                     />
-
                 </ModalAnimated>
             </Modal>                            
         );
@@ -544,9 +543,12 @@ class ConceptModalMD extends Component {
 }
 
 function mapStateToProps (state) {
+
+    console.log('state', state);
+
     if (state.activeConcept) {
         return {
-            concept: state.groups.concepts[state.activeConcept.concept.conceptID],
+            concept: state.bubbles.groups.concepts[state.activeConcept.concept.conceptID],
             activeConcept: state.activeConcept,
             concepts: state.groups.concepts,
             open: state.activeConcept.open
