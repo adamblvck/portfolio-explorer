@@ -103,12 +103,12 @@ ReactDOM.render(
             </Router>
         </Provider>
 
-        <Particles
+        {/* <Particles
             className="particle-background"
             params={particlesConfig}
             style={{
                 width: '100%'
             }}
-        />
+        /> */}
     </ThemeProvider>
     , document.querySelector('.container'));
