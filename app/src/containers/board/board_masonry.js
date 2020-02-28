@@ -392,13 +392,13 @@ class BoardMasonry extends Component {
         return active_layout['layout'][column_ix][item_ix];
     }
 
-    renderDraggableGrid() {
+    renderGrid() {
         const { groups, group_layouts } = this.props;
 
         console.log("props", this.props);
         console.log(groups, group_layouts);
 
-        // check if we have a layout available, if not create one (send via server)
+        // check if we have a layout available, if not create one (send to server)
         if (group_layouts !== undefined) {
             if (group_layouts[this.state.columns.toString()] == null) {
                 console.log("no column layout defined!");
@@ -416,9 +416,11 @@ class BoardMasonry extends Component {
         return _.map(fetched_layout_groups, (column, col_i) => {
             return (
                 <Col xs={4} md={4} key={`col_${col_i}`}>
-                    <Container // drag and drop container
+
+                    {/* If authenticated - show draggable grid */}
+                    {this.props.isAuthenticated && <Container // drag and drop container
                         groupName="board-columns" // to group places where it's possible to drag and drop
-                        style={{ paddingBottom: '200px' }}
+                        // style={{ paddingBottom: '200px' }}
                         dragClass="form-ghost" // dragged class
                         dropClass="form-ghost-drop" // drop region class
                         onDrop={dnd_results => this.dnd_onDrop(col_i, dnd_results)} // perform this on drop
@@ -428,7 +430,14 @@ class BoardMasonry extends Component {
                     >
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderGroups(groups, column)}
-                    </Container>
+                    </Container>}
+
+                    {/* If not authenticated */}
+                    { !this.props.isAuthenticated && <div key={`draggable_in_${col_i}`}>
+                        {/* {this.generateForm(this.state.form)} */}
+                        {this.renderGroups(groups, column)}
+                    </div>}
+
                 </Col>
             );
         });
@@ -443,7 +452,7 @@ class BoardMasonry extends Component {
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
 
                 <Grid>
-                    { this.renderDraggableGrid() }
+                    { this.renderGrid() }
                 </Grid>
             </div>
         );
