@@ -14,14 +14,14 @@ export function addGroup(groupInfo) {
         $description:String,
         $n_depth:Int,
         $parent_groupId:ID,
-        $bubble_id:ID,
+        $board_id:ID,
         $color:String,
         $background:String
     ){
         addGroup(name:$name, 
             description:$description,n_depth:$n_depth,
             parent_groupId:$parent_groupId,
-            bubble_id:$bubble_id, color:$color,
+            board_id:$board_id, color:$color,
             background:$background){
                 id
                 name
@@ -30,7 +30,7 @@ export function addGroup(groupInfo) {
                 description
                 n_depth
                 parent_groupId
-                bubble_id
+                board_id
     }}`;
 
     const headers = {
@@ -65,20 +65,20 @@ export function editGroup(groupInfo) {
         $description:String,
         $n_depth:Int,
         $parent_groupId:ID,
-        $bubble_id:ID
+        $board_id:ID
     ){
         updateGroup(id:$id,name:$name,color:$color, 
             background:$background, sector:$sector, 
             description:$description,n_depth:$n_depth,
             parent_groupId:$parent_groupId,
-            bubble_id:$bubble_id){
+            board_id:$board_id){
                 id
                 name
                 color # used for subgroup-title color
                 description
                 n_depth # needed for group editing, in case when needed
                 parent_groupId # needed for group editing, in case when needed
-                bubble_id # needed for bubble hierarchymn
+                board_id # needed for board hierarchymn
     }}`;
     
     const headers = {

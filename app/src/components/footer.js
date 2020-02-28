@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Typography } from '@material-ui/core';
 
-export default class Bubble extends Component {
+export default class Board extends Component {
     constructor(props){
         super(props);
     }

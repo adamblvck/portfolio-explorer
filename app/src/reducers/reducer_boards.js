@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { FETCH_BUBBLES } from '../actions/fetching_public';
-import { ADD_BUBBLE, EDIT_BUBBLE, DELETE_BUBBLE, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
+import { FETCH_BOARDS } from '../actions/fetching_public';
+import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
 
 function mapKeysRecursive(root_groups){
     // goes into subgroups of every groups and performs another id sorting thingy on it :)
@@ -84,13 +84,13 @@ export default function (state = {}, action) {
         case FETCH_BOARD:
             if (action.payload.status == 200 && action.payload.data){
 
-                console.log(action.payload.data.data.bubble);
+                console.log(action.payload.data.data.board);
 
                 const reduced = {
-                    id: action.payload.data.data.bubble.id,
-                    bubble_id: action.payload.data.data.bubble.bubble_id,
-                    group_layouts: _.mapKeys(action.payload.data.data.bubble.group_layouts, 'name'),
-                    groups: mapKeysRecursive(action.payload.data.data.bubble.groups)
+                    id: action.payload.data.data.board.id,
+                    board_id: action.payload.data.data.board.board_id,
+                    group_layouts: _.mapKeys(action.payload.data.data.board.group_layouts, 'name'),
+                    groups: mapKeysRecursive(action.payload.data.data.board.groups)
                 }
                 
                 return reduced;
@@ -101,11 +101,11 @@ export default function (state = {}, action) {
         case UPDATE_BOARD_LAYOUT:
             if (action.payload.status == 200 && action.payload.data){
 
-                console.log("UDPATE_BOARD_LAYOUT", action.payload.data.data.updateBubble);
+                console.log("UDPATE_BOARD_LAYOUT", action.payload.data.data.updateBoard);
 
                 const reduced = {
                     ...state,
-                    group_layouts: _.mapKeys(action.payload.data.data.updateBubble.group_layouts, 'name'),
+                    group_layouts: _.mapKeys(action.payload.data.data.updateBoard.group_layouts, 'name'),
                 }
                 
                 return reduced;
@@ -114,26 +114,26 @@ export default function (state = {}, action) {
                 return state;
 
 
-        case FETCH_BUBBLES:
-            let b = action.payload.data.data.bubbles;
+        case FETCH_BOARDS:
+            let b = action.payload.data.data.boards;
             return _.mapKeys(b, 'id'); // made key-value store based on id
         
-        case ADD_BUBBLE:
-            const { addBubble } = action.payload.data.data;
-            return { ...state, [addBubble.id]:addBubble};
+        case ADD_BOARD:
+            const { addBoard } = action.payload.data.data;
+            return { ...state, [addBoard.id]:addBoard};
 
-        case EDIT_BUBBLE:
-            const { updateBubble } = action.payload.data.data;
+        case EDIT_BOARD:
+            const { updateBoard } = action.payload.data.data;
 
-            console.log(updateBubble);
+            console.log(updateBoard);
 
-            return { ...state, [updateBubble.id]:updateBubble};
+            return { ...state, [updateBoard.id]:updateBoard};
 
-        case DELETE_BUBBLE:
-            const { deleteBubble } = action.payload.data.data;
+        case DELETE_BOARD:
+            const { deleteBoard } = action.payload.data.data;
 
             const newState = { ...state };
-            delete newState[deleteBubble.id];
+            delete newState[deleteBoard.id];
             return newState;
 
         default:

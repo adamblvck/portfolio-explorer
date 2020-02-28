@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
 import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
-import { FETCH_BUBBLE_GROUPS, FETCH_BOARD } from '../actions/fetching_public';
-
+import { FETCH_BOARD_GROUPS, FETCH_BOARD } from '../actions/fetching_public';
 
 function mapKeysRecursive(root_groups){
     // goes into subgroups of every groups and performs another id sorting thingy on it :)
@@ -91,27 +90,10 @@ export default function (state = {}, action) {
     // we don't need a break in each case statement
     switch(action.type) {
 
-        // case FETCH_BOARD:
-        //     if (action.payload.status == 200 && action.payload.data){
-
-        //         console.log(action.payload.data.data.bubble);
-
-        //         const reduced = {
-        //             id: action.payload.data.data.bubble.id,
-        //             bubble_id: action.payload.data.data.bubble.bubble_id,
-        //             group_layouts: _.mapKeys(action.payload.data.data.bubble.group_layouts, 'name'),
-        //             groups: mapKeysRecursive(action.payload.data.data.bubble.groups)
-        //         }
-                
-        //         return reduced;
-        //     }
-        //     else
-        //         return state;
-
         // DATA QUERIES
-        case FETCH_BUBBLE_GROUPS:
+        case FETCH_BOARD_GROUPS:
             if (action.payload.data)
-                return mapKeysRecursive(action.payload.data.data.bubble_groups);
+                return mapKeysRecursive(action.payload.data.data.board_groups);
             else
                 return state;
 

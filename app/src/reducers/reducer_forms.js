@@ -1,4 +1,4 @@
-import { OPEN_GROUP_FORM, CLOSE_GROUP_FORM, OPEN_CONCEPT_FORM, CLOSE_CONCEPT_FORM, OPEN_BUBBLE_FORM, CLOSE_BUBBLE_FORM } from '../actions/form';
+import { OPEN_GROUP_FORM, CLOSE_GROUP_FORM, OPEN_CONCEPT_FORM, CLOSE_CONCEPT_FORM, OPEN_BOARD_FORM, CLOSE_BOARD_FORM } from '../actions/form';
 
 export default function(state = null, action) {
     switch(action.type){
@@ -26,17 +26,17 @@ export default function(state = null, action) {
             }
             return close_concept_state;
 
-        case OPEN_BUBBLE_FORM:
-            const new_bubble_state = { ...action.payload};
-            return new_bubble_state;
+        case OPEN_BOARD_FORM:
+            const new_board_state = { ...action.payload};
+            return new_board_state;
 
-        case CLOSE_BUBBLE_FORM:
+        case CLOSE_BOARD_FORM:
             // keep previous position
-            const close_bubble_state = {
+            const close_board_state = {
                 ...state,
                 open: false
             }
-            return close_bubble_state;
+            return close_board_state;
 
         default:
             return state;

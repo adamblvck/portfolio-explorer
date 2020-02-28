@@ -1,6 +1,6 @@
 /*
   Author: Adam Blvck (adamblvck.com)
-  Product: Data Bubble
+  Product: Data Board
   Year: 2019  Smartie.be
 */
 
@@ -15,7 +15,7 @@ var GroupSchema = new Schema({
     color: String,
     n_depth: { type: Number, min: 0, max: 3 }, // specifies group depth
     parent_groupId: String, // link to parent group
-    bubble_id: String, // link to upper bubble
+    board_id: String, // link to upper board
 
     group_layouts: [{
       name: String, // name of the layout

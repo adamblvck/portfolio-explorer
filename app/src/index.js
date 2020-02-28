@@ -75,7 +75,7 @@ ReactDOM.render(
                                 return <Callback {...props} />
                         }}/>
 
-                        {/* Show specific bubble */}
+                        {/* Show specific board */}
                         <Route 
                             path="/u/new" 
                             render={
@@ -83,7 +83,7 @@ ReactDOM.render(
                             }
                         />
 
-                        {/* Show specific bubble */}
+                        {/* Show specific board */}
                         <Route 
                             path="/b/:id" 
                             render={
@@ -91,7 +91,7 @@ ReactDOM.render(
                             }    
                         />
 
-                        {/* Show bubbles */}
+                        {/* Show boards */}
                         <Route 
                             path="/" 
                             render={

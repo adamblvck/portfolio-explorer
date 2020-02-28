@@ -20,19 +20,7 @@ const {
 // mongoose schemas
 const Group = require('../models/group');
 const Concept = require('../models/concept');
-const Bubble = require('../models/bubble');
-
-/* GraphQLObject hierarchy
-
-    ConceptType
-        MetaType
-        ConceptDetailType
-            LinkType
-
-    GroupType
-
-    BubbleType
-*/
+const Board = require('../models/board');
 
 const MetaType = new GraphQLObjectType({
     name: 'Meta',
@@ -175,7 +163,7 @@ const GroupType = new GraphQLObjectType({
         color: { type: GraphQLString },
         n_depth: { type: GraphQLInt },
         parent_groupId: { type: GraphQLID },
-        bubble_id: { type: GraphQLID },
+        board_id: { type: GraphQLID },
 
         // saved layouts for 1,2,3,4 (or even different columns)
         group_layouts: { type: new GraphQLList(LayoutType) }, // groups
@@ -204,26 +192,26 @@ const GroupType = new GraphQLObjectType({
     })
 });
 
-const BubbleType = new GraphQLObjectType({
-    name: 'Bubble',
+const BoardType = new GraphQLObjectType({
+    name: 'Board',
     fields: () => ({
         // Graphql ID
         id: { type: GraphQLID },
 
         // Mongoose Schema
         name: { type: GraphQLString },
-        bubble_id: { type: GraphQLString },
+        board_id: { type: GraphQLString },
         background: { type: GraphQLString },
         description: { type: GraphQLString },
 
         // get layouts for below groups
         group_layouts: { type: new GraphQLList(LayoutType) },
 
-        // Get "root groups" belonging to this bubble
+        // Get "root groups" belonging to this board
         groups: {
             type: new GraphQLList(GroupType),
             resolve(parent, args){
-                return Group.find({n_depth:0, bubble_id:parent.bubble_id});
+                return Group.find({n_depth:0, board_id:parent.board_id});
             }
         }
     })
@@ -245,7 +233,7 @@ const UserType = new GraphQLObjectType({
 
 module.exports = {
     UserType,
-    BubbleType,
+    BoardType,
     GroupType,
     
     LayoutType,

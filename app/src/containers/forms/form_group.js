@@ -140,8 +140,8 @@ class FormEditGroup extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
-                                    label="Bubble  ID"
-                                    name="bubble_id"
+                                    label="Board  ID"
+                                    name="board_id"
                                     component={this.renderField}
                                 />
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>

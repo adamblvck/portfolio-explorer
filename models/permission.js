@@ -1,6 +1,6 @@
 /*
   Author: Adam Blvck (adamblvck.com)
-  Product: Data Bubble
+  Product: Data Board
   Year: 2019
   Smartie.be
 */

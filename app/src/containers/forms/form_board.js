@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
 
-import { closeBubbleForm } from '../../actions/form';
-import { updateBubble, addBubble } from '../../actions/board';
+import { closeBoardForm } from '../../actions/form';
+import { updateBoard, addBoard } from '../../actions/board';
 
-class FormBubble extends Component {
+class FormBoard extends Component {
     constructor(props) {
         super(props);
 
@@ -52,20 +52,20 @@ class FormBubble extends Component {
     }
 
     handleClose() {
-        this.props.closeBubbleForm();
+        this.props.closeBoardForm();
     }
 
     onSubmit(values) {
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
-            this.props.addBubble( { ...values } );
+            this.props.addBoard( { ...values } );
         }
         else if (this.props.mode == "update") {
-            this.props.updateBubble( { ...values } );
+            this.props.updateBoard( { ...values } );
         }
 
         // and close the form
-        this.props.closeBubbleForm();
+        this.props.closeBoardForm();
     }
 
     render() {
@@ -84,8 +84,8 @@ class FormBubble extends Component {
                     <div className="form-add-concept">
                         <Paper className="form-add-concept-paper">
                             <Typography gutterBottom variant="title" component="h1" align="center">
-                                { this.props.mode == "update" && <p>Editing Bubble</p> }
-                                { this.props.mode == "new" && <p>New Bubble</p> }
+                                { this.props.mode == "update" && <p>Editing Board</p> }
+                                { this.props.mode == "new" && <p>New Board</p> }
                             </Typography>
                             <form
                                 onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
@@ -96,8 +96,8 @@ class FormBubble extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
-                                    label="Bubble ID"
-                                    name="bubble_id"
+                                    label="Board ID"
+                                    name="board_id"
                                     component={this.renderField}
                                 />
                                 <Field
@@ -127,7 +127,7 @@ function validate(){
 }
 
 function mapStateToProps(state) {
-    if (state.forms && state.forms.form_type == "bubble"){
+    if (state.forms && state.forms.form_type == "board"){
         return {
             open: state.forms.open,
             mode: state.forms.mode,
@@ -138,10 +138,10 @@ function mapStateToProps(state) {
     return {}; 
 }
 
-export default connect(mapStateToProps, { closeBubbleForm, updateBubble, addBubble })(
+export default connect(mapStateToProps, { closeBoardForm, updateBoard, addBoard })(
     reduxForm({
         validate,
-        form: 'EditBubble',
+        form: 'EditBoard',
         enableReinitialize: true
-    })(FormBubble)
+    })(FormBoard)
 );

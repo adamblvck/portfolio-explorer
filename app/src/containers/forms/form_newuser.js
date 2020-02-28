@@ -73,7 +73,7 @@ class FormNewUser extends Component {
                 <Card>
                     <CardHeader
                         title="Create an account"
-                        subheader="Choose a nickname to be able to create and edit bubbles and concepts"
+                        subheader="Choose a nickname to be able to create and edit boards and concepts"
                     />
                     <CardContent>
                         <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-// Actions performed in Bubble Masonry
+// Actions performed in Board Masonry
 import { deleteGroup } from '../../actions/group';
-import { fetchBubbleGroups } from '../../actions/fetching_public';
+import { fetchBoardGroups } from '../../actions/fetching_public';
 import { openGroupForm, openConceptForm } from '../../actions/form';
 import { fetchBoard, updateBoardLayout} from '../../actions/board';
 
@@ -88,7 +88,7 @@ class BoardMasonry extends Component {
         const arrayFromObject = Object.entries(groups).map(([key, value]) => ( key ));
         const chunked_groups = chunk(arrayFromObject, chunkSize);
 
-        console.log(chunked_groups);
+        console.log("chunked_groups", chunked_groups);
 
         const layout = {
             name: this.state.columns.toString(),
@@ -346,7 +346,7 @@ class BoardMasonry extends Component {
                             const params = {
                                 mode: "new",
                                 initialValues: {
-                                    bubble_id: this.props.boardID,
+                                    board_id: this.props.boardID,
                                     background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
                                     n_depth:0,
                                     parent_groupId:null}
@@ -450,7 +450,6 @@ class BoardMasonry extends Component {
         return (
             <div>
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
-
                 <Grid>
                     { this.renderGrid() }
                 </Grid>
@@ -462,15 +461,15 @@ class BoardMasonry extends Component {
 
 function mapStateToProps (state) {
 
-    if (state.bubbles !== null && !_.isEmpty(state.bubbles) && !_.isEmpty(state.bubbles.groups)){ // only if groups exist, and result is NOT EMPTY
+    if (state.boards !== null && !_.isEmpty(state.boards) && !_.isEmpty(state.boards.groups)){ // only if groups exist, and result is NOT EMPTY
 
         return {
-            board_id: state.bubbles.id,
-            board_name: state.bubbles.bubble_id,
-            group_layouts: state.bubbles.group_layouts,
-            groups: state.bubbles.groups.groups,
-            concepts: state.bubbles.groups.concepts,
-            modified: state.bubbles.groups.modified // increases with 1 if groups/concepts are modified
+            board_id: state.boards.id,
+            board_name: state.boards.board_id,
+            group_layouts: state.boards.group_layouts,
+            groups: state.boards.groups.groups,
+            concepts: state.boards.groups.concepts,
+            modified: state.boards.groups.modified // increases with 1 if groups/concepts are modified
         };
     }
 
@@ -488,7 +487,7 @@ export default withStyles(styles)(
         fetchBoard,
         updateBoardLayout,
 
-        fetchBubbleGroups,
+        fetchBoardGroups,
 
         deleteGroup, 
         openGroupForm, 

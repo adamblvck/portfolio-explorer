@@ -21,7 +21,7 @@ const {
 // mongoose schemas
 const Group = require('../models/group');
 const Concept = require('../models/concept');
-const Bubble = require('../models/bubble');
+const Board = require('../models/board');
 const User = require('../models/user');
 
 // GraphQL Schemas
@@ -33,7 +33,7 @@ const {
     MetaInputType, 
     MetaType, 
     GroupType,
-    BubbleType,
+    BoardType,
     LayoutType,
     LayoutInputType
 } = require('./Types');
@@ -99,29 +99,29 @@ const RootQuery = new GraphQLObjectType({
             }
         },
 
-        bubbles: { // all bubbles in the database
-            type: new GraphQLList(BubbleType),
+        boards: { // all boards in the database
+            type: new GraphQLList(BoardType),
             resolve(parent, args){
-                return Bubble.find();
+                return Board.find();
             }
         },
 
-        bubble: { // get bubble from database
-            type: BubbleType,
-            args: { bubble_id: {type: GraphQLString} },
+        board: { // get board from database
+            type: BoardType,
+            args: { board_id: {type: GraphQLString} },
             resolve(parent, args){
-                console.log(args.bubble_id);
-                return Bubble.findOne({bubble_id: args.bubble_id});
+                console.log(args.board_id);
+                return Board.findOne({board_id: args.board_id});
             }
         },
 
         // return root-level groups belonging 
-        bubble_groups: {
+        board_groups: {
             type: new GraphQLList(GroupType),
-            args: { bubble_id: {type: GraphQLID} },
+            args: { board_id: {type: GraphQLID} },
             resolve(parent, args){
-                // return where n_depth=0 and bubble_id matches the one in arg
-                return Group.find({n_depth:0, bubble_id:args.bubble_id});
+                // return where n_depth=0 and board_id matches the one in arg
+                return Group.find({n_depth:0, board_id:args.board_id});
             }
         },
 
@@ -221,12 +221,12 @@ const Mutation = new GraphQLObjectType({
             }
         },
 
-        // add new bubble
-        addBubble: {
-            type: BubbleType,
+        // add new board
+        addBoard: {
+            type: BoardType,
             args: {
                 name: { type: GraphQLString },
-                bubble_id: { type: GraphQLString },
+                board_id: { type: GraphQLString },
                 background: { type: GraphQLString },
                 description: { type: GraphQLString },
             },
@@ -239,21 +239,21 @@ const Mutation = new GraphQLObjectType({
                 const email = credentials.payload.email;
                 console.log("Logged in email:", email);
 
-                // check if user is allowed to create new bubble
+                // check if user is allowed to create new board
                 if (email != 'eragon.blizzard@gmail.com'){
                     throw new Error('User has no permissions to add groups to the database');
                 }
 
-                // create new bubble
-                let bubble = new Bubble({
+                // create new board
+                let board = new Board({
                     name: args.name,
-                    bubble_id: args.bubble_id,
+                    board_id: args.board_id,
                     background: args.background,
                     description: args.description,
                 });
 
                 // save to DB
-                return bubble.save();
+                return board.save();
             }
         },
 
@@ -265,7 +265,7 @@ const Mutation = new GraphQLObjectType({
                 description: { type: GraphQLString },
                 n_depth: { type: GraphQLInt},
                 parent_groupId: { type: GraphQLID},
-                bubble_id: { type: GraphQLID},
+                board_id: { type: GraphQLID},
                 color: {type: GraphQLString},
                 background: {type: GraphQLString}
             },
@@ -287,7 +287,7 @@ const Mutation = new GraphQLObjectType({
                     description: args.description,
                     n_depth: args.n_depth,
                     parent_groupId: args.parent_groupId,
-                    bubble_id: args.bubble_id,
+                    board_id: args.board_id,
                     color: args.color,
                     background: args.background
                 });
@@ -334,12 +334,12 @@ const Mutation = new GraphQLObjectType({
             }
         },
 
-        updateBubble: {
-            type: BubbleType,
+        updateBoard: {
+            type: BoardType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)},
                 name: { type: GraphQLString},
-                bubble_id:  { type: GraphQLString },
+                board_id:  { type: GraphQLString },
                 background:  { type: GraphQLString },
                 description: { type: GraphQLString },
                 group_layouts: {type: new GraphQLList(LayoutInputType)},
@@ -360,12 +360,12 @@ const Mutation = new GraphQLObjectType({
                 // query resolve
                 let mod = {}
                 if (args.name) mod.name = args.name;
-                if (args.bubble_id) mod.bubble_id = args.bubble_id;
+                if (args.board_id) mod.board_id = args.board_id;
                 if (args.background) mod.background = args.background;
                 if (args.description) mod.description = args.description;
                 if (args.group_layouts) mod.group_layouts = args.group_layouts;
 
-                return Bubble.findByIdAndUpdate(
+                return Board.findByIdAndUpdate(
                     args.id,
                     { $set: mod},
                     { new: true}
@@ -385,7 +385,7 @@ const Mutation = new GraphQLObjectType({
                 description: { type: GraphQLString },
                 n_depth: { type: GraphQLInt },
                 parent_groupId: { type: GraphQLID },
-                bubble_id: { type: GraphQLID },
+                board_id: { type: GraphQLID },
                 group_layouts: {type: new GraphQLList(LayoutInputType)},
                 concept_layouts: {type: new GraphQLList(LayoutInputType)}
             },
@@ -410,7 +410,7 @@ const Mutation = new GraphQLObjectType({
                 if (args.description) mod.description = args.description;
                 if (args.n_depth) mod.n_depth = args.n_depth;
                 if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;
-                if (args.bubble_id) mod.bubble_id = args.bubble_id;
+                if (args.board_id) mod.board_id = args.board_id;
                 if (args.group_layouts) mod.group_layouts = args.group_layouts;
                 if (args.concept_layouts) mod.concept_layouts = args.concept_layouts;
 
@@ -522,8 +522,8 @@ const Mutation = new GraphQLObjectType({
             }
         },
 
-        deleteBubble: {
-            type: BubbleType,
+        deleteBoard: {
+            type: BoardType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
@@ -535,13 +535,13 @@ const Mutation = new GraphQLObjectType({
 
                 console.log("Logged in email:", credentials.payload.email);
 
-                // check if authorized to delete bubble
+                // check if authorized to delete board
                 if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
                     throw new Error('User has no permissions to delete groups from the database');
                 }
 
                 // query resolve
-                return Bubble.findByIdAndRemove(
+                return Board.findByIdAndRemove(
                     args.id
                 );
             }

@@ -4,8 +4,8 @@ export const CLOSE_GROUP_FORM = "close_group_form";
 export const OPEN_CONCEPT_FORM = "open_concept_form";
 export const CLOSE_CONCEPT_FORM = "close_concept_form";
 
-export const OPEN_BUBBLE_FORM = "open_bubble_form";
-export const CLOSE_BUBBLE_FORM = "close_bubble_form";
+export const OPEN_BOARD_FORM = "open_board_form";
+export const CLOSE_BOARD_FORM = "close_board_form";
 
 // Local development has a different url than when deployed on heroku
 const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
@@ -53,23 +53,23 @@ export function closeConceptForm() {
     }
 }
 
-export function openBubbleForm(params) {
+export function openBoardForm(params) {
     const payload = {
         mode: params.mode,
         open: true,
-        form_type: "bubble",
+        form_type: "board",
         initialValues: params.initialValues
     };
 
     return {
-        type: OPEN_BUBBLE_FORM,
+        type: OPEN_BOARD_FORM,
         payload: payload
     }
 }
 
-export function closeBubbleForm() {
+export function closeBoardForm() {
     return {
-        type: CLOSE_BUBBLE_FORM,
+        type: CLOSE_BOARD_FORM,
         payload: {}
     }
 }

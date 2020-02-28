@@ -1,33 +1,32 @@
 import axios from 'axios';
 
-export const ADD_BUBBLE = 'add_bubble';
-export const EDIT_BUBBLE = 'edit_bubble';
-export const DELETE_BUBBLE = 'delete_bubble';
-export const UPDATE_BOARD_LAYOUT = 'UPDATE_BUBBLE_LAYOUT';
+export const ADD_BOARD = 'add_board';
+export const EDIT_BOARD = 'edit_board';
+export const DELETE_BOARD = 'delete_board';
+export const UPDATE_BOARD_LAYOUT = 'update_board_layout';
 export const FETCH_BOARD = 'fetch_board';
 
 // Local development has a different url than when deployed on heroku
 const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
 const ROOT_URL = isLOCALHOST ? 'http://localhost:4000/graphql' : '/graphql';
 
-export function addBubble(bubbleInfo) {
-    // FETCH_BUBBLES
+export function addBoard(boardInfo) {
     let query = `
-    mutation addBubble (
+    mutation addBoard (
         $name:String,
-        $bubble_id: String,
+        $board_id: String,
         $background: String,
         $description: String,
     ) {
-        addBubble(
+        addBoard(
             name:$name,
-            bubble_id:$bubble_id,
+            board_id:$board_id,
             background:$background,
             description:$description
         ) {
             id
             name
-            bubble_id
+            board_id
             background
             description
         }
@@ -43,25 +42,25 @@ export function addBubble(bubbleInfo) {
         url:`${ROOT_URL}`,
         data: {
             query: query,
-            variables: bubbleInfo
+            variables: boardInfo
         },
         headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
-        type: ADD_BUBBLE,
+        type: ADD_BOARD,
         payload: request
     };
 }
 
-export function updateBoardLayout(bubbleInfo) {
+export function updateBoardLayout(boardInfo) {
     // UPDATE_BOARD_LAYOUT
     let query = `
     mutation updateBoardLayout (
         $id: ID!,
         $group_layouts: [LayoutInput]
     ) {
-        updateBubble(
+        updateBoard(
             id:$id,
             group_layouts:$group_layouts
         ) {
@@ -83,7 +82,7 @@ export function updateBoardLayout(bubbleInfo) {
         url:`${ROOT_URL}`,
         data: {
             query: query,
-            variables: bubbleInfo
+            variables: boardInfo
         },
         headers: localStorage.getItem('is_authenticated')? headers: {}
     });
@@ -96,10 +95,10 @@ export function updateBoardLayout(bubbleInfo) {
 
 export function fetchBoard(board_id) {
     const query = `
-    query getBubbleGroups {
-        bubble (bubble_id:"${board_id}"){
+    query getBoardGroups {
+        board (board_id:"${board_id}"){
             id
-            bubble_id
+            board_id
             group_layouts {
                 name
                 layout
@@ -116,8 +115,8 @@ export function fetchBoard(board_id) {
                 n_depth 
                 # needed for group editing, in case when needed
                 parent_groupId 
-                # needed for top-level bubble_id
-                bubble_id # needed for bubble hierarchymn
+                # needed for top-level board_id
+                board_id # needed for board hierarchymn
                 group_layouts {
                     name
                     layout
@@ -129,7 +128,7 @@ export function fetchBoard(board_id) {
                     description
                     n_depth # needed for group editing, in case when needed
                     parent_groupId # needed for group editing, in case when needed
-                    bubble_id # used for bubble hierarchymn 
+                    board_id # used for board hierarchy 
                     concept_layouts {
                         name
                         layout
@@ -188,26 +187,25 @@ export function fetchBoard(board_id) {
     }
 }
 
-export function updateBubble(bubbleInfo) {
-    // FETCH_BUBBLES
+export function updateBoard(boardInfo) {
     let query = `
-    mutation updateBubble (
+    mutation updateBoard (
         $id: ID!,
         $name: String,
-        $bubble_id: String,
+        $board_id: String,
         $background: String,
         $description: String,
     ) {
-        updateBubble(
+        updateBoard (
             id:$id,
             name:$name,
-            bubble_id:$bubble_id,
+            board_id:$board_id,
             background:$background,
             description:$description
         ) {
             id
             name
-            bubble_id
+            board_id
             background
             description
         }
@@ -223,24 +221,23 @@ export function updateBubble(bubbleInfo) {
         url:`${ROOT_URL}`,
         data: {
             query: query,
-            variables: bubbleInfo
+            variables: boardInfo
         },
         headers: localStorage.getItem('is_authenticated')? headers: {}
     });
 
     return {
-        type: EDIT_BUBBLE,
+        type: EDIT_BOARD,
         payload: request
     };
 }
 
-export function deleteBubble(bubbleInfo){
-    // FETCH_BUBBLES
+export function deleteBoard(boardInfo){
     let query = `
-    mutation deleteBubble (
+    mutation deleteBoard (
         $id:ID!
     ) {
-        deleteBubble(
+        deleteBoard (
             id:$id
         ) {
             id
@@ -257,13 +254,13 @@ export function deleteBubble(bubbleInfo){
         url:`${ROOT_URL}`,
         data: {
             query: query,
-            variables: {id: bubbleInfo.id}
+            variables: {id: boardInfo.id}
         },
         headers: localStorage.getItem('is_authenticated')? headers: {}
     });
  
     return {
-        type: DELETE_BUBBLE,
+        type: DELETE_BOARD,
         payload: request
     };
 }

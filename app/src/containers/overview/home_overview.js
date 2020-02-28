@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import _ from 'lodash';
 
-// Actions performed in Bubble Masonry
-import { fetchBubbles } from '../../actions/fetching_public';
-import { openBubbleForm } from '../../actions/form';
-import { deleteBubble } from '../../actions/board';
+// Actions performed in Board Masonry
+import { fetchBoards } from '../../actions/fetching_public';
+import { openBoardForm } from '../../actions/form';
+import { deleteBoard } from '../../actions/board';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles, MenuItem } from '@material-ui/core';
 
 import MenuGroup from '../../components/menus/menu_groups';
-import FormBubble from '../forms/form_bubble';
+import FormBoard from '../forms/form_board';
 import Footer from '../../components/footer';
 
 // Masonry
@@ -42,14 +42,14 @@ class HomeOverview extends Component {
 
         this.handleLogin  = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        this.handleDeleteBubble = this.handleDeleteBubble.bind(this);
+        this.handleDeleteBoard = this.handleDeleteBoard.bind(this);
 
-        this.renderFormEditBubble = this.renderFormEditBubble.bind(this);
-        this.renderDeleteBubble = this.renderDeleteBubble.bind(this);
+        this.renderFormEditBoard = this.renderFormEditBoard.bind(this);
+        this.renderDeleteBoard = this.renderDeleteBoard.bind(this);
     }
 
     componentDidMount(){
-        this.props.fetchBubbles();
+        this.props.fetchBoards();
     }
 
     handleLogin() {
@@ -72,7 +72,7 @@ class HomeOverview extends Component {
                     </Link>
 
                     <Typography variant="h1" className="menubar-header">
-                        Bubbles
+                        Boards
                     </Typography>
 
                     <Button> New Note </Button>
@@ -93,55 +93,55 @@ class HomeOverview extends Component {
         );
     }
 
-    handleDeleteBubble(bubble){
+    handleDeleteBoard(board){
         if( confirm('Sure want to delete?')) {
-            this.props.deleteBubble(bubble);
+            this.props.deleteBoard(board);
         }
     }
 
-    renderFormEditBubble(component) {
-        const { label, bubble } = component;
+    renderFormEditBoard(component) {
+        const { label, board } = component;
 
         const params = {
             mode: "update",
-            initialValues: bubble
+            initialValues: board
         };
 
         return (
             <MenuItem
                 color="secondary" 
-                key={`editBubble-${bubble.id}`}
-                onClick={() => this.props.openBubbleForm(params)}
+                key={`editBoard-${board.id}`}
+                onClick={() => this.props.openBoardForm(params)}
             >
                 {label}
             </MenuItem>
         );
     }
 
-    renderDeleteBubble(component) {
-        const { label, bubble } = component;
+    renderDeleteBoard(component) {
+        const { label, board } = component;
 
         return (
             <MenuItem
                 color="secondary" 
-                key={`deleteBubble-${bubble.id}`}
-                onClick={() => this.handleDeleteBubble(bubble)}
+                key={`deleteBoard-${board.id}`}
+                onClick={() => this.handleDeleteBoard(board)}
             >
                 {label}
             </MenuItem>
         );
     }
 
-    renderCard(bubble){
+    renderCard(board){
         const { classes } = this.props;
 
         const default_background = "linear-gradient(45deg, rgb(40, 48, 72), rgb(133, 147, 152))"
-        const background_color = bubble.background ? bubble.background : default_background;
+        const background_color = board.background ? board.background : default_background;
 
-        const link_to_bubble = `/b/${bubble.bubble_id}`;
+        const link_to_board = `/b/${board.board_id}`;
 
         return (
-            <Card className={`${classes.card} bubble_overview_bubble`} elevation={3}>
+            <Card className={`${classes.card} board_overview_board`} elevation={3}>
                 <CardHeader
                     action={
                         this.props.auth.isAuthenticated() && // if authenticated
@@ -150,29 +150,29 @@ class HomeOverview extends Component {
                             isAuthenticated={this.props.auth}
                             components={ [
                                 {
-                                    label: "Edit Bubble",
+                                    label: "Edit Board",
                                     needAuth: true,
-                                    bubble: bubble,
-                                    render: this.renderFormEditBubble
+                                    board: board,
+                                    render: this.renderFormEditBoard
                                 },
                                 {
-                                    label: "Delete Bubble",
+                                    label: "Delete Board",
                                     needAuth: true,
-                                    bubble: bubble,
-                                    render: this.renderDeleteBubble
+                                    board: board,
+                                    render: this.renderDeleteBoard
                                 }
                             ]}
                         />
                     }
-                    title={bubble.name}
-                    subheader={bubble.description}
+                    title={board.name}
+                    subheader={board.description}
                     style={{backgroundColor: background_color, background: background_color}}
                     className='RootGroupHeader'
                 />
                 <CardContent className={classes.content}>
-                    <Link to={link_to_bubble}>
+                    <Link to={link_to_board}>
                         <Button type="button">
-                            {bubble.name}
+                            {board.name}
                         </Button>
                     </Link>
 
@@ -181,11 +181,11 @@ class HomeOverview extends Component {
         );
     }
 
-    renderBubbles(){
-        return _.map(this.props.bubbles, bubble => {
+    renderBoards(){
+        return _.map(this.props.boards, board => {
             return (
-                <div key={bubble.id}>
-                    {this.renderCard(bubble)}
+                <div key={board.id}>
+                    {this.renderCard(board)}
                 </div>
             );
         });
@@ -197,7 +197,7 @@ class HomeOverview extends Component {
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
-                    {this.renderBubbles()}
+                    {this.renderBoards()}
                     
                     {/* TODO: Refactor below item into a function */}
                     { isAuthenticated() && 
@@ -206,13 +206,13 @@ class HomeOverview extends Component {
                                 const params = {
                                     mode: "new",
                                     initialValues: {
-                                        name: "New Bubble",
-                                        bubble_id: "unique bubble identifier",
-                                        description: "Write description of your bubble here",
+                                        name: "New Board",
+                                        board_id: "unique board identifier",
+                                        description: "Write description of your board here",
                                         background: "linear-gradient(45deg, #4532E6, #1cb5e0)"}
                                 };
 
-                                this.props.openBubbleForm(params);
+                                this.props.openBoardForm(params);
                             }}
                         >
                             Add Group
@@ -232,11 +232,11 @@ class HomeOverview extends Component {
                 {/* Toolbar */}
                 {this.renderAppBar(isAuthenticated)}
 
-                {/* Holds the overview of all bubbles*/}
+                {/* Holds the overview of all boards*/}
                 { this.renderMasonry(isAuthenticated) }
 
                 {/* Holds form for creating/editing concepts */}
-                <FormBubble
+                <FormBoard
                     label="default"
                     mode="new"
                     open={false}
@@ -251,7 +251,7 @@ class HomeOverview extends Component {
 
 function mapStateToProps(state) {
     return {
-        bubbles: state.bubbles
+        boards: state.boards
     };
 }
 
@@ -260,5 +260,5 @@ HomeOverview.propTypes = {
 };
 
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchBubbles, openBubbleForm, deleteBubble })(HomeOverview)
+    connect(mapStateToProps, { fetchBoards, openBoardForm, deleteBoard })(HomeOverview)
 );
