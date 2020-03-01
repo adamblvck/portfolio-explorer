@@ -140,7 +140,7 @@ class FormEditGroup extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
-                                    label="Board  ID"
+                                    label="Board ID"
                                     name="board_id"
                                     component={this.renderField}
                                 />

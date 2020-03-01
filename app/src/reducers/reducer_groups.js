@@ -177,6 +177,9 @@ export default function (state = {}, action) {
 
         // GROUP MUTATIONS
         case ADD_GROUP:
+
+            console.log("WOHOOO ADD RAA", state, action);
+
             if (action.payload.status == 200){
 
                 console.log("WOHOOO ADD GROUP", state, action);
@@ -201,7 +204,7 @@ export default function (state = {}, action) {
 
                 return newState;
             } else {
-                console.log("Couldn't add group, got ",action.payload.status);
+                console.log("Couldn't add group, got ",action.payload.status, "for status");
                 return state;
             }
 
@@ -217,6 +220,9 @@ export default function (state = {}, action) {
 
                 // no parent id means we can alter a top-level group
                 if (parent_group_id == null){
+
+                    console.log("Okay I'm deep");
+
                     let prev_group = {
                         ...newState.groups[group_id],
                         ...updateGroup
@@ -226,6 +232,9 @@ export default function (state = {}, action) {
                 
                 // if we have a parent_id, we need to dig a little deeper in the structure
                 else {
+
+                    console.log("Okay I'm deeper, with a parent_id");
+
                     let prev_group = {
                         ...newState.groups[parent_group_id].groups[group_id],
                         ...updateGroup

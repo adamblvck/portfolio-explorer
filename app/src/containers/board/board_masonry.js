@@ -13,7 +13,7 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 // Material Design Graphics
 import PropTypes from 'prop-types';
-import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu } from '@material-ui/core';
+import { Card, CardContent, withStyles, CardHeader, MenuItem, Menu, Button } from '@material-ui/core';
 
 // Components and Containers
 import ConceptMasonry from './concept_masonry';
@@ -407,13 +407,33 @@ class BoardMasonry extends Component {
                 return ( <div className="placeholder-css"/> ); // or placeholder
             }
         } else {
-            return ( <div className="placeholder-css"/> ); // or placeholder
+            return ( 
+                // return an "add button" if none of the above is true.
+                <div>
+                    <Button onClick={() => {
+                            const params = {
+                                mode: "new",
+                                initialValues: {
+                                    board_id: this.props.boardID,
+                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
+                                    n_depth:0,
+                                    parent_groupId:null}
+                            };
+
+                            this.props.openGroupForm(params)
+                        }}>
+                            Add Group
+                        </Button>
+                </div>
+            );
         }
 
         const fetched_layout_groups = group_layouts[this.state.columns.toString()].layout;
         console.log('fetched_layout_groups', fetched_layout_groups);
 
         return _.map(fetched_layout_groups, (column, col_i) => {
+            const col_index_is_zero = col_i == 0;
+            console.log('col_i', col_i);
             return (
                 <Col xs={4} md={4} key={`col_${col_i}`}>
 
@@ -438,6 +458,22 @@ class BoardMasonry extends Component {
                         {this.renderGroups(groups, column)}
                     </div>}
 
+                    { col_index_is_zero && <Button onClick={() => {
+                            const params = {
+                                mode: "new",
+                                initialValues: {
+                                    board_id: this.props.boardID,
+                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
+                                    n_depth:0,
+                                    parent_groupId:null}
+                            };
+
+                            this.props.openGroupForm(params)
+                        }}>
+                            Add Group
+                        </Button>
+                    }
+
                 </Col>
             );
         });
@@ -452,6 +488,20 @@ class BoardMasonry extends Component {
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
                 <Grid>
                     { this.renderGrid() }
+                    <Button onClick={() => {
+                            const params = {
+                                mode: "new",
+                                initialValues: {
+                                    board_id: this.props.boardID,
+                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
+                                    n_depth:0,
+                                    parent_groupId:null}
+                            };
+
+                            this.props.openGroupForm(params)
+                        }}>
+                            Add Group
+                        </Button>
                 </Grid>
             </div>
         );
