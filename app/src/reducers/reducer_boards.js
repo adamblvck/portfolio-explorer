@@ -17,19 +17,23 @@ function mapKeysRecursive(root_groups){
     for(var key in root_groups) {
         var obj = root_groups[key];
         if (obj.groups){
-                for(var key2 in obj.groups) {
-                    var subgroup = obj.groups[key2];
-                    if (subgroup.concepts){
-                        // <key, value> map concepts array into a dictionary
-                        subgroup.concepts = _.mapKeys(subgroup.concepts, 'id');
+            for(var key2 in obj.groups) {
+                var subgroup = obj.groups[key2];
+                if (subgroup.concepts){
+                    // <key, value> map concepts array into a dictionary
+                    subgroup.concepts = _.mapKeys(subgroup.concepts, 'id');
 
-                        // add <key,value> of new concepts to all_concepts
-                        all_concepts = {...all_concepts, ...subgroup.concepts };
+                    // add <key,value> of new concepts to all_concepts
+                    all_concepts = {...all_concepts, ...subgroup.concepts };
 
-                        // reduce <key, value> to an array of only keys
-                        subgroup.concepts = Object.keys(subgroup.concepts);
-                    }
+                    // reduce <key, value> to an array of only keys
+                    subgroup.concepts = Object.keys(subgroup.concepts);
                 }
+            }
+        }
+
+        if (obj.group_layouts){
+            obj.group_layouts = _.mapKeys(obj.group_layouts, 'name');
         }
     }
 
@@ -144,28 +148,32 @@ export default function (state = {}, action) {
         case ADD_GROUP:
             if (action.payload.status == 200){
 
-                // console.log("We have 200!", state, action);
+                console.log("We have 200!", state, 'action', action);
 
                 const { addGroup } = action.payload.data.data;
                 const newState = {...state};
 
                 // get out a few variables
-                const { id, parent_group_id, board_id, board } = addGroup;
-                const group_layouts = board ? board.group_layouts : []; // return group layouts if they exist
+                const { id, parent_groupId, board_id, board, parent_group } = addGroup;
 
-                // ...
-                if (parent_group_id == null){ // we're dealing with a top-level group
+                // return group_layouts, depending if we're having a board, or a parent_group
+                const group_layouts = board ? board.group_layouts : (parent_group ? parent_group.group_layouts : []); 
+
+                console.log(group_layouts);
+
+                // if no group as parent ...
+                if (parent_groupId == null) { // we're dealing with a top-level group
                     newState.groups.groups[id] = addGroup; // add to list of groups
                     newState.group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in this board
                 }
                 else { // lower-tier group - dig in deeper.
-                    newState.groups[parent_group_id].groups[group_id] = addGroup;
+                    newState.groups.groups[parent_groupId].groups[id] = addGroup;
+                    newState.groups.groups[parent_groupId].group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in parent group
                 }
 
                 // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
-
-                // console.log("new state because of edit_group", newState);
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                // console.log("new state because of ADD_GROUP", newState);
 
                 return newState;
             } else {
@@ -181,21 +189,24 @@ export default function (state = {}, action) {
                 const newState = {...state};
 
                 // get out a few variables
-                const { id, parent_group_id, board_id, board } = deleteGroup;
-                const group_layouts = board ? board.group_layouts : []; // return group layouts if they exist
+                const { id, parent_groupId, board_id, board, parent_group } = deleteGroup;
+
+                // return group_layouts, depending if we're having a board, or a parent_group
+                const group_layouts = board ? board.group_layouts : (parent_group ? parent_group.group_layouts : []); 
 
                 // ...
-                if (parent_group_id == null){ // we're dealing with a top-level group
+                if (parent_groupId == null){ // we're dealing with a top-level group
                     delete newState.groups[id]; // remove from list
                     newState.group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in this board
                 }
                 else { // lower-tier group - dig in deeper.
-                    delete newState.groups[parent_group_id].groups[id];
+                    delete newState.groups.groups[parent_groupId].groups[id];
+                    newState.groups.groups[parent_groupId].group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in parent group
                 }
 
                 // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
-                // console.log("new state because of remove group", newState);
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                console.log("new state because of remove group", newState);
 
                 return newState;
             } else {

@@ -15,19 +15,19 @@ function mapKeysRecursive(root_groups){
     for(var key in root_groups) {
         var obj = root_groups[key];
         if (obj.groups){
-                for(var key2 in obj.groups) {
-                    var subgroup = obj.groups[key2];
-                    if (subgroup.concepts){
-                        // <key, value> map concepts array into a dictionary
-                        subgroup.concepts = _.mapKeys(subgroup.concepts, 'id');
+            for(var key2 in obj.groups) {
+                var subgroup = obj.groups[key2];
+                if (subgroup.concepts){
+                    // <key, value> map concepts array into a dictionary
+                    subgroup.concepts = _.mapKeys(subgroup.concepts, 'id');
 
-                        // add <key,value> of new concepts to all_concepts
-                        all_concepts = {...all_concepts, ...subgroup.concepts };
+                    // add <key,value> of new concepts to all_concepts
+                    all_concepts = {...all_concepts, ...subgroup.concepts };
 
-                        // reduce <key, value> to an array of only keys
-                        subgroup.concepts = Object.keys(subgroup.concepts);
-                    }
+                    // reduce <key, value> to an array of only keys
+                    subgroup.concepts = Object.keys(subgroup.concepts);
                 }
+            }
         }
     }
 
@@ -198,7 +198,6 @@ export default function (state = {}, action) {
                 
                 // if we have a parent_id, we need to dig a little deeper in the structure
                 else {
-
                     console.log("Okay I'm deeper, with a parent_id");
 
                     let prev_group = {

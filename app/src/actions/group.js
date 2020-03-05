@@ -41,6 +41,13 @@ export function addGroup(groupInfo) {
                         layout
                     }
                 }
+                parent_group {
+                    id
+                    group_layouts {
+                        name
+                        layout
+                    }
+                }
         }
     }`;
 
@@ -126,6 +133,13 @@ export function deleteGroup(groupInfo) {
             id
             parent_groupId
             board {
+                group_layouts {
+                    name
+                    layout
+                }
+            }
+            parent_group {
+                id
                 group_layouts {
                     name
                     layout

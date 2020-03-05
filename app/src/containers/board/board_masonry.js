@@ -198,7 +198,12 @@ class BoardMasonry extends Component {
 
     renderSubgroups(group) {
         const { classes, concepts } = this.props;
-        
+
+        const subgroups = group.groups;
+
+        // get out the only array inside the layout called "1"...
+        const subgroup_layout = group.group_layouts && group.group_layouts['1'] ? group.group_layouts['1'].layout[0] : [];
+
         // Don't render group if the no subgroups are available
         if (_.isEmpty(group.groups)){
             return (
@@ -210,9 +215,11 @@ class BoardMasonry extends Component {
         const { rootColor, background } = group;
 
         // for every subgroup present, render a `CardHeader` and a `ConceptMasonry`
-        return _.map(group.groups, (group) => {
+        return _.map(subgroup_layout, (subgroup_id) => {
+            const subgroup = subgroups[subgroup_id];
+
             return (
-                <Draggable key={group.id}>
+                <Draggable key={`subgroup_render_${subgroup.id}`}>
                     <CardHeader
                         action={
                             this.props.isAuthenticated && // if authenticated
@@ -223,25 +230,25 @@ class BoardMasonry extends Component {
                                     {
                                         label: "Add Concept",
                                         needAuth: true,
-                                        group: group,
+                                        group: subgroup,
                                         render: this.renderFormAddConcept
                                     },
                                     {
                                         label: "Edit Subgroup",
                                         needAuth: true,
-                                        group: group,
+                                        group: subgroup,
                                         render: this.renderFormEditGroup
                                     },
                                     {
                                         label: "Delete Subgroup",
                                         needAuth: true,
-                                        group: group,
+                                        group: subgroup,
                                         render: this.renderDeleteGroup
                                     }
                                 ]}
                             />
                         }
-                        subheader={group.name}
+                        subheader={subgroup.name}
                         // title={group.name}
                         component="h3"
                         className="subgroup-header"
@@ -250,7 +257,7 @@ class BoardMasonry extends Component {
                         }}
                     />
                     <ConceptMasonry
-                        conceptIDs={group.concepts}
+                        conceptIDs={subgroup.concepts}
                         concepts={concepts}
                         background={background}
                         isAuthenticated={this.props.isAuthenticated}
@@ -260,7 +267,7 @@ class BoardMasonry extends Component {
         });
     }
 
-    renderCard(group){
+    renderGroup(group){
         const { classes } = this.props;
         return (
             <Card className={`${classes.card} board_group_card`} elevation={3}>
@@ -326,8 +333,8 @@ class BoardMasonry extends Component {
                 return ( <div>MISSING GROUP_ID IN GROUPS: {group_id}</div> );
 
             return (
-                <Draggable key={g.id}>
-                    {this.renderCard(g)}
+                <Draggable key={`draggable_g_${g.id}`}>
+                    {this.renderGroup(g)}
                 </Draggable>
             );
         });
@@ -404,12 +411,12 @@ class BoardMasonry extends Component {
 
         // check if we have a layout available, if not create one (send to server)
         if (group_layouts !== undefined) {
-            if (group_layouts[this.state.columns.toString()] == null) {
-                console.log("no column layout defined!");
-                this.create_and_update_column_layout();
+            // if (group_layouts[this.state.columns.toString()] == null) {
+            //     console.log("no column layout defined!");
+            //     this.create_and_update_column_layout();
 
-                return ( <div className="placeholder-css"/> ); // or placeholder
-            }
+            //     return ( <div className="placeholder-css"/> ); // or placeholder
+            // }
         } else {
             return ( 
                 // return an "add button" if none of the above is true.
@@ -457,12 +464,13 @@ class BoardMasonry extends Component {
                         {this.renderGroups(groups, column)}
                     </Container>}
 
-                    {/* If not authenticated */}
+                    {/* If not authenticated - not-draggable grid */}
                     { !this.props.isAuthenticated && <div key={`draggable_in_${col_i}`}>
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderGroups(groups, column)}
                     </div>}
 
+                    {/* Add a simple button click0r */}
                     { col_index_is_zero && <Button onClick={() => {
                             const params = {
                                 mode: "new",

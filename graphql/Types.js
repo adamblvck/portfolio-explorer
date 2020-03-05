@@ -197,6 +197,14 @@ const GroupType = new GraphQLObjectType({
                 // todo, board_id should be renamed to board_name, and the id of the board should become board_id
                 return Board.findById(parent._boardId);
             }
+        }, 
+
+        parent_group: {
+            type: BoardType,
+            resolve(parent, args){
+                // todo, board_id should be renamed to board_name, and the id of the board should become board_id
+                return Group.findById(parent.parent_groupId);
+            }
         }
     })
 });

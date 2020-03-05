@@ -38,6 +38,8 @@ const {
     LayoutInputType
 } = require('./Types');
 
+const { verify_layout_structures } = require('./layout_helpers');
+
 const addGroupResolver = {
 	type: GroupType,
 	args: {
@@ -80,7 +82,9 @@ const addGroupResolver = {
 			group.save().then(function (savedGroup) {
 				// 1. get list of layouts of board in Board group
 				// executes, name LIKE john and only selecting the "name" and "friends" fields
-				if (args.parent_groupId === null && args._boardId  !== null) // if we have a board as parent to this group
+
+				// IF BOARD as PARENT
+				if (args.parent_groupId === null && args._boardId  !== null) 
 					Board.findById(args._boardId, function (err, board) {
 						if (err) {
 							console.log(err);
@@ -90,10 +94,11 @@ const addGroupResolver = {
 							// A: go through each board with board_id (should be only one)
 							// 1. get group_layouts attached to _board_id
 
-							let group_layouts = [ ...board.group_layouts ];
-
 							const _board_id = board._id;
 							const _new_group_id = savedGroup._id.toHexString() + '';
+							let group_layouts = [ ...board.group_layouts ];
+
+							group_layouts = verify_layout_structures(group_layouts, 'board_layout');
 
 							// 2. add _new_group_id to every layout
 							for(let j = 0; j<group_layouts.length;j++){
@@ -116,7 +121,7 @@ const addGroupResolver = {
 								{ $set: mod},
 								{ new: true}, function(err, results){
 									if (err) {
-										console.log("Error when updating board after adding new group", err);
+										console.log("Error when updating board layout after adding new group", err);
 										reject(err);
 									} else {
 										resolve(savedGroup);
@@ -125,10 +130,55 @@ const addGroupResolver = {
 							);
 
 						} // if we have no issues finding a correct board;
-
 					});
-				else if (args.parent_groupId !== null) {// if we have a group that belongs to a group
 
+				// if GROUP as PARENT
+				else if (args.parent_groupId !== null) { // if we have a group that belongs to a group
+					Group.findById(args.parent_groupId, function (err, group) {
+						if (err) {
+							console.log(err);
+							reject(err);
+						} else {
+							console.log("group", group);
+
+							// 1. get group_layouts attached to _board_id
+							const _group_id_of_layout = group._id;
+							const _added_group_id = savedGroup._id.toHexString() + '';
+
+							let group_layouts = [ ...group.group_layouts ];
+							group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
+
+							// 2. add _added_group_id to every layout
+							for(let j = 0; j<group_layouts.length;j++){
+								let group_layout = group_layouts[j];
+
+								// !!!! Add to first list, assumes 2D List
+								if (group_layout.layout.length >= 1) {
+									let a = group_layout.layout[0];
+									let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
+									group_layout.layout[0] = b;
+								}
+								group_layouts[j] = group_layout;
+							}
+
+							// 3. push new layout to board
+							let mod = { 'group_layouts': group_layouts }
+
+							return Group.findByIdAndUpdate(
+								_group_id_of_layout,
+								{ $set: mod},
+								{ new: true}, function(err, results){
+									if (err) {
+										console.log("Error when updating group layout after adding new group", err);
+										reject(err);
+									} else {
+										resolve(savedGroup);
+									}
+								}
+							);
+
+						} // if we have no issues finding a correct board;
+					});
 				}
 				
 			}); // end of group save
@@ -184,12 +234,6 @@ const updateGroupResolver = {
 			{ $set: mod },
 			{ new: true }
 		);
-
-		// return Group.findOneAndUpdate(
-		//     { id: args.id},
-		//     { $set: mod },
-		//     { new: true }
-		// );
 	}
 };
 
@@ -226,7 +270,7 @@ const deleteGroupResolver = {
 					const _parentGroupId = deletedGroup.parent_groupId;
 
 					// If we have a _boardId, we have a board "parent", thus change the layout of board
-					if (_parentGroupId === null && _boardId !== null && _boardId !== undefined)
+					if ( _parentGroupId === null && _boardId !== null && _boardId !== undefined )
 						Board.findById(_boardId, function (err, board) {
 							if (err) {
 								console.log("Error when finding board by id", _boardId, ":", err);
@@ -264,8 +308,50 @@ const deleteGroupResolver = {
 
 							}
 						});
-					else (_parentGroupId !== null)
-					// resolve(deletedGroup);
+					else if (_parentGroupId !== null) {
+						Group.findById(_parentGroupId, function (err, group) {
+							if (err) {
+								console.log("Error when finding board by id", _parentGroupId, ":", err);
+								reject(err);
+							} else {
+								let group_layouts = [ ...group.group_layouts];
+								group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
+								
+								console.log("group_layouts", group_layouts);
+
+								// 2. from EVERY LAYOUT in this GROUP
+								for(let j = 0; j<group_layouts.length;j++){
+									let group_layout = group_layouts[j];
+
+									// filter out any instance of "_groupId" (args.id)
+									for (let x = 0; x<group_layout.layout.length; x++){
+										// remove args.id from every column
+										let new_col = group_layout.layout[x].filter(item => item !== args.id);
+										group_layout.layout[x] = new_col;
+									}
+
+									// re-assign group_layout to group_layouts[j];
+									group_layouts[j] = group_layout;
+								}
+
+								console.log("group_layouts", group_layouts);
+
+								// 3. push new layout to group
+								let mod = { 'group_layouts': group_layouts }
+
+								return Group.findByIdAndUpdate(_parentGroupId, { $set: mod}, { new: true}, function(err, results){
+									if (err) {
+										console.log("Error when updating layout in group after REMOVING group", args.id, err);
+										reject(err);
+									} else {
+										console.log("deletedGroup", deletedGroup, "results", results);
+										resolve(deletedGroup);
+									}
+								});
+
+							}
+						});
+					}
 				}
 			});
 		});
