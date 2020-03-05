@@ -169,3 +169,7 @@ export function deleteGroup(groupInfo) {
         payload: request
     }
 }
+
+export function updateGroupLayout() {
+    
+}

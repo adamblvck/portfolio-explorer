@@ -54,6 +54,7 @@ class BoardMasonry extends Component {
         this.update_layout_from_state = this.update_layout_from_state.bind(this);
 
         this.dnd_onDrop = this.dnd_onDrop.bind(this);
+        this.dnd_onDropSubgroup = this.dnd_onDropSubgroup.bind(this);
 
         this.state = {
             columns: 3,
@@ -269,6 +270,9 @@ class BoardMasonry extends Component {
 
     renderGroup(group){
         const { classes } = this.props;
+
+        const groupId = group.id;
+
         return (
             <Card className={`${classes.card} board_group_card`} elevation={3}>
                 <CardHeader
@@ -308,14 +312,14 @@ class BoardMasonry extends Component {
                 {/* Create container with draggable subgroups */}
                 <CardContent className={classes.content}>
                     <Container // drag and drop container
-                        groupName={`board-subgroups`} // to group places where it's possible to drag and drop
+                        groupName={`board-subgroups${groupId}`} // to group places where it's possible to drag and drop
                         // style={{ paddingBottom: '200px' }}
                         dragClass="form-ghost" // dragged class
                         dropClass="form-ghost-drop" // drop region class
-                        // onDrop={dnd_results => this.dnd_onDrop(col_i, dnd_results)} // perform this on drop
-                        // getChildPayload={index => this.dnd_getConceptCard(col_i, index)} // get column index, and index of dragged item
+                        onDrop={dnd_results => this.dnd_onDropSubgroup(groupId, dnd_results)} // perform this on drop
+                        getChildPayload={index => this.dnd_getSubgroup(groupId, index)} // get column index, and index of dragged item
                         nonDragAreaSelector=".field"
-                        key={`draggable_subgroup_container_${group.id}`} // small key to make this one shine
+                        key={`draggable_subgroup_container_${groupId}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
@@ -373,27 +377,49 @@ class BoardMasonry extends Component {
         );
     }
 
-    dnd_onDrop = (col_i, dnd_results) => {
-        console.log(col_i, dnd_results);
+    dnd_onDropSubgroup = (parent_groupId, dnd_results) => {
+        console.log("parent_groupId",parent_groupId);
 
-        const active_col = this.props.group_layouts[this.state.columns]['layout'][col_i];
-
+        const active_col = this.props.groups[parent_groupId].group_layouts['1']['layout'][0];
         const new_col = applyDrag(active_col, dnd_results);
 
         console.log(active_col, new_col);
 
+        
+    }
+
+    dnd_getSubgroup = (parent_groupId, item_ix) => {
+        // here we assume the server created the `1` layout, AND we're working with a 2D array (hence we take index=0)
+        const active_layout = this.props.groups[parent_groupId].group_layouts['1'];
+
+        console.log("parent_groupId",parent_groupId);
+
+        return active_layout['layout'][0][item_ix];
+    }
+
+    dnd_onDrop = (col_i, dnd_results) => {
+        // this function gets called by every "list of draggable items" there are under the same name
+        // this means that your own accounting needs to be done to check weather to upgrade or not ...
+
+        const active_col = this.props.group_layouts[this.state.columns]['layout'][col_i];
+        const new_col = applyDrag(active_col, dnd_results);
+
+        console.log(active_col, new_col);
+
+        // if first column in iteration
         if (col_i == 0){
             this.setState({new_layout: [new_col] });
+
+        // if somewhere between first / last column
         } else {
             const new_layout = this.state.new_layout.concat([new_col]);
             this.setState({new_layout: new_layout });
         }
 
+        // if last column in iteration
         if (col_i == (this.state.columns-1) ) {
             this.update_layout_from_state();
         }
-
-        // console.log(applyDrag(this.props.this.props.group_layouts[this.state.columns][col_i], dnd_results)); // this return the new array for col_i
     }
 
     dnd_getConceptCard = (column_ix, item_ix) => {
