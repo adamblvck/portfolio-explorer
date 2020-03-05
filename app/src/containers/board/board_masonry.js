@@ -84,7 +84,7 @@ class BoardMasonry extends Component {
         };
         
         const groups = this.props.groups;
-        const chunkSize = Object.size(groups) / this.state.columns;
+        const chunkSize = Math.ceil(Object.size(groups) / this.state.columns);
         const arrayFromObject = Object.entries(groups).map(([key, value]) => ( key ));
         const chunked_groups = chunk(arrayFromObject, chunkSize);
 
@@ -322,6 +322,9 @@ class BoardMasonry extends Component {
         return _.map(column, group_id => {
             const g = groups[group_id]; // get corresponding group
 
+            if (g === undefined)
+                return ( <div>MISSING GROUP_ID IN GROUPS: {group_id}</div> );
+
             return (
                 <Draggable key={g.id}>
                     {this.renderCard(g)}
@@ -346,7 +349,8 @@ class BoardMasonry extends Component {
                             const params = {
                                 mode: "new",
                                 initialValues: {
-                                    board_id: this.props.boardID,
+                                    board_id: this.props.board_name,
+                                    _boardId: this.props.board_id,
                                     background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
                                     n_depth:0,
                                     parent_groupId:null}
@@ -415,6 +419,7 @@ class BoardMasonry extends Component {
                                 mode: "new",
                                 initialValues: {
                                     board_id: this.props.boardID,
+                                    _boardId: this.props.board_id,
                                     background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
                                     n_depth:0,
                                     parent_groupId:null}
@@ -463,6 +468,7 @@ class BoardMasonry extends Component {
                                 mode: "new",
                                 initialValues: {
                                     board_id: this.props.boardID,
+                                    _boardId: this.props.board_id,
                                     background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
                                     n_depth:0,
                                     parent_groupId:null}
@@ -492,7 +498,8 @@ class BoardMasonry extends Component {
                             const params = {
                                 mode: "new",
                                 initialValues: {
-                                    board_id: this.props.boardID,
+                                    board_id: this.props.board_name,
+                                    _boardId: this.props.board_id,
                                     background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
                                     n_depth:0,
                                     parent_groupId:null}
@@ -505,7 +512,6 @@ class BoardMasonry extends Component {
                 </Grid>
             </div>
         );
-
     }
 }
 

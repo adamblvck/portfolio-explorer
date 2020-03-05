@@ -144,6 +144,11 @@ class FormEditGroup extends Component {
                                     name="board_id"
                                     component={this.renderField}
                                 />
+                                <Field
+                                    label="Board DB ID"
+                                    name="_boardId"
+                                    component={this.renderField}
+                                />
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
                                 <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
                             </form>

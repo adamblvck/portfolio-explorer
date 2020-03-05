@@ -544,13 +544,13 @@ class ConceptModalMD extends Component {
 
 function mapStateToProps (state) {
 
-    console.log('mapStateToProps in ConceptModalMD', state);
+    // console.log('mapStateToProps in ConceptModalMD', state);
 
     if (state.activeConcept !== undefined && state.activeConcept !== null && state.boards.groups !== undefined) {
         return {
             concept: state.boards.groups.concepts[state.activeConcept.concept.conceptID],
-            activeConcept: state.activeConcept,
             concepts: state.boards.groups.concepts,
+            activeConcept: state.activeConcept,
             open: state.activeConcept.open
         };
     }

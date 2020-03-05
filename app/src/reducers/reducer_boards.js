@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { FETCH_BOARDS } from '../actions/fetching_public';
 import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
 
+import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
+
 function mapKeysRecursive(root_groups){
     // goes into subgroups of every groups and performs another id sorting thingy on it :)
     var all_concepts = {};
@@ -113,7 +115,6 @@ export default function (state = {}, action) {
             else
                 return state;
 
-
         case FETCH_BOARDS:
             let b = action.payload.data.data.boards;
             return _.mapKeys(b, 'id'); // made key-value store based on id
@@ -135,6 +136,72 @@ export default function (state = {}, action) {
             const newState = { ...state };
             delete newState[deleteBoard.id];
             return newState;
+
+        // -----------------------------
+        // GROUP MUTATIONS CAPTURED HERE
+        // -----------------------------
+
+        case ADD_GROUP:
+            if (action.payload.status == 200){
+
+                // console.log("We have 200!", state, action);
+
+                const { addGroup } = action.payload.data.data;
+                const newState = {...state};
+
+                // get out a few variables
+                const { id, parent_group_id, board_id, board } = addGroup;
+                const group_layouts = board ? board.group_layouts : []; // return group layouts if they exist
+
+                // ...
+                if (parent_group_id == null){ // we're dealing with a top-level group
+                    newState.groups.groups[id] = addGroup; // add to list of groups
+                    newState.group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in this board
+                }
+                else { // lower-tier group - dig in deeper.
+                    newState.groups[parent_group_id].groups[group_id] = addGroup;
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
+
+                // console.log("new state because of edit_group", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't add group, got ",action.payload.status, "for status");
+                return state;
+            }
+
+        case DELETE_GROUP:
+            if (action.payload.status == 200){
+                // console.log("Deleting group in reducer", state, action);
+
+                const { deleteGroup } = action.payload.data.data;
+                const newState = {...state};
+
+                // get out a few variables
+                const { id, parent_group_id, board_id, board } = deleteGroup;
+                const group_layouts = board ? board.group_layouts : []; // return group layouts if they exist
+
+                // ...
+                if (parent_group_id == null){ // we're dealing with a top-level group
+                    delete newState.groups[id]; // remove from list
+                    newState.group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in this board
+                }
+                else { // lower-tier group - dig in deeper.
+                    delete newState.groups[parent_group_id].groups[id];
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.modified++;
+                // console.log("new state because of remove group", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't remove group, got ", action.payload.status);
+                return state;
+            }
 
         default:
             return state;

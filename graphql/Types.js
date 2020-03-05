@@ -163,6 +163,7 @@ const GroupType = new GraphQLObjectType({
         color: { type: GraphQLString },
         n_depth: { type: GraphQLInt },
         parent_groupId: { type: GraphQLID },
+        _boardId: { type: GraphQLID },
         board_id: { type: GraphQLID },
 
         // saved layouts for 1,2,3,4 (or even different columns)
@@ -187,6 +188,14 @@ const GroupType = new GraphQLObjectType({
             resolve(parent, args){
                 // return subgroups where parent_groupId equal current id and n_depth is 1 deeper
                 return Group.find({parent_groupId: parent.id, n_depth: parent.n_depth+1});
+            }
+        },
+
+        board: {
+            type: BoardType,
+            resolve(parent, args){
+                // todo, board_id should be renamed to board_name, and the id of the board should become board_id
+                return Board.findById(parent._boardId);
             }
         }
     })

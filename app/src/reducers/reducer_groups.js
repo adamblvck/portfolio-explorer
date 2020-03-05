@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
-import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
+import { EDIT_GROUP} from '../actions/group';
 import { FETCH_BOARD_GROUPS, FETCH_BOARD } from '../actions/fetching_public';
 
 function mapKeysRecursive(root_groups){
@@ -54,7 +54,7 @@ function parseResponse(state, action){
         let error = handleErrors(response);
 
         if (action.payload.status == 200 && !error){
-            window.location.reload(); // cheap trick, needs to replaced !
+            // window.location.reload(); // cheap trick, needs to replaced !
         }
     }
 
@@ -173,40 +173,6 @@ export default function (state = {}, action) {
                 console.log("Couldn't add concept, got ",action.payload.status);
                 return state;
             }
-        
-
-        // GROUP MUTATIONS
-        case ADD_GROUP:
-
-            console.log("WOHOOO ADD RAA", state, action);
-
-            if (action.payload.status == 200){
-
-                console.log("WOHOOO ADD GROUP", state, action);
-
-                const { addGroup } = action.payload.data.data;
-                const newState = {...state};
-
-                let group_id = addGroup.id;
-                let parent_group_id = addGroup.parent_groupId;
-
-                if (parent_group_id == null){
-                    newState.groups[group_id] = addGroup;
-                }
-                else {
-                    newState.groups[parent_group_id].groups[group_id] = addGroup;
-                }
-
-                // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
-
-                console.log("new state because of edit_group", newState);
-
-                return newState;
-            } else {
-                console.log("Couldn't add group, got ",action.payload.status, "for status");
-                return state;
-            }
 
         case EDIT_GROUP:
             if (action.payload.status == 200){
@@ -252,47 +218,6 @@ export default function (state = {}, action) {
                 console.log("Couldn't edit group, got ",action.payload.status);
                 return state;
             }
-
-        case DELETE_GROUP:
-
-            if (action.payload.status == 200){
-                console.log("WOHOOO EDIT GROUP", state, action);
-
-                const { deleteGroup } = action.payload.data.data;
-                const newState = {...state};
-
-                let group_id = deleteGroup.id;
-                let parent_group_id = deleteGroup.parent_groupId;
-
-                // no parent id means we can alter a top-level group
-                if (parent_group_id == null){
-                    delete newState.groups[group_id];
-                } 
-                
-                // if we have a parent_id, we need to dig a little deeper in the structure
-                else {
-                    delete newState.groups[parent_group_id].groups[group_id];
-                }
-
-                // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
-
-                console.log("new state because of remove group", newState);
-
-                return newState;
-            } else {
-                console.log("Couldn't remove group, got ", action.payload.status);
-                return state;
-            }
-
-        // ODD ONES OUT, REMOVE IF NOT USED IN 2-3 sprint cycles
-        // case FETCH_CONCEPTS:
-        //     return _.mapKeys(action.payload.data.data.groups, 'id');
-
-        // case FETCH_ROOT_GROUPS_AND_CONCEPTS:
-        //     return mapKeysRecursive(action.payload.data.data.root_groups);
-
-
 
         // CATCH NO ACTIONS
         default:

@@ -15,7 +15,8 @@ var GroupSchema = new Schema({
     color: String,
     n_depth: { type: Number, min: 0, max: 3 }, // specifies group depth
     parent_groupId: String, // link to parent group
-    board_id: String, // link to upper board
+    _boardId: String, // mongoose id of board (GraphQLID)
+    board_id: String, // url id to upper board
 
     group_layouts: [{
       name: String, // name of the layout

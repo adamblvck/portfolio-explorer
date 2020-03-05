@@ -63,6 +63,7 @@ export function fetchBoardGroups(board_id) {
             parent_groupId 
             # needed for top-level board_id
             board_id # needed for board hierarchymn
+            _boardID
             group_layouts {
                 name
                 layout
@@ -74,6 +75,7 @@ export function fetchBoardGroups(board_id) {
                 description
                 n_depth # needed for group editing, in case when needed
                 parent_groupId # needed for group editing, in case when needed
+                _boardID
                 board_id # used for board hierarchymn 
                 concepts {
                     id

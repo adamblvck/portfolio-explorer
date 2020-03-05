@@ -266,6 +266,7 @@ const Mutation = new GraphQLObjectType({
                 n_depth: { type: GraphQLInt},
                 parent_groupId: { type: GraphQLID},
                 board_id: { type: GraphQLID},
+                _boardId: { type: GraphQLID},
                 color: {type: GraphQLString},
                 background: {type: GraphQLString}
             },
@@ -288,12 +289,67 @@ const Mutation = new GraphQLObjectType({
                     n_depth: args.n_depth,
                     parent_groupId: args.parent_groupId,
                     board_id: args.board_id,
+                    _boardId: args._boardId,
                     color: args.color,
                     background: args.background
                 });
 
-                // save to DB
-                return group.save();
+                // Return new promise which will save new group, and add that gruop to the layouts, one tier up higher...
+
+                return new Promise((resolve, reject) => {
+                    group.save().then(function (savedGroup) {
+                        // 1. get list of layouts of board in Board group
+                        // executes, name LIKE john and only selecting the "name" and "friends" fields
+                        Board.findById(args._boardId, function (err, board) {
+                            if (err) {
+                                console.log(err);
+                                reject(err);
+                            } else {
+                                console.log("board", board);
+                                // A: go through each board with board_id (should be only one)
+                                // 1. get group_layouts attached to _board_id
+
+                                let group_layouts = [ ...board.group_layouts ];
+
+                                const _board_id = board._id;
+                                const _new_group_id = savedGroup._id.toHexString() + '';
+
+                                // 2. add _new_group_id to every layout
+                                for(let j = 0; j<group_layouts.length;j++){
+                                    let group_layout = group_layouts[j];
+
+                                    // !!!! Add to first list, assumes 2D List
+                                    if (group_layout.layout.length >= 1) {
+                                        let a = group_layout.layout[0];
+                                        let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
+                                        group_layout.layout[0] = b;
+                                    }
+                                    group_layouts[j] = group_layout;
+                                }
+
+                                // 3. push new layout to board
+                                let mod = { 'group_layouts': group_layouts }
+
+                                return Board.findByIdAndUpdate(
+                                    _board_id,
+                                    { $set: mod},
+                                    { new: true}, function(err, results){
+                                        if (err) {
+                                            console.log("Error when updating board after adding new group", err);
+                                            reject(err);
+                                        } else {
+                                            resolve(savedGroup);
+                                        }
+                                    }
+                                );
+
+                            } // if we have no issues finding a correct board;
+
+                        });
+                        
+                    }); // end of group save
+
+                }); // end of returned promise
             }
         },
 
@@ -515,10 +571,65 @@ const Mutation = new GraphQLObjectType({
                     throw new Error('User has no permissions to delete groups from the database');
                 }
 
-                // query resolve
-                return Group.findByIdAndRemove(
-                    args.id
-                );
+                // Query resolve
+                // a) Delete group
+                // b) Delete groupid from all layouts in the board (or group) it belongs to
+                return new Promise((resolve, reject) => {
+                    return Group.findByIdAndRemove(args.id, function(err, deletedGroup){
+                        if (err){
+                            console.log("Error when deleting group by id", args.id, ":", err);
+                            reject(err);
+                        } else {
+                            console.log("deletedGroup", deletedGroup);
+
+                            const _deletedId = deletedGroup._id;
+                            const _boardId = deletedGroup._boardId;
+                            const _parentGroupId = deletedGroup.parent_groupId;
+
+                            // If we have a _boardId, we have a board "parent", thus change the layout of board
+                            if (_boardId !== null && _boardId !== undefined)
+                                Board.findById(_boardId, function (err, board) {
+                                    if (err) {
+                                        console.log("Error when finding board by id", _boardId, ":", err);
+                                        reject(err);
+                                    } else {
+                                        let group_layouts = [ ...board.group_layouts];
+
+                                        // 2. from EVERY LAYOUT in this BOARD
+                                        for(let j = 0; j<group_layouts.length;j++){
+                                            let group_layout = group_layouts[j];
+
+                                            // filter out any instance of "_groupId" (args.id)
+                                            for (let x = 0; x<group_layout.layout.length; x++){
+                                                // remove new_col from every column
+                                                let new_col = group_layout.layout[x].filter(item => item !== args.id);
+                                                group_layout.layout[x] = new_col;
+                                            }
+
+                                            // re-assign group_layout to group_layouts[j];
+                                            group_layouts[j] = group_layout;
+                                        }
+
+                                        // 3. push new layout to board
+                                        let mod = { 'group_layouts': group_layouts }
+
+                                        return Board.findByIdAndUpdate(_boardId, { $set: mod}, { new: true}, function(err, results){
+                                            if (err) {
+                                                console.log("Error when updating layout in board after REMOVING group", args.id, err);
+                                                reject(err);
+                                            } else {
+                                                console.log("deletedGroup", deletedGroup, "results", results);
+                                                resolve(deletedGroup);
+                                            }
+                                        });
+
+                                    }
+                                });
+
+                            // resolve(deletedGroup);
+                        }
+                    });
+                });
             }
         },
 
