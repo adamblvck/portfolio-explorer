@@ -167,13 +167,18 @@ export default function (state = {}, action) {
                     newState.group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in this board
                 }
                 else { // lower-tier group - dig in deeper.
-                    newState.groups.groups[parent_groupId].groups[id] = addGroup;
+
+                    if (newState.groups.groups[parent_groupId].groups === undefined) // create new object
+                        newState.groups.groups[parent_groupId].groups = {}
+
+                    newState.groups.groups[parent_groupId].groups[id] = addGroup; // assign group as new id
                     newState.groups.groups[parent_groupId].group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in parent group
                 }
 
                 // change the modified counter to trigger a re-render of elements depending on groups
                 newState.groups.modified = Math.round(Math.random() * 100000);
-                // console.log("new state because of ADD_GROUP", newState);
+                
+                console.log("new state because of ADD_GROUP", newState);
 
                 return newState;
             } else {
