@@ -3,6 +3,7 @@ import axios from 'axios';
 export const ADD_GROUP = 'add_group';
 export const EDIT_GROUP = 'edit_group';
 export const DELETE_GROUP = 'delete_group';
+export const UPDATE_GROUP_LAYOUT = 'update_group_layout';
 
 const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
 const ROOT_URL = isLOCALHOST ? 'http://localhost:4000/graphql' : '/graphql';
@@ -170,6 +171,42 @@ export function deleteGroup(groupInfo) {
     }
 }
 
-export function updateGroupLayout() {
-    
+export function updateGroupLayout(groupInfo) {
+    let query = `
+    mutation updateGroupLayout (
+        $id:ID!,
+        $group_layouts: [LayoutInput]
+    ) {
+        updateGroup (
+            id:$id,
+            group_layouts:$group_layouts
+        ) { 
+            id
+            parent_groupId
+            group_layouts {
+                name
+                layout
+            }
+        }
+    }`;
+
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data:{
+            query: query,
+            variables: groupInfo
+        },
+        headers: localStorage.getItem('is_authenticated')? headers: {}
+    });
+
+    return {
+        type: UPDATE_GROUP_LAYOUT,
+        payload: request
+    }
 }

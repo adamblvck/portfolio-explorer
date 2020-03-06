@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { FETCH_BOARDS } from '../actions/fetching_public';
 import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
 
-import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP} from '../actions/group';
+import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT} from '../actions/group';
 
 function mapKeysRecursive(root_groups){
     // goes into subgroups of every groups and performs another id sorting thingy on it :)
@@ -187,7 +187,7 @@ export default function (state = {}, action) {
             }
 
         case DELETE_GROUP:
-            if (action.payload.status == 200){
+            if (action.payload.status == 200) {
                 // console.log("Deleting group in reducer", state, action);
 
                 const { deleteGroup } = action.payload.data.data;
@@ -217,6 +217,32 @@ export default function (state = {}, action) {
             } else {
                 console.log("Couldn't remove group, got ", action.payload.status);
                 return state;
+            }
+
+        case UPDATE_GROUP_LAYOUT:
+            if (action.payload.status == 200) {
+                console.log("Updating group layout", state, action);
+
+                const { updateGroup } = action.payload.data.data;
+                const newState = {...state};
+
+                // get out a few variables
+                console.log(updateGroup);
+                const { id, parent_groupId, group_layouts } = updateGroup;
+
+                // ...
+                if (parent_groupId == null){ // we're the layout of subgroups in a top-tier group
+                    newState.groups.groups[id].group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in parent group
+                }
+                else { // lower-tier group - dig in deeper.
+                    
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                console.log("new state because of update group layout", newState);
+
+                return newState;
             }
 
         default:

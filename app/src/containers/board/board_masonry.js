@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions performed in Board Masonry
-import { deleteGroup } from '../../actions/group';
+import { deleteGroup, updateGroupLayout } from '../../actions/group';
 import { fetchBoardGroups } from '../../actions/fetching_public';
 import { openGroupForm, openConceptForm } from '../../actions/form';
 import { fetchBoard, updateBoardLayout} from '../../actions/board';
@@ -385,7 +385,16 @@ class BoardMasonry extends Component {
 
         console.log(active_col, new_col);
 
-        
+        const layout = {
+            name: '1',
+            layout: [new_col]
+        }
+
+        // here we want to send the new_col layout to the server
+        this.props.updateGroupLayout({
+            id: parent_groupId,
+            group_layouts: [layout]
+        });
     }
 
     dnd_getSubgroup = (parent_groupId, item_ix) => {
@@ -579,6 +588,7 @@ export default withStyles(styles)(
 
         fetchBoardGroups,
 
+        updateGroupLayout,
         deleteGroup, 
         openGroupForm, 
         openConceptForm
