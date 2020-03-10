@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { FETCH_BOARDS } from '../actions/fetching_public';
 import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
-
+import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
 import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT} from '../actions/group';
 
 function mapKeysRecursive(root_groups){
@@ -16,6 +16,8 @@ function mapKeysRecursive(root_groups){
     // Add <id, concept> value store, on the subgroups
     for(var key in root_groups) {
         var obj = root_groups[key];
+
+        // map keys subgroups and concepts
         if (obj.groups){
             for(var key2 in obj.groups) {
                 var subgroup = obj.groups[key2];
@@ -29,12 +31,19 @@ function mapKeysRecursive(root_groups){
                     // reduce <key, value> to an array of only keys
                     subgroup.concepts = Object.keys(subgroup.concepts);
                 }
+
+                // map keys on concept_layouts in subgroup 
+                if (subgroup.concept_layouts){
+                    subgroup.concept_layouts = _.mapKeys(subgroup.concept_layouts, 'name');
+                }
             }
         }
 
-        if (obj.group_layouts){
+        // map keys on group_layouts 
+        if (obj.group_layouts) {
             obj.group_layouts = _.mapKeys(obj.group_layouts, 'name');
         }
+
     }
 
     // Add <id, group> value store, on the subgroups
@@ -158,8 +167,6 @@ export default function (state = {}, action) {
 
                 // return group_layouts, depending if we're having a board, or a parent_group
                 const group_layouts = board ? board.group_layouts : (parent_group ? parent_group.group_layouts : []); 
-
-                // console.log(group_layouts);
 
                 // if no group as parent ...
                 if (parent_groupId == null) { // we're dealing with a top-level group
@@ -289,6 +296,46 @@ export default function (state = {}, action) {
                 console.log("new state because of update group layout", newState);
 
                 return newState;
+            }
+
+
+
+        // -----------------------------
+        // CONCEPT MUTATIONS CAPTURED HERE
+        // -----------------------------
+
+        case ADD_CONCEPT:
+            // console.log("ADD_CONCEPT triggered! WOHOOO", state, action);
+
+            if (action.payload.status == 200){
+                const { addConcept } = action.payload.data.data;
+                const newState = {...state};
+
+                // get out a few variables
+                const { group } = addConcept;
+                const _id = addConcept.id;
+                const { id, parent_groupId, concept_layouts } = group;
+
+                console.log(newState);
+                console.log(group, _id, id, parent_groupId, concept_layouts, addConcept);
+
+                // add new ID to concept_id array
+                newState.groups.groups[parent_groupId].groups[id].concepts.push(_id);
+
+                // add concept to concept dictionary
+                newState.groups.concepts[_id] = addConcept;
+
+                // re-edit the layout of the subgroup
+                newState.groups.groups[parent_groupId].groups[id].concept_layouts = _.mapKeys(concept_layouts, 'name');
+
+                // Trigger re-render
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                console.log("new state because of update group layout", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't add concept, got ",action.payload.status);
+                return state;
             }
 
         default:

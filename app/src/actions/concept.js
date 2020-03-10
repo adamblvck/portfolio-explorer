@@ -65,6 +65,10 @@ export function addConcept(conceptInfo) {
                     id
                     name
                     parent_groupId
+                    concept_layouts {
+                        name
+                        layout
+                    }
                 }
                 groupIds
             }

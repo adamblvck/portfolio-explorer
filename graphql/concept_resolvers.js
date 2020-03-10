@@ -102,20 +102,24 @@ const addConceptResolver = {
 							// 3. Save new layout for this particular group (groupId)
 							let mod = { 'concept_layouts': concept_layouts }
 
-							return Group.findByIdAndUpdate(
+							Group.findByIdAndUpdate(
 								groupId,
 								{ $set: mod},
 								{ new: true}, function(err, results){
 									if (err) {
 										console.log("Error when updating group layout after adding new group", err);
 										reject(err);
+									} else {
+										console.log("savedcConcept", savedConcept, "updatedGroup", results.concept_layouts[0].layout);
+										// resolve if we're at the end of the array
+										if ( i == (groupIds.length-1) )
+											resolve(savedConcept);
 									}
 								}
 							);
 						}
 					});
 				}
-				resolve(savedConcept);
 			});
 		});
 		

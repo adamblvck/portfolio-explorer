@@ -98,33 +98,35 @@ export default function (state = {}, action) {
                 return state;
 
         // CONCEPT MUTATIONS
-        case ADD_CONCEPT:
-            // console.log("ADD_CONCEPT triggered! WOHOOO", state, action);
+        // case ADD_CONCEPT:
+        //     // console.log("ADD_CONCEPT triggered! WOHOOO", state, action);
 
-            if (action.payload.status == 200){
-                const { addConcept } = action.payload.data.data;
-                const newState = {...state};
+        //     if (action.payload.status == 200){
+        //         const { addConcept } = action.payload.data.data;
+        //         const newState = {...state};
 
-                let root_group_id = addConcept.group.parent_groupId;
-                let sub_group_id = addConcept.groupIds[0];
-                let concept_id = addConcept.id;
+        //         console.log(addConcept);
 
-                // add new ID to concept_id array
-                newState.groups[root_group_id].groups[sub_group_id].concepts.push(concept_id);
+        //         let root_group_id = addConcept.group.parent_groupId;
+        //         let sub_group_id = addConcept.groupIds[0];
+        //         let concept_id = addConcept.id;
 
-                // add concept to concept dictionary
-                newState.concepts[concept_id] = addConcept;
+        //         // add new ID to concept_id array
+        //         newState.groups[root_group_id].groups[sub_group_id].concepts.push(concept_id);
 
-                // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
+        //         // add concept to concept dictionary
+        //         newState.concepts[concept_id] = addConcept;
 
-                console.log("new state because of add_concept", newState);
+        //         // change the modified counter to trigger a re-render of elements depending on groups
+        //         newState.modified++;
 
-                return newState;
-            } else {
-                console.log("Couldn't add concept, got ",action.payload.status);
-                return state;
-            }
+        //         console.log("new state because of add_concept", newState);
+
+        //         return newState;
+        //     } else {
+        //         console.log("Couldn't add concept, got ",action.payload.status);
+        //         return state;
+        //     }
 
         case UPDATE_CONCEPT:
             if (action.payload.status == 200){
@@ -173,50 +175,6 @@ export default function (state = {}, action) {
                 console.log("Couldn't add concept, got ",action.payload.status);
                 return state;
             }
-
-        // case EDIT_GROUP:
-        //     if (action.payload.status == 200){
-        //         console.log("WOHOOO EDIT GROUP", state, action);
-
-        //         const { updateGroup } = action.payload.data.data;
-        //         const newState = {...state};
-
-        //         let group_id = updateGroup.id;
-        //         let parent_group_id = updateGroup.parent_groupId;
-
-        //         // no parent id means we can alter a top-level group
-        //         if (parent_group_id == null){
-
-        //             console.log("Okay I'm deep");
-
-        //             let prev_group = {
-        //                 ...newState.groups[group_id],
-        //                 ...updateGroup
-        //             };
-        //             newState.groups[group_id] = prev_group;
-        //         } 
-                
-        //         // if we have a parent_id, we need to dig a little deeper in the structure
-        //         else {
-        //             console.log("Okay I'm deeper, with a parent_id");
-
-        //             let prev_group = {
-        //                 ...newState.groups[parent_group_id].groups[group_id],
-        //                 ...updateGroup
-        //             };
-        //             newState.groups[parent_group_id].groups[group_id] = prev_group;
-        //         }
-
-        //         // change the modified counter to trigger a re-render of elements depending on groups
-        //         newState.modified++;
-
-        //         console.log("new state because of edit_group", newState);
-
-        //         return newState;
-        //     } else {
-        //         console.log("Couldn't edit group, got ",action.payload.status);
-        //         return state;
-        //     }
 
         // CATCH NO ACTIONS
         default:

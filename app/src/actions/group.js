@@ -42,6 +42,10 @@ export function addGroup(groupInfo) {
                         layout
                     }
                 }
+                concept_layouts {
+                    name
+                    layout
+                }
                 parent_group {
                     id
                     group_layouts {
@@ -100,6 +104,10 @@ export function editGroup(groupInfo) {
                 parent_groupId # needed for group editing, in case when needed
                 board_id # needed for board hierarchymn
                 _boardId # Database ID of parent Board
+                concept_layouts {
+                    name
+                    layout
+                }
     }}`;
     
     const headers = {
@@ -145,6 +153,10 @@ export function deleteGroup(groupInfo) {
                     name
                     layout
                 }
+            }
+            concept_layouts {
+                name
+                layout
             }
         }
     }

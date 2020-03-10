@@ -16,9 +16,12 @@ class ConceptMasonry extends Component {
 
     renderConcepts(){
         const { background }  = this.props;
-        const { conceptIDs, concepts } = this.props;
+        const { conceptIDs, concepts, concept_layouts} = this.props;
 
-        return _.map(conceptIDs, (conceptID) => {
+        const layout = concept_layouts['1'] ? concept_layouts['1'].layout[0] : [];
+        // console.log(layout, concept_layouts);
+
+        return _.map(layout, (conceptID) => {
             return (
                 <Draggable
                     key={`${conceptID}-draggable`}
@@ -38,8 +41,7 @@ class ConceptMasonry extends Component {
     }
 
     render() {
-
-        
+        // console.log(this.props);
 
         return (
             <Container // drag and drop container

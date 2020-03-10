@@ -219,6 +219,8 @@ class BoardMasonry extends Component {
         return _.map(subgroup_layout, (subgroup_id) => {
             const subgroup = subgroups[subgroup_id];
 
+            // console.log("subgroup", subgroup);
+
             return (
                 <Draggable key={`subgroup_render_${subgroup.id}`}>
                     <CardHeader
@@ -258,6 +260,7 @@ class BoardMasonry extends Component {
                         }}
                     />
                     <ConceptMasonry
+                        concept_layouts={subgroup.concept_layouts}
                         conceptIDs={subgroup.concepts}
                         concepts={concepts}
                         background={background}

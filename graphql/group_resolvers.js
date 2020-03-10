@@ -310,6 +310,7 @@ const deleteGroupResolver = {
 
 							}
 						});
+						
 					else if (_parentGroupId !== null) {
 						Group.findById(_parentGroupId, function (err, group) {
 							if (err) {

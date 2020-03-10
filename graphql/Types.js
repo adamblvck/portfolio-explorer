@@ -108,13 +108,13 @@ const ConceptType = new GraphQLObjectType({
         // Concept details - to be replaced by markdown
         details: { type: ConceptDetailType },
 
-        group: {
-            type: GroupType,
+        group: { type: GroupType,
             resolve(parent, args){
                 // return Group with id=concept.id (= parent)
-                return Group.findById(parent.groupIds);
+                return Group.findById(parent.groupIds[0]);
             }
         },
+        
         groupIds: { type: new GraphQLList(GraphQLID)}
     })
 });
