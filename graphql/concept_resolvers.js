@@ -38,6 +38,8 @@ const {
     LayoutInputType
 } = require('./Types');
 
+const { verify_layout_structures, add_id_to_layouts } = require('./layout_helpers');
+
 const addConceptResolver = {
 	type: ConceptType,
 	args: {
@@ -70,7 +72,53 @@ const addConceptResolver = {
 			groupIds: args.groupIds
 		});
 
-		return concept.save();
+		return new Promise((resolve, reject) => {
+			concept.save().then(function(savedConcept){
+
+				const { groupIds } = savedConcept;
+
+				// for every group this concept is in, add the concept to the layout
+				for (let i=0; i< groupIds.length;i++){
+					const groupId = groupIds[i];
+
+					// Currently we only putting Concepts into subgroups.
+					// Thus... Fetch the Group this concept points to, and add the id to the CONCEPT LAYOUT
+					Group.findById(groupId, function (err, group) {
+						if (err) {
+							console.log(err);
+							reject(err);
+						} else {
+
+							// 1. Get existing layout
+							const _new_concept_id = savedConcept._id.toHexString() + '';
+							let concept_layouts = [ ...group.concept_layouts ];
+
+							// this steps create an empty layout to be added (TODO: this step can add prev not-added layouts too)
+							concept_layouts = verify_layout_structures(concept_layouts, 'concept_layout');
+							
+							// 2. Add concept to every present layout
+							concept_layouts = add_id_to_layouts(concept_layouts, _new_concept_id);
+
+							// 3. Save new layout for this particular group (groupId)
+							let mod = { 'concept_layouts': concept_layouts }
+
+							return Group.findByIdAndUpdate(
+								groupId,
+								{ $set: mod},
+								{ new: true}, function(err, results){
+									if (err) {
+										console.log("Error when updating group layout after adding new group", err);
+										reject(err);
+									}
+								}
+							);
+						}
+					});
+				}
+				resolve(savedConcept);
+			});
+		});
+		
 	}
 };
 

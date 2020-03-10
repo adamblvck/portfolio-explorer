@@ -38,7 +38,7 @@ const {
     LayoutInputType
 } = require('./Types');
 
-const { verify_layout_structures } = require('./layout_helpers');
+const { verify_layout_structures, add_id_to_layouts } = require('./layout_helpers');
 
 const addGroupResolver = {
 	type: GroupType,
@@ -199,6 +199,7 @@ const updateGroupResolver = {
 		n_depth: { type: GraphQLInt },
 		parent_groupId: { type: GraphQLID },
 		board_id: { type: GraphQLID },
+		_boardId: { type: GraphQLID },
 		group_layouts: {type: new GraphQLList(LayoutInputType)},
 		concept_layouts: {type: new GraphQLList(LayoutInputType)}
 	},
@@ -224,6 +225,7 @@ const updateGroupResolver = {
 		if (args.n_depth) mod.n_depth = args.n_depth;
 		if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;
 		if (args.board_id) mod.board_id = args.board_id;
+		if (args._boardId) mod._boardId = args._boardId;
 		if (args.group_layouts) mod.group_layouts = args.group_layouts;
 		if (args.concept_layouts) mod.concept_layouts = args.concept_layouts;
 

@@ -1,7 +1,8 @@
 /* General Layout, Colors, Fonts, ... */
 
 body {
-    background: linear-gradient(#fff, rgba(0, 157, 197, 0.29) );
+    /* background: linear-gradient(#fff, rgba(0, 157, 197, 0.29) ); */
+    background: linear-gradient(#fff, rgba(239, 128, 80, 0.06) );
     /* background: linear-gradient(#009dc5, #00556b); */
     height: 100%;
     margin: 0;

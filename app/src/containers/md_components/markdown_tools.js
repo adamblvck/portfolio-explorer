@@ -51,7 +51,7 @@ export const parse_core_information = (lines, depth, has_key) => {
   
 	// if the title doesn't begin with a hashtag, we claim fauly markdown
 	if ( !title.startsWith("#".repeat(depth) + " ") ) {
-		console.log("notitle", title, "lines", lines);
+		// console.log("notitle", title, "lines", lines);
 		return {
 			_title: "notitle_noheader",
 			_tags: "notags",
@@ -77,7 +77,7 @@ export const parse_core_information = (lines, depth, has_key) => {
 	
 		// const key_rgx = title.match(/# ([a-zA-Z0-9_]*) /);
 	
-		console.log("test_title", title.replace(re, ""));
+		// console.log("test_title", title.replace(re, ""));
 	
 		const key_rgx = title.match(/# ([a-zA-Z0-9_]*) /);
 		if (key_rgx) {
@@ -92,12 +92,12 @@ export const parse_core_information = (lines, depth, has_key) => {
 	  	title = title.replace(re, "");
 	}
   
-	console.log(title);
+	// console.log(title);
 
 	// capture rest lines
 	const _rest_lines = lines.slice(1);
   
-	console.log("_rest_lines", _rest_lines);
+	// console.log("_rest_lines", _rest_lines);
 
 	// get_hashtag_row (assuming there is only one in this section)
 	let _hashtags = "";

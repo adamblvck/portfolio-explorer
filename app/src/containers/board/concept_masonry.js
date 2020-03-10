@@ -38,6 +38,9 @@ class ConceptMasonry extends Component {
     }
 
     render() {
+
+        
+
         return (
             <Container // drag and drop container
                 groupName="concept-holders"

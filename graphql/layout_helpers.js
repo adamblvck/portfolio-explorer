@@ -34,11 +34,30 @@ const verify_layout_structures = (layouts, layout_type) => {
 	return new_layout;
 };
 
+const add_id_to_layouts = (layouts, id) => {
+
+	console.log(id);
+
+	for(let j = 0; j<layouts.length;j++){
+		let l = layouts[j];
+
+		// !!!! Add to first list in thr presummed 2D list
+		if (l.layout.length >= 1) {
+			l.layout[0] = l.layout[0].concat([id]); // here we concat, pushing gives weird behavior
+		}
+
+		layouts[j] = l; // assign a new one
+	}
+
+	return layouts;
+}
+
 const remove_id_from_layouts = (layouts, id) => {
 	
 }
 
 module.exports = {
 	verify_layout_structures,
-	remove_id_from_layouts
+	remove_id_from_layouts,
+	add_id_to_layouts
 };

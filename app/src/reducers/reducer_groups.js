@@ -99,7 +99,7 @@ export default function (state = {}, action) {
 
         // CONCEPT MUTATIONS
         case ADD_CONCEPT:
-            console.log("ADD_CONCEPT triggered! WOHOOO", state, action);
+            // console.log("ADD_CONCEPT triggered! WOHOOO", state, action);
 
             if (action.payload.status == 200){
                 const { addConcept } = action.payload.data.data;
@@ -144,7 +144,7 @@ export default function (state = {}, action) {
             }
     
         case DELETE_CONCEPT:
-            console.log("DELETE_CONCEPT triggered! WOHOOO", state, action);
+            // console.log("DELETE_CONCEPT triggered! WOHOOO", state, action);
 
             if (action.payload.status == 200){
                 const { deleteConcept } = action.payload.data.data;
@@ -174,49 +174,49 @@ export default function (state = {}, action) {
                 return state;
             }
 
-        case EDIT_GROUP:
-            if (action.payload.status == 200){
-                console.log("WOHOOO EDIT GROUP", state, action);
+        // case EDIT_GROUP:
+        //     if (action.payload.status == 200){
+        //         console.log("WOHOOO EDIT GROUP", state, action);
 
-                const { updateGroup } = action.payload.data.data;
-                const newState = {...state};
+        //         const { updateGroup } = action.payload.data.data;
+        //         const newState = {...state};
 
-                let group_id = updateGroup.id;
-                let parent_group_id = updateGroup.parent_groupId;
+        //         let group_id = updateGroup.id;
+        //         let parent_group_id = updateGroup.parent_groupId;
 
-                // no parent id means we can alter a top-level group
-                if (parent_group_id == null){
+        //         // no parent id means we can alter a top-level group
+        //         if (parent_group_id == null){
 
-                    console.log("Okay I'm deep");
+        //             console.log("Okay I'm deep");
 
-                    let prev_group = {
-                        ...newState.groups[group_id],
-                        ...updateGroup
-                    };
-                    newState.groups[group_id] = prev_group;
-                } 
+        //             let prev_group = {
+        //                 ...newState.groups[group_id],
+        //                 ...updateGroup
+        //             };
+        //             newState.groups[group_id] = prev_group;
+        //         } 
                 
-                // if we have a parent_id, we need to dig a little deeper in the structure
-                else {
-                    console.log("Okay I'm deeper, with a parent_id");
+        //         // if we have a parent_id, we need to dig a little deeper in the structure
+        //         else {
+        //             console.log("Okay I'm deeper, with a parent_id");
 
-                    let prev_group = {
-                        ...newState.groups[parent_group_id].groups[group_id],
-                        ...updateGroup
-                    };
-                    newState.groups[parent_group_id].groups[group_id] = prev_group;
-                }
+        //             let prev_group = {
+        //                 ...newState.groups[parent_group_id].groups[group_id],
+        //                 ...updateGroup
+        //             };
+        //             newState.groups[parent_group_id].groups[group_id] = prev_group;
+        //         }
 
-                // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
+        //         // change the modified counter to trigger a re-render of elements depending on groups
+        //         newState.modified++;
 
-                console.log("new state because of edit_group", newState);
+        //         console.log("new state because of edit_group", newState);
 
-                return newState;
-            } else {
-                console.log("Couldn't edit group, got ",action.payload.status);
-                return state;
-            }
+        //         return newState;
+        //     } else {
+        //         console.log("Couldn't edit group, got ",action.payload.status);
+        //         return state;
+        //     }
 
         // CATCH NO ACTIONS
         default:

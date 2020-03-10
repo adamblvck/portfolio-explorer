@@ -89,7 +89,7 @@ class BoardMasonry extends Component {
         const arrayFromObject = Object.entries(groups).map(([key, value]) => ( key ));
         const chunked_groups = chunk(arrayFromObject, chunkSize);
 
-        console.log("chunked_groups", chunked_groups);
+        // console.log("chunked_groups", chunked_groups);
 
         const layout = {
             name: this.state.columns.toString(),
@@ -378,12 +378,12 @@ class BoardMasonry extends Component {
     }
 
     dnd_onDropSubgroup = (parent_groupId, dnd_results) => {
-        console.log("parent_groupId",parent_groupId);
+        // console.log("parent_groupId",parent_groupId);
 
         const active_col = this.props.groups[parent_groupId].group_layouts['1']['layout'][0];
         const new_col = applyDrag(active_col, dnd_results);
 
-        console.log(active_col, new_col);
+        // console.log(active_col, new_col);
 
         const layout = {
             name: '1',
@@ -401,7 +401,7 @@ class BoardMasonry extends Component {
         // here we assume the server created the `1` layout, AND we're working with a 2D array (hence we take index=0)
         const active_layout = this.props.groups[parent_groupId].group_layouts['1'];
 
-        console.log("parent_groupId",parent_groupId);
+        // console.log("parent_groupId",parent_groupId);
 
         return active_layout['layout'][0][item_ix];
     }
@@ -413,7 +413,7 @@ class BoardMasonry extends Component {
         const active_col = this.props.group_layouts[this.state.columns]['layout'][col_i];
         const new_col = applyDrag(active_col, dnd_results);
 
-        console.log(active_col, new_col);
+        // console.log(active_col, new_col);
 
         // if first column in iteration
         if (col_i == 0){
@@ -441,8 +441,8 @@ class BoardMasonry extends Component {
     renderGrid() {
         const { groups, group_layouts } = this.props;
 
-        console.log("props", this.props);
-        console.log(groups, group_layouts);
+        // console.log("props", this.props);
+        // console.log(groups, group_layouts);
 
         // check if we have a layout available, if not create one (send to server)
         if (group_layouts !== undefined) {
@@ -476,11 +476,11 @@ class BoardMasonry extends Component {
         }
 
         const fetched_layout_groups = group_layouts[this.state.columns.toString()].layout;
-        console.log('fetched_layout_groups', fetched_layout_groups);
+        // console.log('fetched_layout_groups', fetched_layout_groups);
 
         return _.map(fetched_layout_groups, (column, col_i) => {
             const col_index_is_zero = col_i == 0;
-            console.log('col_i', col_i);
+            // console.log('col_i', col_i);
             return (
                 <Col xs={4} md={4} key={`col_${col_i}`}>
 

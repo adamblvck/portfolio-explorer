@@ -11,7 +11,7 @@ function mapKeysRecursive(root_groups){
 
     const hmm = root_groups;
 
-    console.log('groups reducer', hmm);
+    // console.log('groups reducer', hmm);
 
     // Add <id, concept> value store, on the subgroups
     for(var key in root_groups) {
@@ -82,7 +82,7 @@ export default function (state = {}, action) {
         return state;
 
     if (action.error){
-        console.log(action.payload);
+        // console.log(action.payload);
         return state;
     }
 
@@ -90,7 +90,7 @@ export default function (state = {}, action) {
         case FETCH_BOARD:
             if (action.payload.status == 200 && action.payload.data){
 
-                console.log(action.payload.data.data.board);
+                // console.log(action.payload.data.data.board);
 
                 const reduced = {
                     id: action.payload.data.data.board.id,
@@ -107,7 +107,7 @@ export default function (state = {}, action) {
         case UPDATE_BOARD_LAYOUT:
             if (action.payload.status == 200 && action.payload.data){
 
-                console.log("UDPATE_BOARD_LAYOUT", action.payload.data.data.updateBoard);
+                // console.log("UDPATE_BOARD_LAYOUT", action.payload.data.data.updateBoard);
 
                 const reduced = {
                     ...state,
@@ -130,7 +130,7 @@ export default function (state = {}, action) {
         case EDIT_BOARD:
             const { updateBoard } = action.payload.data.data;
 
-            console.log(updateBoard);
+            // console.log(updateBoard);
 
             return { ...state, [updateBoard.id]:updateBoard};
 
@@ -148,7 +148,7 @@ export default function (state = {}, action) {
         case ADD_GROUP:
             if (action.payload.status == 200){
 
-                console.log("We have 200!", state, 'action', action);
+                // console.log("We have 200!", state, 'action', action);
 
                 const { addGroup } = action.payload.data.data;
                 const newState = {...state};
@@ -159,7 +159,7 @@ export default function (state = {}, action) {
                 // return group_layouts, depending if we're having a board, or a parent_group
                 const group_layouts = board ? board.group_layouts : (parent_group ? parent_group.group_layouts : []); 
 
-                console.log(group_layouts);
+                // console.log(group_layouts);
 
                 // if no group as parent ...
                 if (parent_groupId == null) { // we're dealing with a top-level group
@@ -178,11 +178,57 @@ export default function (state = {}, action) {
                 // change the modified counter to trigger a re-render of elements depending on groups
                 newState.groups.modified = Math.round(Math.random() * 100000);
                 
-                console.log("new state because of ADD_GROUP", newState);
+                // console.log("new state because of ADD_GROUP", newState);
 
                 return newState;
             } else {
                 console.log("Couldn't add group, got ",action.payload.status, "for status");
+                return state;
+            }
+
+        case EDIT_GROUP:
+            if (action.payload.status == 200) {
+                // console.log("WOOOW EDIT GROUP", state, action);
+
+                // get the updateGroup
+                const { updateGroup } = action.payload.data.data;
+
+                // an new state
+                const newState = {...state};
+
+                // pull essential parameters
+                let { id, parent_groupId } = updateGroup;
+
+                // no parent id means we're altering a top-level group
+                if (parent_groupId == null) {
+
+                    // update the group by taking the previous states, and adding the changes of `updateGroup`
+                    newState.groups.groups[id] = {
+                        ...newState.groups.groups[id], 
+                        ...updateGroup
+                    };
+
+                }
+
+                // if we have a parent_id, we need to dig a little deeper in the structure
+                else {
+
+                    // update nesState with the group that's a subgroup, and add the parameters which we got returned from the API
+                    newState.groups.groups[parent_groupId].groups[id] = {
+                        ...newState.groups.groups[parent_groupId].groups[id],
+                        ...updateGroup
+                    };
+
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.groups.modified = Math.round(Math.random() * 100000);
+
+                // console.log("new state because of edit_group:", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't edit group, got ",action.payload.status);
                 return state;
             }
 

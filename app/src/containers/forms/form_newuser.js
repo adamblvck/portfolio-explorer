@@ -24,7 +24,7 @@ class FormNewUser extends Component {
 
         if (nextProps.usernameavailable !== undefined){ // if form receives props and this turns true
             // console.log("setting user_checked to true");
-            console.log(nextProps.usernameavailable);
+            // console.log(nextProps.usernameavailable);
 
             // if both checked and available, create the username!
             if ( nextProps.usernameavailable === true && this.state.created_user === false ){
