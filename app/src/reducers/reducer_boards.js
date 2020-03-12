@@ -389,6 +389,29 @@ export default function (state = {}, action) {
                 return state;
             }
 
+        case UPDATE_CONCEPT:
+            if (action.payload.status == 200){
+                const { updateConcept } = action.payload.data.data;
+                const newState = {...state};
+
+                const { id } = updateConcept;
+
+                // update concept at key updatedConcept.id with the newly received concept!
+                newState.groups.concepts[id] = updateConcept;
+
+                // update concept at the lower levels of the game
+                
+
+                // Trigger re-render
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                console.log("new state because of update group layout", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't update concept, got ",action.payload.status);
+                return state;
+            }
+
         case DELETE_CONCEPT:
             if (action.payload.status == 200){
                 console.log("DELETE_CONCEPT triggered! WOHOOO", action.payload);
