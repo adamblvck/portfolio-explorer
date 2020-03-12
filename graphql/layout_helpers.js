@@ -36,8 +36,6 @@ const verify_layout_structures = (layouts, layout_type) => {
 
 const add_id_to_layouts = (layouts, id) => {
 
-	console.log(id);
-
 	for(let j = 0; j<layouts.length;j++){
 		let l = layouts[j];
 

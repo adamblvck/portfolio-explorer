@@ -184,10 +184,61 @@ const deleteConceptResolver = {
 			throw new Error('User has no permissions to delete concepts from the database');
 		}
 
-		// query resolve
-		return Concept.findByIdAndRemove(
-			args.id
-		);
+		return new Promise((resolve, reject) => {
+			return Concept.findByIdAndRemove(args.id, function(err, removedConcept) {
+				if ( err ){
+					console.log("Error when finding concept and removing by ID", err);
+					reject(err);
+				} else {
+					const groupIds = removedConcept.groupIds;
+
+					// iterate through all 'attached' groupIds
+					for(let i=0; i< groupIds.length; i++) {
+						const groupId = groupIds[i];
+
+						Group.findById(groupId, function(err, group){
+							if (err) {
+								console.log("Error when finding group to update it's layout after removing concept", err);
+								reject(err);
+							} else {
+								// 1. make a copy of the layouts
+								let concept_layouts = [ ...group.concept_layouts];
+
+								// 2. from EVERY LAYOUT in this BOARD
+								for(let j = 0; j<concept_layouts.length;j++){
+									let concept_layout = concept_layouts[j];
+
+									// filter out any instance of "_groupId" (args.id)
+									for (let x = 0; x<concept_layout.layout.length; x++){
+										// remove new_col from every column
+										let new_col = concept_layout.layout[x].filter(item => item !== args.id);
+										concept_layout.layout[x] = new_col;
+									}
+
+									// re-assign group_layout to group_layouts[j];
+									concept_layouts[j] = concept_layout;
+								}
+
+								// 3. push new layout to board
+								let mod = { 'concept_layouts': concept_layouts }
+
+								Group.findByIdAndUpdate(groupId, { $set: mod}, { new: true}, function(err, results){
+									if (err) {
+										console.log("Error when updating concept_layout in parent group, after removing a concept", args.id, err);
+										reject(err);
+									} else {
+										if (i == (groupIds.length-1))
+											resolve(removedConcept);
+									}
+								});
+
+							}
+						});
+
+					}
+				}
+			});
+		});
 	}
 }
 

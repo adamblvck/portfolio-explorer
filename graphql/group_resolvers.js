@@ -373,6 +373,7 @@ const deleteGroupResolver = {
 								console.log("Error when finding board by id", _boardId, ":", err);
 								reject(err);
 							} else {
+								// 1. make a copy of the layouts
 								let group_layouts = [ ...board.group_layouts];
 
 								// 2. from EVERY LAYOUT in this BOARD

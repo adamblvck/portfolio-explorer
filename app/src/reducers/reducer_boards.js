@@ -389,6 +389,40 @@ export default function (state = {}, action) {
                 return state;
             }
 
+        case DELETE_CONCEPT:
+            if (action.payload.status == 200){
+                console.log("DELETE_CONCEPT triggered! WOHOOO", action.payload);
+
+                const { deleteConcept } = action.payload.data.data;
+
+                const newState = {...state};
+
+                // get out core variables
+                const { parent_groupId, id, concept_layouts } = deleteConcept.group;
+                const _id = deleteConcept.id
+
+                // A. remove concept_id from array
+                let filtered_array = newState.groups.groups[parent_groupId].groups[id].concepts.filter(function(item) { 
+                    return item !== _id
+                });
+                newState.groups.groups[parent_groupId].groups[id].concepts = filtered_array;
+
+                // B. remove concept from concept dictionary
+                delete newState.groups.concepts[_id];
+
+                // C. change-up the layout
+                newState.groups.groups[parent_groupId].groups[id].concept_layouts = _.mapKeys(concept_layouts, 'name');
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                console.log("new state because of update group layout", newState);
+
+                return newState;
+            } else {
+                console.log("Couldn't delete concept, got ", action.payload.status);
+                return state;
+            }
+
         default:
             return state;
     }

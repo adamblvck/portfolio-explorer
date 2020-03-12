@@ -178,8 +178,11 @@ export function deleteConcept(conceptInfo) {
             id
             group {
                 id
-                name
                 parent_groupId
+                concept_layouts {
+                    name
+                    layout
+                }
             }
          }
     }

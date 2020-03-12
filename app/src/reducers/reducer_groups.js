@@ -128,53 +128,22 @@ export default function (state = {}, action) {
         //         return state;
         //     }
 
-        case UPDATE_CONCEPT:
-            if (action.payload.status == 200){
-                const { updateConcept } = action.payload.data.data;
-                const newState = {...state};
+        // case UPDATE_CONCEPT:
+        //     if (action.payload.status == 200){
+        //         const { updateConcept } = action.payload.data.data;
+        //         const newState = {...state};
 
-                // update concept at key updatedConcept.id with the newly received concept!
-                newState.concepts[updateConcept.id] = updateConcept;
+        //         // update concept at key updatedConcept.id with the newly received concept!
+        //         newState.concepts[updateConcept.id] = updateConcept;
 
-                // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
+        //         // change the modified counter to trigger a re-render of elements depending on groups
+        //         newState.modified++;
 
-                return newState;
-            } else {
-                console.log("Couldn't update concept, got ",action.payload.status);
-                return state;
-            }
-    
-        case DELETE_CONCEPT:
-            // console.log("DELETE_CONCEPT triggered! WOHOOO", state, action);
-
-            if (action.payload.status == 200){
-                const { deleteConcept } = action.payload.data.data;
-                const newState = {...state};
-
-                let root_group_id = deleteConcept.group.parent_groupId;
-                let sub_group_id = deleteConcept.group.id;
-                let concept_id = deleteConcept.id;
-
-                // remove concept_id from array
-                let filtered_array = newState.groups[root_group_id].groups[sub_group_id].concepts.filter(function(item) { 
-                    return item !== concept_id
-                });
-                newState.groups[root_group_id].groups[sub_group_id].concepts = filtered_array;
-
-                // remove concept from concept dictionary
-                delete newState.concepts[concept_id];
-
-                // change the modified counter to trigger a re-render of elements depending on groups
-                newState.modified++;
-
-                console.log("new state because of delete_concept", newState);
-
-                return newState;
-            } else {
-                console.log("Couldn't add concept, got ",action.payload.status);
-                return state;
-            }
+        //         return newState;
+        //     } else {
+        //         console.log("Couldn't update concept, got ",action.payload.status);
+        //         return state;
+        //     }
 
         // CATCH NO ACTIONS
         default:
