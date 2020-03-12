@@ -239,6 +239,101 @@ const updateGroupResolver = {
 	}
 };
 
+// returns a list of the updated groups, together with its components
+const updateConceptLayoutResolver = {
+	type: new GraphQLList(GroupType),
+	args: {
+		to_id: { type: new GraphQLNonNull(GraphQLID)},
+		to_concept_layouts: {type: new GraphQLList(LayoutInputType)},
+		from_id: { type: new GraphQLNonNull(GraphQLID)},
+		from_concept_layouts: {type: new GraphQLList(LayoutInputType)},
+		concept_id: { type: new GraphQLNonNull(GraphQLID)}
+	},
+	resolve(parent, args, {isAuthenticated, credentials}) {
+		// authentication check
+		if (!isAuthenticated) {
+			throw new Error('User needs to be authenticated to make changes to the database');
+		}
+
+		console.log("Logged in email:", credentials.payload.email);
+
+		if (credentials.payload.email != 'eragon.blizzard@gmail.com') {
+			throw new Error('User has no permissions to update groups in the database');
+		}
+
+		// construct a list of groups Ids we'll be returning after the DnD is done
+		const returnGroupIds = [args.to_id, args.from_id];
+
+		return new Promise((resolve, reject) => {
+
+			// from query layout MOD
+			let mod_from = {
+				concept_layouts: args.from_concept_layouts
+			};
+			
+			// to query layout MOD
+			let mod_to = {
+				concept_layouts: args.to_concept_layouts
+			};
+
+			Group.findByIdAndUpdate(args.from_id, { $set: mod_from }, { new: true }).then(function(ok1){ // update from group
+				Group.findByIdAndUpdate(args.to_id, { $set: mod_to }, { new: true }).then(function(ok2){ // update to group
+
+					// update the concept 'groupIds' this concept belongs
+					Concept.findById(args.concept_id, function (err, concept) {
+						if (err) {
+							console.log("Error when updating groupIds in concept", concept_id, ":", err);
+							reject(err);
+						} else {
+
+							let groupIds = [...concept.groupIds];
+							console.log("+++", groupIds, args.from_id, args.to_id);
+
+							// filter out from_id
+							groupIds = groupIds.filter(item => item !== args.from_id)
+
+							// add to_id to the list
+							groupIds.push(args.to_id);
+
+							console.log("---", groupIds, args.from_id, args.to_id);
+
+							// push this new groupIds
+							let mod = { 'groupIds': groupIds }
+							
+							Concept.findByIdAndUpdate(args.concept_id, { $set: mod}, { new: true}, function(err, results){
+								if (err) {
+									console.log("Error when updating concept after SETTING CONCEPT LAYOUT in group", args.id, err);
+									reject(err);
+								} else {
+									
+									// now return a list of updated groups
+									Group.find().where('_id').in(returnGroupIds).exec((err, groups) => {
+										if (err) {
+											console.log("Error when getting result groups", returnGroupIds, ":", err);
+											reject(err);
+										} else {
+											console.log(groups);
+											resolve(groups);
+										}
+									});
+								}
+							});
+
+						}
+					});
+
+				}).catch(function(err){
+					console.log("Error when deleting group by id", args.id, ":", err);
+					reject(err);
+				});
+			}).catch(function(err){
+				console.log("Error when deleting group by id", args.id, ":", err);
+				reject(err);
+			});
+		});
+	}
+};
+
 const deleteGroupResolver = {
 	type: GroupType,
 	args: {
@@ -303,7 +398,7 @@ const deleteGroupResolver = {
 										console.log("Error when updating layout in board after REMOVING group", args.id, err);
 										reject(err);
 									} else {
-										console.log("deletedGroup", deletedGroup, "results", results);
+										// console.log("deletedGroup", deletedGroup, "results", results);
 										resolve(deletedGroup);
 									}
 								});
@@ -320,7 +415,7 @@ const deleteGroupResolver = {
 								let group_layouts = [ ...group.group_layouts];
 								group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
 								
-								console.log("group_layouts", group_layouts);
+								// console.log("group_layouts", group_layouts);
 
 								// 2. from EVERY LAYOUT in this GROUP
 								for(let j = 0; j<group_layouts.length;j++){
@@ -347,7 +442,7 @@ const deleteGroupResolver = {
 										console.log("Error when updating layout in group after REMOVING group", args.id, err);
 										reject(err);
 									} else {
-										console.log("deletedGroup", deletedGroup, "results", results);
+										// console.log("deletedGroup", deletedGroup, "results", results);
 										resolve(deletedGroup);
 									}
 								});
@@ -364,5 +459,6 @@ const deleteGroupResolver = {
 module.exports = {
 	addGroupResolver,
 	updateGroupResolver,
-	deleteGroupResolver
+	deleteGroupResolver,
+	updateConceptLayoutResolver
 };

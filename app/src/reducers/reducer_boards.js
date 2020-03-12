@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { FETCH_BOARDS } from '../actions/fetching_public';
 import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
 import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
-import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT} from '../actions/group';
+import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT, UPDATE_CONCEPT_LAYOUT, UPDATE_CONCEPT_LAYOUT_SPECIAL} from '../actions/group';
 
 function mapKeysRecursive(root_groups){
     // goes into subgroups of every groups and performs another id sorting thingy on it :)
@@ -264,7 +264,7 @@ export default function (state = {}, action) {
 
                 // change the modified counter to trigger a re-render of elements depending on groups
                 newState.groups.modified = Math.round(Math.random() * 100000);
-                console.log("new state because of remove group", newState);
+                // console.log("new state because of remove group", newState);
 
                 return newState;
             } else {
@@ -274,7 +274,7 @@ export default function (state = {}, action) {
 
         case UPDATE_GROUP_LAYOUT:
             if (action.payload.status == 200) {
-                console.log("Updating group layout", state, action);
+                // console.log("Updating group layout", state, action);
 
                 const { updateGroup } = action.payload.data.data;
                 const newState = {...state};
@@ -293,12 +293,63 @@ export default function (state = {}, action) {
 
                 // change the modified counter to trigger a re-render of elements depending on groups
                 newState.groups.modified = Math.round(Math.random() * 100000);
-                console.log("new state because of update group layout", newState);
+                // console.log("new state because of update group layout", newState);
 
                 return newState;
             }
 
+        case UPDATE_CONCEPT_LAYOUT:
+            if (action.payload.status == 200) {
+                // console.log("---Updating concept layout", state, action);
 
+                const { updateGroup } = action.payload.data.data;
+                const newState = {...state};
+
+                // get out a few variables
+                const { id, parent_groupId, group_layouts, concept_layouts } = updateGroup;
+
+                // ...
+                if (parent_groupId == null){ // we're the layout of subgroups in a top-tier group
+                    newState.groups.groups[id].group_layouts = _.mapKeys(group_layouts, 'name'); // update group_layouts in parent group
+                }
+                else { // lower-tier group - dig in deeper.
+                    newState.groups.groups[parent_groupId].groups[id].concept_layouts = _.mapKeys(concept_layouts, 'name');
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                // console.log("---new state because of update group layout", newState);
+
+                return newState;
+            }
+
+        case UPDATE_CONCEPT_LAYOUT_SPECIAL:
+            if (action.payload.status == 200) {
+                // console.log("-s-Updating concept layout", state, action);
+
+                const { updateConceptLayout } = action.payload.data.data;
+                const newState = {...state};
+
+                console.log(updateConceptLayout, newState);
+
+                for (let i=0; i<updateConceptLayout.length; i++) {
+                    const group = updateConceptLayout[i];
+
+                    const {id, parent_groupId } = group;
+
+                    // map key the concepts, it gets twisty but keep calm :)
+                    newState.groups.groups[parent_groupId].groups[id].concepts = _.mapKeys(group.concepts, 'id');
+
+                    // // then finally mapKeys the concept layouts
+                    newState.groups.groups[parent_groupId].groups[id].concept_layouts = _.mapKeys(group.concept_layouts, 'name');
+                }
+
+                // change the modified counter to trigger a re-render of elements depending on groups
+                newState.groups.modified = Math.round(Math.random() * 100000);
+                // console.log("---new state because of update group layout", newState);
+
+                return newState;
+            }
 
         // -----------------------------
         // CONCEPT MUTATIONS CAPTURED HERE

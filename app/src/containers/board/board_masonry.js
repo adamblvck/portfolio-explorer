@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions performed in Board Masonry
-import { deleteGroup, updateGroupLayout } from '../../actions/group';
+import { deleteGroup, updateGroupLayout, updateConceptLayout, updateConceptLayout_changegroup } from '../../actions/group';
 import { fetchBoardGroups } from '../../actions/fetching_public';
 import { openGroupForm, openConceptForm } from '../../actions/form';
 import { fetchBoard, updateBoardLayout} from '../../actions/board';
@@ -60,6 +60,8 @@ class BoardMasonry extends Component {
             columns: 3,
             new_layout: []
         };
+
+        this.concept_dnd = {};
     }
 
     componentDidMount = () => {
@@ -260,6 +262,10 @@ class BoardMasonry extends Component {
                         }}
                     />
                     <ConceptMasonry
+                        groupId={subgroup.id} // used in D&D
+                        parent_groupId={subgroup.parent_groupId} // used in D&D
+                        dnd_onDropConcept={this.dnd_onDropConcept}
+                        dnd_getConcept={this.dnd_getConcept}
                         concept_layouts={subgroup.concept_layouts}
                         conceptIDs={subgroup.concepts}
                         concepts={concepts}
@@ -378,6 +384,88 @@ class BoardMasonry extends Component {
                 </Masonry>
             </ResponsiveMasonry>
         );
+    }
+
+    dnd_onDropConcept = (parent_groupId, groupId, dnd_results) => {
+
+        // same group layout change
+        if (dnd_results.removedIndex !== null && dnd_results.addedIndex !== null) {
+            console.log(parent_groupId, groupId, dnd_results);
+
+            const this_layout = this.props.groups[parent_groupId].groups[groupId].concept_layouts['1']['layout'][0];
+            const new_layout = applyDrag(this_layout, dnd_results);
+            const layout = {
+                name: '1',
+                layout: [new_layout]
+            }
+
+            this.props.updateConceptLayout({
+                id: groupId,
+                concept_layouts: [layout]
+            });
+
+            this.concept_dnd = {};
+        }
+
+        // Removed from this list (parent_groupId, groupId)
+        else if (dnd_results.removedIndex !== null && dnd_results.addedIndex == null) {
+
+            console.log("Removed from", parent_groupId, groupId, dnd_results);
+
+            const this_layout = this.props.groups[parent_groupId].groups[groupId].concept_layouts['1']['layout'][0];
+            const new_layout = applyDrag(this_layout, dnd_results);
+            const layout = {
+                name: '1',
+                layout: [new_layout]
+            }
+
+            this.concept_dnd['from_id'] = groupId;
+            this.concept_dnd['from_layout'] = [layout];
+            this.concept_dnd['concept_id'] = dnd_results.payload;
+        }
+
+        // Added to this list (parent_groupId, groupId)
+        else if (dnd_results.removedIndex == null && dnd_results.addedIndex !== null) {
+            console.log("Added to", parent_groupId, groupId, dnd_results);
+
+            const this_layout = this.props.groups[parent_groupId].groups[groupId].concept_layouts['1']['layout'][0];
+            const new_layout = applyDrag(this_layout, dnd_results);
+            const layout = {
+                name: '1',
+                layout: [new_layout]
+            }
+
+            this.concept_dnd['to_id'] = groupId;
+            this.concept_dnd['to_layout'] = [layout];
+            this.concept_dnd['concept_id'] = dnd_results.payload;
+        }
+
+        // IMPORTANT PART
+        // when we have both the TO and FROM layout, we send it to the server
+        if (this.concept_dnd['from_id'] !== undefined && this.concept_dnd['to_id'] !== undefined) {
+
+            console.log(this.concept_dnd);
+
+            this.props.updateConceptLayout_changegroup({
+                to_id: this.concept_dnd['to_id'],
+                to_concept_layouts: this.concept_dnd['to_layout'],
+                from_id: this.concept_dnd['from_id'],
+                from_concept_layouts: this.concept_dnd['from_layout'],
+                concept_id: this.concept_dnd['concept_id'],
+            });
+
+            // reset the DND stuff
+            this.concept_dnd = {};
+        }
+
+    }
+
+    dnd_getConcept = (parent_groupId, groupId, item_ix) => {
+        // parent_groupId is group which contains concept_layout
+        // console.log(parent_groupId, groupId, item_ix);
+        // console.log(this.props.groups[parent_groupId].groups[groupId].concept_layouts);
+        const active_layout = this.props.groups[parent_groupId].groups[groupId].concept_layouts['1'];
+        return active_layout['layout'][0][item_ix];
     }
 
     dnd_onDropSubgroup = (parent_groupId, dnd_results) => {
@@ -592,6 +680,9 @@ export default withStyles(styles)(
         fetchBoardGroups,
 
         updateGroupLayout,
+        updateConceptLayout,
+        updateConceptLayout_changegroup,
+
         deleteGroup, 
         openGroupForm, 
         openConceptForm

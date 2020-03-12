@@ -20,18 +20,27 @@ class ConceptMasonry extends Component {
 
         const layout = concept_layouts['1'] ? concept_layouts['1'].layout[0] : [];
         // console.log(layout, concept_layouts);
+        
 
         return _.map(layout, (conceptID) => {
+
+            const concept = concepts[conceptID]
+
+            if (concept == undefined){
+                console.log(conceptID);
+                return (<div>{conceptID} missing</div>);
+            } 
+
+            else
             return (
                 <Draggable
                     key={`${conceptID}-draggable`}
                     render={(setRef) => (
-                        <div ref={setRef}>
+                        <div ref={setRef} key={`${conceptID}-btn`}>
                             <ConceptMasonryButton
                                 className="concept-masonry-item"
-                                concept={concepts[conceptID]}
+                                concept={concept}
                                 background={background}
-                                key={`${conceptID}-btn`}
                             />
                         </div>
                     )}
@@ -41,14 +50,15 @@ class ConceptMasonry extends Component {
     }
 
     render() {
-        // console.log(this.props);
+        const { parent_groupId, groupId } = this.props;
 
         return (
             <Container // drag and drop container
                 groupName="concept-holders"
                 dragClass="form-ghost"
                 dropClass="form-ghost-drop"
-                onDrop={this.onDrop}
+                onDrop={dnd_results => this.props.dnd_onDropConcept(parent_groupId, groupId, dnd_results)} // perform this on drop
+                getChildPayload={index => this.props.dnd_getConcept(parent_groupId, groupId, index)} // get column index, and index of dragged item
                 nonDragAreaSelector=".field"
                 orientation="horizontal"
                 render={(setRef) => (
@@ -57,9 +67,6 @@ class ConceptMasonry extends Component {
                     </div>
                 )}
             />
-            // <Masonry className="concept-masonry">
-            //     {this.renderConcepts()}
-            // </Masonry>
         );
     }
 }
