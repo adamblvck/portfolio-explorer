@@ -64,17 +64,27 @@ class BoardMasonry extends Component {
         this.concept_dnd = {};
     }
 
-    componentDidMount = () => {
-        this.props.fetchBoard(this.props.boardID);
+    updateDimensions = () => {
+
+        if (window.innerWidth > 1000 && this.state.columns !== 3 ){
+            this.setState({ columns: 3 });
+        } else if (window.innerWidth <= 1000 && window.innerWidth > 680 && this.state.columns !== 2 ) {
+            this.setState({ columns: 2 });
+        } else if (window.innerWidth <= 680 && this.state.columns !== 1 ) {
+            this.setState({ columns: 1 });
+        }
+
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     console.log('nextProps', nextProps);
+    componentDidMount = () => {
+        this.props.fetchBoard(this.props.boardID);
 
-    //     const current_layout = nextProps.group_layouts[this.state.columns.toString()]['layout'];
-    //     console.log('current_layout',current_layout);
-    //     this.setState({new_layout: current_layout});
-    // }
+        window.addEventListener('resize', this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
 
     create_and_update_column_layout = () => {
         // add object sizing
@@ -288,7 +298,7 @@ class BoardMasonry extends Component {
                     action={
                         this.props.isAuthenticated && // if authenticated
                         <MenuGroup 
-                            className="groupmenu-btn"
+                            className="groupmenu-btn group-drag-handle"
                             isAuthenticated={this.props.isAuthenticated}
                             components={ [
                                 {
@@ -315,12 +325,12 @@ class BoardMasonry extends Component {
                     title={group.name}
                     subheader={group.description}
                     style={{backgroundColor: group.color, background: group.background}}
-                    className='RootGroupHeader'
+                    className='RootGroupHeader field'
                 />
 
                 {/* Create container with draggable subgroups */}
                 <CardContent className={classes.content}>
-                    <Container // drag and drop container
+                    { this.props.isAuthenticated && <Container // drag and drop container
                         groupName={`board-subgroups${groupId}`} // to group places where it's possible to drag and drop
                         // style={{ paddingBottom: '200px' }}
                         dragClass="form-ghost" // dragged class
@@ -332,7 +342,16 @@ class BoardMasonry extends Component {
                     >
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
-                    </Container>
+                    </Container>}
+
+                    { !this.props.isAuthenticated && <div
+
+                        key={`draggable_subgroup_container_${groupId}`}
+                    >
+                        {/* {this.generateForm(this.state.form)} */}
+                        {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
+                    </div>}
+                    
                 </CardContent>
             </Card>
         );
@@ -584,6 +603,7 @@ class BoardMasonry extends Component {
                         onDrop={dnd_results => this.dnd_onDrop(col_i, dnd_results)} // perform this on drop
                         getChildPayload={index => this.dnd_getConceptCard(col_i, index)} // get column index, and index of dragged item
                         nonDragAreaSelector=".field"
+                        dragHandleSelector=".group-drag-handle"
                         key={`draggable_in_${col_i}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}
