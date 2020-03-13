@@ -14,7 +14,7 @@ export const parse_first_line = (lines, depth) => {
 	}
   
 	// get [tag] from title or header
-	let _tags = title.match(/(?<=\[).+?(?=\])/);
+	let _tags = title.match(/(?:\[).+?(?=\])/);
 	if (_tags) _tags = _tags[0];
   
 	// remove [tag] in title -> replace with ""
@@ -64,7 +64,7 @@ export const parse_core_information = (lines, depth, has_key) => {
 	let key = "";
   
 	// get [tag] from title or header
-	let _tags = title.match(/(?<=\[).+?(?=\])/);
+	let _tags = title.match(/(?:\[).+?(?=\])/);
 	if (_tags) _tags = _tags[0];
   
 	// remove [tag] in title -> replace with ""

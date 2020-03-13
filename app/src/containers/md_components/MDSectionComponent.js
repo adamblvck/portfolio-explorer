@@ -104,8 +104,8 @@ export default class MDSectionComponent extends Component {
 		// go through each line, extract the lines out of it
 		for (let i=0; i<rest_lines.length; i++) {
 			const line = rest_lines[i];
-			let url_title = line.match(/(?<=\[).+?(?=\])/);
-			let url = line.match(/(?<=\().+?(?=\))/);
+			let url_title = line.match(/(?:\[).+?(?=\])/);
+			let url = line.match(/(?:\().+?(?=\))/);
 
 			console.log("rest_lines PARSE", 'url_title', url_title, 'url', url);
 
