@@ -60,7 +60,7 @@ export function updateBoardLayout(boardInfo) {
         $id: ID!,
         $group_layouts: [LayoutInput]
     ) {
-        updateBoard(
+        updateBoardLayout(
             id:$id,
             group_layouts:$group_layouts
         ) {

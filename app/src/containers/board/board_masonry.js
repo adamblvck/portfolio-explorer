@@ -80,6 +80,7 @@ class BoardMasonry extends Component {
         this.props.fetchBoard(this.props.boardID);
 
         window.addEventListener('resize', this.updateDimensions);
+        this.updateDimensions();
     }
 
     componentWillUnmount() {
@@ -325,7 +326,7 @@ class BoardMasonry extends Component {
                     title={group.name}
                     subheader={group.description}
                     style={{backgroundColor: group.color, background: group.background}}
-                    className='RootGroupHeader field'
+                    className='RootGroupHeader'
                 />
 
                 {/* Create container with draggable subgroups */}
@@ -337,7 +338,7 @@ class BoardMasonry extends Component {
                         dropClass="form-ghost-drop" // drop region class
                         onDrop={dnd_results => this.dnd_onDropSubgroup(groupId, dnd_results)} // perform this on drop
                         getChildPayload={index => this.dnd_getSubgroup(groupId, index)} // get column index, and index of dragged item
-                        nonDragAreaSelector=".field"
+                        // nonDragAreaSelector=".field"
                         key={`draggable_subgroup_container_${groupId}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}
@@ -370,39 +371,6 @@ class BoardMasonry extends Component {
                 </Draggable>
             );
         });
-    }
-
-    renderMasonry() {
-        return (
-            <ResponsiveMasonry
-                columnsCountBreakPoints={{350: 1, 600: 2, 900: 3}}
-            >
-                <Masonry gutter="0 auto 0 auto">
-
-                    {/* Render Groups */}
-                    {this.renderGroups()}
-
-                    {/* Add Group Button */}
-                    <MenuItem
-                        onClick={() => {
-                            const params = {
-                                mode: "new",
-                                initialValues: {
-                                    board_id: this.props.board_name,
-                                    _boardId: this.props.board_id,
-                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
-                                    n_depth:0,
-                                    parent_groupId:null}
-                            };
-
-                            this.props.openGroupForm(params)
-                        }}>
-                        Add Group
-                    </MenuItem>
-
-                </Masonry>
-            </ResponsiveMasonry>
-        );
     }
 
     dnd_onDropConcept = (parent_groupId, groupId, dnd_results) => {
@@ -590,20 +558,22 @@ class BoardMasonry extends Component {
 
         return _.map(fetched_layout_groups, (column, col_i) => {
             const col_index_is_zero = col_i == 0;
-            // console.log('col_i', col_i);
+            
+            const col_size = 12/this.state.columns; // will be either 4 (3 cols), 6 (2 cols), 12 (1 col)
+
             return (
-                <Col xs={4} md={4} key={`col_${col_i}`}>
+                <Col xs={col_size} md={col_size} key={`col_${col_i}`}>
 
                     {/* If authenticated - show draggable grid */}
-                    {this.props.isAuthenticated && <Container // drag and drop container
+                    { this.props.isAuthenticated && <Container // drag and drop container
                         groupName="board-columns" // to group places where it's possible to drag and drop
                         // style={{ paddingBottom: '200px' }}
                         dragClass="form-ghost" // dragged class
                         dropClass="form-ghost-drop" // drop region class
                         onDrop={dnd_results => this.dnd_onDrop(col_i, dnd_results)} // perform this on drop
                         getChildPayload={index => this.dnd_getConceptCard(col_i, index)} // get column index, and index of dragged item
-                        nonDragAreaSelector=".field"
-                        dragHandleSelector=".group-drag-handle"
+                        // nonDragAreaSelector=".field"
+                        // dragHandleSelector=".group-drag-handle"
                         key={`draggable_in_${col_i}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}

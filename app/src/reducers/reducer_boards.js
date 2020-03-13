@@ -115,12 +115,12 @@ export default function (state = {}, action) {
 
         case UPDATE_BOARD_LAYOUT:
             if (action.payload.status == 200 && action.payload.data){
-
+                const { updateBoardLayout } = action.payload.data.data;
                 // console.log("UDPATE_BOARD_LAYOUT", action.payload.data.data.updateBoard);
 
                 const reduced = {
                     ...state,
-                    group_layouts: _.mapKeys(action.payload.data.data.updateBoard.group_layouts, 'name'),
+                    group_layouts: _.mapKeys(updateBoardLayout.group_layouts, 'name'),
                 }
                 
                 return reduced;

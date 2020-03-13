@@ -39,7 +39,7 @@ const {
 } = require('./Types');
 
 // MUTATION RESOLVERS
-const { addBoardResolver, updateBoardResolver, deleteBoardResolver } = require('./board_resolvers');
+const { addBoardResolver, updateBoardResolver, deleteBoardResolver, updateBoardLayoutResolver } = require('./board_resolvers');
 const { addGroupResolver, updateGroupResolver, deleteGroupResolver, updateConceptLayoutResolver } = require('./group_resolvers');
 const { addConceptResolver, updateConceptResolver, deleteConceptResolver } = require('./concept_resolvers');
 
@@ -170,6 +170,7 @@ const Mutation = new GraphQLObjectType({
         // BOARD ADD/EDIT/DELETE MUTATION
         addBoard: addBoardResolver,
         updateBoard: updateBoardResolver,
+        updateBoardLayout: updateBoardLayoutResolver,
         deleteBoard: deleteBoardResolver,
 
         // GROUP ADD/EDIT/DELETE MUTATION

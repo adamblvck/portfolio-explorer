@@ -112,6 +112,62 @@ const updateBoardResolver = {
 	}
 };
 
+const updateBoardLayoutResolver = {
+	type: BoardType,
+	args: {
+		id: { type: new GraphQLNonNull(GraphQLID)},
+		group_layouts: {type: new GraphQLList(LayoutInputType)},
+	},
+	resolve(parent, args, {isAuthenticated, credentials}){
+		// authentication check
+		if (!isAuthenticated) {
+			throw new Error('User needs to be authenticated to make changes to the database');
+		}
+
+		console.log("Logged in email:", credentials.payload.email);
+
+		// check if user is allowed to update the database
+		if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+			throw new Error('User has no permissions to update groups in the database');
+		}
+
+		return new Promise((resolve, reject) => {
+			Board.findById( args.id, function (err, board) {
+				if (err){
+					console.log("Got an error when finding board to update its layout");
+					reject(err);
+				} else {
+					// 1. fix this shit
+					const { _id, group_layouts } = board;
+					let new_group_layouts = [...group_layouts];
+
+					// 2. intermediately update the layouts which match by name
+					for (let i=0; i<new_group_layouts.length; i++) {
+						for (let j=0; j<args.group_layouts.length; j++){
+							if (new_group_layouts[i].name == args.group_layouts[j].name) {
+								new_group_layouts[i].layout = [...args.group_layouts[j].layout];
+							}
+						}
+					}
+
+					// 3. Update the board layouts
+					const mod = { group_layouts: new_group_layouts };
+					Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true}, function(err2, updatedBoard) {
+						if (err2) {
+							console.log("Got an error when updating board layouts", err2);
+							reject(err2);
+						} else {
+							console.log("Updated board", updatedBoard);
+							resolve(updatedBoard);
+						}
+					});
+
+				}
+			});
+		});
+	}
+}
+
 const deleteBoardResolver = {
 	type: BoardType,
 	args: {
@@ -140,5 +196,6 @@ const deleteBoardResolver = {
 module.exports = {
 	addBoardResolver,
 	updateBoardResolver,
+	updateBoardLayoutResolver,
 	deleteBoardResolver
 };
