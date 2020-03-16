@@ -12,6 +12,22 @@ body {
     font-family: "Nunito", "Roboto", "Helvetica", "Arial" !important;
 }
 
+.container {
+    padding: 0px !important; /* Fixing sideline issues here */
+}
+
+.form-ghost {
+    /* background-color: black; */
+    outline-color: black 0px !important;
+    outline-width: 5px 0px !important;
+}
+
+.form-ghost-drop {
+    /* background-color: black; */
+    outline-color: black 0px !important;
+    outline-width: 5px 0px !important;
+}
+
 .particle-background {
     overflow: hidden;
 
