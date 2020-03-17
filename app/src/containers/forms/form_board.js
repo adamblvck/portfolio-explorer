@@ -93,10 +93,8 @@ class FormBoard extends Component {
                                 style={{backgroundColor: background_color, background: background_color}}
                             />
 
-                            <CardContent>
-                                <form
-                                    onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
-
+                            <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
+                                <CardContent>
                                     <Field
                                         label="Name"
                                         name="name"
@@ -123,13 +121,13 @@ class FormBoard extends Component {
                                         disabled={true}
                                         component={this.renderField}
                                     />
-                                </form>
-                            </CardContent>
+                                </CardContent>
 
-                            <CardActions>
-                                <Button type="submit" variant="outlined" color="primary">Submit</Button>
-                                <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
-                            </CardActions>
+                                <CardActions>
+                                    <Button type="submit" variant="outlined" color="primary">Submit</Button>
+                                    <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                                </CardActions>
+                            </form>
 
                         </Card>
                     </div>

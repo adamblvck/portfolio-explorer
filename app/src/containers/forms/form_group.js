@@ -111,56 +111,58 @@ class FormEditGroup extends Component {
                                 style={{backgroundColor: background_color, background: background_color}}
                             />
 
-                            <CardContent>
-                                <form
-                                    onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
-                                    <Field
-                                        label="Name"
-                                        name="name"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Color"
-                                        name="color"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Background"
-                                        name="background"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Description"
-                                        name="description"
-                                        component={this.renderTextField}
-                                    />
-                                    <Field
-                                        label="N Depth"
-                                        name="n_depth"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Parent Group ID"
-                                        name="parent_groupId"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Board ID"
-                                        name="board_id"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Board DB ID"
-                                        name="_boardId"
-                                        component={this.renderField}
-                                    />
-                                </form>
-                            </CardContent>
+                            <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
 
-                            <CardActions>
-                                <Button type="submit" variant="outlined" color="primary">Submit</Button>
-                                <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
-                            </CardActions>
+                                <CardContent>
+                                        <Field
+                                            label="Name"
+                                            name="name"
+                                            component={this.renderField}
+                                        />
+                                        <Field
+                                            label="Color"
+                                            name="color"
+                                            component={this.renderField}
+                                        />
+                                        <Field
+                                            label="Background"
+                                            name="background"
+                                            component={this.renderField}
+                                        />
+                                        <Field
+                                            label="Description"
+                                            name="description"
+                                            component={this.renderTextField}
+                                        />
+                                        <Field
+                                            label="N Depth"
+                                            name="n_depth"
+                                            component={this.renderField}
+                                        />
+                                        <Field
+                                            label="Parent Group ID"
+                                            name="parent_groupId"
+                                            component={this.renderField}
+                                        />
+                                        <Field
+                                            label="Board ID"
+                                            name="board_id"
+                                            component={this.renderField}
+                                        />
+                                        <Field
+                                            label="Board DB ID"
+                                            name="_boardId"
+                                            component={this.renderField}
+                                        />
+                                    
+                                </CardContent>
+
+                                <CardActions>
+                                    <Button type="submit" variant="outlined" color="primary">Submit</Button>
+                                    <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
+                                </CardActions>
+
+                            </form>
 
                         </Card>
                     </div>
