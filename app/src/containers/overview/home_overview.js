@@ -17,7 +17,6 @@ import { Button, Typography, Toolbar, AppBar, Paper, Card, CardHeader, CardConte
 
 import MenuGroup from '../../components/menus/menu_groups';
 import FormBoard from '../forms/form_board';
-import Footer from '../../components/footer';
 
 // Masonry
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -251,8 +250,6 @@ class HomeOverview extends Component {
                     open={false}
                 />
 
-                {/* Render Footer */}
-                <Footer/>
             </div>
         )
     }

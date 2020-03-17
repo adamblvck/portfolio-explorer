@@ -38,6 +38,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import store from './store';
 
+import Footer from './components/footer';
+
 // create redux store
 // const store = createStoreWithMiddleware(reducers);
 
@@ -99,6 +101,7 @@ ReactDOM.render(
                             }    
                         />
                     </Switch>
+                    <Footer/>
                 </div>
             </Router>
         </Provider>

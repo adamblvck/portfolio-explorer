@@ -104,9 +104,6 @@ class Board extends Component {
                     <div className="groups-masonry">
                         <BoardMasonry isAuthenticated={isAuthenticated()} boardID={this.boardID.toLowerCase()} />
                     </div>
-
-                    {/* Bottom bar */}
-                    <Footer/>
                 </div>
 
                 {/* Holds concept details component */}
