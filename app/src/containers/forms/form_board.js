@@ -25,6 +25,7 @@ class FormBoard extends Component {
                     label={field.label}
                     className="form-control"
                     margin="normal"
+                    disabled={field.disabled}
 
                     {...field.input}
                 />
@@ -96,20 +97,29 @@ class FormBoard extends Component {
                                     component={this.renderField}
                                 />
                                 <Field
-                                    label="Board ID"
+                                    label="Board URL identifier"
                                     name="board_id"
                                     component={this.renderField}
                                 />
-                                <Field
-                                    label="Background"
-                                    name="background"
-                                    component={this.renderField}
-                                />
+
                                 <Field
                                     label="Description"
                                     name="description"
                                     component={this.renderTextField}
                                 />
+                                <Field
+                                    label="Background"
+                                    name="background"
+                                    component={this.renderField}
+                                />                                
+
+                                <Field
+                                    label="Board ID"
+                                    name="id"
+                                    disabled={true}
+                                    component={this.renderField}
+                                />
+                                
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
                                 <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
                             </form>
