@@ -38,6 +38,8 @@ const {
     LayoutInputType
 } = require('./Types');
 
+const { verify_layout_structures } = require('./layout_helpers');
+
 const addBoardResolver = {
 	type: BoardType,
 	args: {
@@ -45,12 +47,20 @@ const addBoardResolver = {
 		board_id: { type: GraphQLString },
 		background: { type: GraphQLString },
 		description: { type: GraphQLString },
+		scope: { type: GraphQLString }
 	},
 	resolve(parent, args, {isAuthenticated, credentials}){
 		// authentication check
 		if (!isAuthenticated) {
 			throw new Error('User needs to be authenticated to make changes to the database');
 		}
+
+		// gather which action is being asked for
+
+
+		// authorization check
+
+		// 1. download permission on: user, publish, type: BOARD,
 
 		const email = credentials.payload.email;
 		console.log("Logged in email:", email);
@@ -60,15 +70,20 @@ const addBoardResolver = {
 			throw new Error('User has no permissions to add groups to the database');
 		}
 
-		// create new board
+
+
+		// get initial layout structure
+		const group_layouts = verify_layout_structures([], 'board_layout');
+
 		let board = new Board({
 			name: args.name,
 			board_id: args.board_id,
 			background: args.background,
 			description: args.description,
+			scope: args.scope,
+			group_layouts: group_layouts
 		});
 
-		// save to DB
 		return board.save();
 	}
 };

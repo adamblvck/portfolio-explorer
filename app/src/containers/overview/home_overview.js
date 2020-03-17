@@ -238,11 +238,11 @@ class HomeOverview extends Component {
                 {this.renderAppBar(isAuthenticated)}
 
                 {/* Holds the overview of all boards*/}
-                <Typography variant="h4" className="home-overview-header">Public Boards</Typography>
+                <Typography variant="h4" className="home-overview-header">Editorial</Typography>
                 { this.renderMasonry(isAuthenticated) }
         
                 {/* Holds the overview of all boards*/}
-                { isAuthenticated() && <Typography variant="h4" className="home-overview-header">Editorial</Typography> }
+                { isAuthenticated() && <Typography variant="h4" className="home-overview-header">Private Boards</Typography> }
                 { isAuthenticated() && this.renderMasonry(isAuthenticated) }
 
                 {/* Holds form for creating/editing concepts */}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Typography, Modal, Button, Paper, TextField} from '@material-ui/core';
+import { Typography, Modal, Button, Paper, TextField, Card, CardHeader, CardActions, CardContent} from '@material-ui/core';
 
 import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 
@@ -89,6 +89,8 @@ class FormEditGroup extends Component {
 
     render() {
         const { handleSubmit } = this.props;
+        const title = this.props.mode == "update" ? "Edit Group" : (this.props.mode == "new" ? "Add Group" : "corona");
+        const background_color = this.props.initialValues ? this.props.initialValues.background : "";
 
         return (
             <div>
@@ -101,58 +103,66 @@ class FormEditGroup extends Component {
                     onClose={this.handleClose}
                 >
                     <div className="form-add-concept">
-                        <Paper className="form-add-concept-paper">
-                            <Typography gutterBottom variant="title" component="h1" align="center">
-                                { this.props.mode == "update" && <p>Editing Group</p> }
-                                { this.props.mode == "new" && <p>New Group</p> }
-                            </Typography>
-                            <form
-                                onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
 
-                                <Field
-                                    label="Name"
-                                    name="name"
-                                    component={this.renderField}
-                                />
-                                <Field
-                                    label="Color"
-                                    name="color"
-                                    component={this.renderField}
-                                />
-                                <Field
-                                    label="Background"
-                                    name="background"
-                                    component={this.renderField}
-                                />
-                                <Field
-                                    label="Description"
-                                    name="description"
-                                    component={this.renderTextField}
-                                />
-                                <Field
-                                    label="N Depth"
-                                    name="n_depth"
-                                    component={this.renderField}
-                                />
-                                <Field
-                                    label="Parent Group ID"
-                                    name="parent_groupId"
-                                    component={this.renderField}
-                                />
-                                <Field
-                                    label="Board ID"
-                                    name="board_id"
-                                    component={this.renderField}
-                                />
-                                <Field
-                                    label="Board DB ID"
-                                    name="_boardId"
-                                    component={this.renderField}
-                                />
+                        <Card>
+                            <CardHeader
+                                className="concept-detail-card-header"
+                                title={title}
+                                style={{backgroundColor: background_color, background: background_color}}
+                            />
+
+                            <CardContent>
+                                <form
+                                    onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
+                                    <Field
+                                        label="Name"
+                                        name="name"
+                                        component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Color"
+                                        name="color"
+                                        component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Background"
+                                        name="background"
+                                        component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Description"
+                                        name="description"
+                                        component={this.renderTextField}
+                                    />
+                                    <Field
+                                        label="N Depth"
+                                        name="n_depth"
+                                        component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Parent Group ID"
+                                        name="parent_groupId"
+                                        component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Board ID"
+                                        name="board_id"
+                                        component={this.renderField}
+                                    />
+                                    <Field
+                                        label="Board DB ID"
+                                        name="_boardId"
+                                        component={this.renderField}
+                                    />
+                                </form>
+                            </CardContent>
+
+                            <CardActions>
                                 <Button type="submit" variant="outlined" color="primary">Submit</Button>
                                 <Button type="button" variant="outlined" color="secondary" onClick={this.handleClose}>Cancel</Button>
-                            </form>
-                        </Paper>
+                            </CardActions>
+
+                        </Card>
                     </div>
                 </Modal>
             </div>
