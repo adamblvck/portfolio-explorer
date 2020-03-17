@@ -71,7 +71,7 @@ class Board extends Component {
                         /b/{this.boardID}
                     </Typography>
 
-                    <Button onClick={this.handleNewNote}> New Note </Button>
+                    {/* <Button onClick={this.handleNewNote}> New Note </Button> */}
 
                     {
                         isAuthenticated() && (

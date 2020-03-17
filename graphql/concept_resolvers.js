@@ -38,7 +38,7 @@ const {
     LayoutInputType
 } = require('./Types');
 
-const { verify_layout_structures, add_id_to_layouts } = require('./layout_helpers');
+const { verify_layout_structures, add_id_to_layouts, verify_holon_layout_structures } = require('./layout_helpers');
 
 const addConceptResolver = {
 	type: ConceptType,
@@ -94,29 +94,32 @@ const addConceptResolver = {
 							let concept_layouts = [ ...group.concept_layouts ];
 
 							// this steps create an empty layout to be added (TODO: this step can add prev not-added layouts too)
-							concept_layouts = verify_layout_structures(concept_layouts, 'concept_layout');
-							
-							// 2. Add concept to every present layout
-							concept_layouts = add_id_to_layouts(concept_layouts, _new_concept_id);
+							verify_holon_layout_structures(group, concept_layouts, 'concept_layout')
+							.then(concept_layouts => {
+						
+								// 2. Add concept to every present layout
+								concept_layouts = add_id_to_layouts(concept_layouts, _new_concept_id);
 
-							// 3. Save new layout for this particular group (groupId)
-							let mod = { 'concept_layouts': concept_layouts }
+								// 3. Save new layout for this particular group (groupId)
+								let mod = { 'concept_layouts': concept_layouts }
 
-							Group.findByIdAndUpdate(
-								groupId,
-								{ $set: mod},
-								{ new: true}, function(err, results){
-									if (err) {
-										console.log("Error when updating group layout after adding new group", err);
-										reject(err);
-									} else {
-										console.log("savedcConcept", savedConcept, "updatedGroup", results.concept_layouts[0].layout);
-										// resolve if we're at the end of the array
-										if ( i == (groupIds.length-1) )
-											resolve(savedConcept);
+								Group.findByIdAndUpdate(
+									groupId,
+									{ $set: mod},
+									{ new: true}, function(err, results){
+										if (err) {
+											console.log("Error when updating group layout after adding new group", err);
+											reject(err);
+										} else {
+											console.log("savedcConcept", savedConcept, "updatedGroup", results.concept_layouts[0].layout);
+											// resolve if we're at the end of the array
+											if ( i == (groupIds.length-1) )
+												resolve(savedConcept);
+										}
 									}
-								}
-							);
+								);
+
+							});
 						}
 					});
 				}

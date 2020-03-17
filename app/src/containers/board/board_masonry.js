@@ -524,12 +524,7 @@ class BoardMasonry extends Component {
 
         // check if we have a layout available, if not create one (send to server)
         if (group_layouts !== undefined) {
-            // if (group_layouts[this.state.columns.toString()] == null) {
-            //     console.log("no column layout defined!");
-            //     this.create_and_update_column_layout();
-
-            //     return ( <div className="placeholder-css"/> ); // or placeholder
-            // }
+            
         } else {
             return ( 
                 // return an "add button" if none of the above is true.
@@ -610,8 +605,7 @@ class BoardMasonry extends Component {
     }
 
     render() {
-        const { classes, concepts } = this.props;
-        // console.log("concepts in subgroups", concepts);
+        console.log("props board_masonry", this.props);
 
         return (
             <div>

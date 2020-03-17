@@ -38,7 +38,7 @@ const {
     LayoutInputType
 } = require('./Types');
 
-const { verify_layout_structures, add_id_to_layouts } = require('./layout_helpers');
+const { verify_layout_structures, add_id_to_layouts, verify_holon_layout_structures } = require('./layout_helpers');
 
 const addGroupResolver = {
 	type: GroupType,
@@ -98,36 +98,40 @@ const addGroupResolver = {
 							const _new_group_id = savedGroup._id.toHexString() + '';
 							let group_layouts = [ ...board.group_layouts ];
 
-							group_layouts = verify_layout_structures(group_layouts, 'board_layout');
+							// IMPORTANT STEP HEER
+							verify_holon_layout_structures(board, group_layouts, 'board_layout')
+							.then(group_layouts => {
 
-							// 2. add _new_group_id to every layout
-							for(let j = 0; j<group_layouts.length;j++){
-								let group_layout = group_layouts[j];
+								// 2. add _new_group_id to every layout
+								for(let j = 0; j<group_layouts.length;j++){
+									let group_layout = group_layouts[j];
 
-								// !!!! Add to first list, assumes 2D List
-								if (group_layout.layout.length >= 1) {
-									let a = group_layout.layout[0];
-									let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
-									group_layout.layout[0] = b;
-								}
-								group_layouts[j] = group_layout;
-							}
-
-							// 3. push new layout to board
-							let mod = { 'group_layouts': group_layouts }
-
-							return Board.findByIdAndUpdate(
-								_board_id,
-								{ $set: mod},
-								{ new: true}, function(err, results){
-									if (err) {
-										console.log("Error when updating board layout after adding new group", err);
-										reject(err);
-									} else {
-										resolve(savedGroup);
+									// !!!! Add to first list, assumes 2D List
+									if (group_layout.layout.length >= 1) {
+										let a = group_layout.layout[0];
+										let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
+										group_layout.layout[0] = b;
 									}
+									group_layouts[j] = group_layout;
 								}
-							);
+
+								// 3. push new layout to board
+								let mod = { 'group_layouts': group_layouts }
+
+								Board.findByIdAndUpdate(
+									_board_id,
+									{ $set: mod},
+									{ new: true}, function(err, results){
+										if (err) {
+											console.log("Error when updating board layout after adding new group", err);
+											reject(err);
+										} else {
+											resolve(savedGroup);
+										}
+									}
+								);
+
+							});
 
 						} // if we have no issues finding a correct board;
 					});
@@ -146,37 +150,41 @@ const addGroupResolver = {
 							const _added_group_id = savedGroup._id.toHexString() + '';
 
 							let group_layouts = [ ...group.group_layouts ];
-							group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
 
-							// 2. add _added_group_id to every layout
-							for(let j = 0; j<group_layouts.length;j++){
-								let group_layout = group_layouts[j];
+							verify_holon_layout_structures(group, group_layouts, 'group_layout')
+							.then(group_layouts => {
+							// group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
 
-								// !!!! Add to first list, assumes 2D List
-								if (group_layout.layout.length >= 1) {
-									let a = group_layout.layout[0];
-									let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
-									group_layout.layout[0] = b;
-								}
-								group_layouts[j] = group_layout;
-							}
+								// 2. add _added_group_id to every layout
+								for(let j = 0; j<group_layouts.length;j++){
+									let group_layout = group_layouts[j];
 
-							// 3. push new layout to board
-							let mod = { 'group_layouts': group_layouts }
-
-							return Group.findByIdAndUpdate(
-								_group_id_of_layout,
-								{ $set: mod},
-								{ new: true}, function(err, results){
-									if (err) {
-										console.log("Error when updating group layout after adding new group", err);
-										reject(err);
-									} else {
-										resolve(savedGroup);
+									// !!!! Add to first list, assumes 2D List
+									if (group_layout.layout.length >= 1) {
+										let a = group_layout.layout[0];
+										let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
+										group_layout.layout[0] = b;
 									}
+									group_layouts[j] = group_layout;
 								}
-							);
 
+								// 3. push new layout to board
+								let mod = { 'group_layouts': group_layouts }
+
+								return Group.findByIdAndUpdate(
+									_group_id_of_layout,
+									{ $set: mod},
+									{ new: true}, function(err, results){
+										if (err) {
+											console.log("Error when updating group layout after adding new group", err);
+											reject(err);
+										} else {
+											resolve(savedGroup);
+										}
+									}
+								);
+							})
+							.catch(err => { console.log("fafa", err); reject(err); });
 						} // if we have no issues finding a correct board;
 					});
 				}
