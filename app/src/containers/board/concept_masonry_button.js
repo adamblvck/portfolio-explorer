@@ -18,9 +18,7 @@ class ConceptMasonryButton extends Component {
         this.handleClick = this.handleClick.bind(this);
     };
 
-    handleClick(event) {
-        const { currentTarget } = event;
-
+    handleClick() {
         // we contain the concept in our props, so just pass on the information
         this.props.showConceptDetail( { conceptID: this.props.concept.id, background: this.props.background, open: true } );
     }

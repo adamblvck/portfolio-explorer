@@ -56,7 +56,7 @@ export default class MDSectionComponent extends Component {
 		let md = rest_lines.join("\n");
 
 		return (
-			<div style={{width:'300px'}}>
+			<div style={{width:'100%'}}>
 				<h2>{title}</h2>
 				<MindmapViewer mindmapData={md}/>
 			</div>
@@ -184,8 +184,8 @@ export default class MDSectionComponent extends Component {
 		return (
 			<div>
 				<CardContent className="concept-detail-content">
-					<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 600: 2}}>
-						<Masonry gutter="0 auto 0 auto">
+					{/* <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 600: 2}}> */}
+						{/* <Masonry gutter="0 auto 0 auto"> */}
 							{/* iterate through sections */}
 							{_.map(section_from_i_to_j, from_to => {
 								const { from, to } = from_to;
@@ -200,8 +200,8 @@ export default class MDSectionComponent extends Component {
 									);
 								}
 							})}
-						</Masonry>
-					</ResponsiveMasonry>
+						{/* </Masonry> */}
+					{/* </ResponsiveMasonry> */}
 				</CardContent>
 			</div>
 		);

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 // Import material-design toolbar
 import PropTypes from 'prop-types';
-import { Button, Typography, Toolbar, AppBar, Card, CardHeader, CardContent, withStyles, MenuItem } from '@material-ui/core';
+import { Button, Typography, Toolbar, AppBar, Paper, Card, CardHeader, CardContent, withStyles, MenuItem, Avatar } from '@material-ui/core';
 
 import MenuGroup from '../../components/menus/menu_groups';
 import FormBoard from '../forms/form_board';
@@ -75,11 +75,11 @@ class HomeOverview extends Component {
                         Boards
                     </Typography>
 
-                    <Button> New Note </Button>
+                    {/* <Button> New Note </Button> */}
 
                     {
                         isAuthenticated() && (
-                            <Button onClick={this.handleLogout} > Logout </Button>
+                            <Button onClick={this.handleLogout} > Logout <Avatar alt="avatar" src={this.props.auth.getPicture()} style={{marginLeft:'7px'}} /> </Button>
                         )
                     }
 
@@ -198,10 +198,14 @@ class HomeOverview extends Component {
             >
                 <Masonry gutter="0 auto 0 auto">
                     {this.renderBoards()}
-                    
+
                     {/* TODO: Refactor below item into a function */}
                     { isAuthenticated() && 
-                        <MenuItem
+                        <Button
+                            elevation={1}
+                            variant="outlined"
+                            color="primary"
+                            className="add-button-in-col"
                             onClick={() => {
                                 const params = {
                                     mode: "new",
@@ -215,8 +219,8 @@ class HomeOverview extends Component {
                                 this.props.openBoardForm(params);
                             }}
                         >
-                            Add Group
-                        </MenuItem>
+                                Add Group
+                        </Button>
                     }
 
                 </Masonry>
@@ -233,7 +237,12 @@ class HomeOverview extends Component {
                 {this.renderAppBar(isAuthenticated)}
 
                 {/* Holds the overview of all boards*/}
+                <Typography variant="h4" className="home-overview-header" >Public Boards</Typography>
                 { this.renderMasonry(isAuthenticated) }
+        
+                {/* Holds the overview of all boards*/}
+                { isAuthenticated() && <Typography variant="h4" className="home-overview-header">Private Boards</Typography> }
+                { isAuthenticated() && this.renderMasonry(isAuthenticated) }
 
                 {/* Holds form for creating/editing concepts */}
                 <FormBoard

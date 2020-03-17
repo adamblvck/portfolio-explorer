@@ -18,7 +18,7 @@ import FormNoteTaker from '../forms/forms_noteditor'
 import MarkdownPopup from '../forms/form_markdown';
 
 // Import material-design toolbar
-import { Button, Typography, Toolbar, AppBar } from '@material-ui/core';
+import { Button, Typography, Toolbar, AppBar, Avatar } from '@material-ui/core';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
@@ -75,7 +75,7 @@ class Board extends Component {
 
                     {
                         isAuthenticated() && (
-                            <Button onClick={this.handleLogout} > Logout </Button>
+                            <Button onClick={this.handleLogout} > Logout <Avatar alt="avatar" src={this.props.auth.getPicture()} style={{marginLeft:'7px'}} /> </Button>
                         )
                     }
 

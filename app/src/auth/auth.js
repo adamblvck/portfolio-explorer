@@ -34,7 +34,7 @@ export default class Auth {
         clientID: 'nmwFAcrQ4iKBlNNqjNuoFjzJwDMlkkJK',
         redirectUri: CALLBACK_URL,
         responseType: 'token id_token',
-        scope: 'openid email'
+        scope: 'openid email profile'
     });
 
     constructor(){
@@ -46,6 +46,8 @@ export default class Auth {
         // check if still authenticated, if not, reset tokenstore
         if (!this.isAuthenticated()){
             this.logout();
+        } else {
+            this.payload = this.parseJwt(localStorage.getItem('id_token'));;
         }
     }
 
@@ -75,6 +77,12 @@ export default class Auth {
         this.auth0.authorize();
     }    
 
+    parseJwt = (token) => {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace('-', '+').replace('_', '/');
+        return JSON.parse(window.atob(base64));
+    }
+
     handleAuthentication() {
         this.auth0.parseHash((err, authResult) => {
             // authResult contains info returned in the URL on /callback
@@ -101,6 +109,8 @@ export default class Auth {
         localStorage.setItem('expires_at', expiresAt);
         localStorage.setItem('is_authenticated', true);
 
+        this.payload = this.parseJwt(authResult.idToken);
+
         // history.replace('/'); // navigate home
     }
 
@@ -111,18 +121,30 @@ export default class Auth {
         localStorage.removeItem('is_authenticated');
         localStorage.removeItem('user');
         localStorage.setItem('expires_at', 0);
+        this.payload = undefined;
     }
 
     isAuthenticated() {
         let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
 
-        if (expiresAt == null){
+        if (expiresAt == null) {
             this.logout();
             return false;
         }
 
+        // confirm that w're authenticated
         const isAuth = new Date().getTime() < expiresAt;
         isAuth ? localStorage.setItem('is_authenticated', true) : localStorage.removeItem('is_authenticated');
+
+        // set payload for this group again.        
+
         return isAuth;
+    }
+
+    getPicture() {
+        if (this.payload !== undefined) {
+            return this.payload.picture;
+        }
+        else return undefined;
     }
 }
