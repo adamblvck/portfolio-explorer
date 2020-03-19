@@ -25,7 +25,7 @@ import { applyDrag } from './utils';
 import { chunk } from 'lodash';
 
 import { Grid, Row, Col } from 'react-bootstrap';
-import { gradients, getTextColor } from '../forms/gradient_helper.js';
+import { gradients, getTextColor, getHeaderColor } from '../forms/gradient_helper.js';
 
 const styles = {
         card: {
@@ -228,6 +228,7 @@ class BoardMasonry extends Component {
 
         // extract root color
         const { rootColor, background } = group;
+        const headerColor = getHeaderColor(background);
 
         // for every subgroup present, render a `CardHeader` and a `ConceptMasonry`
         return _.map(subgroup_layout, (subgroup_id) => {
@@ -270,7 +271,7 @@ class BoardMasonry extends Component {
                         component="h3"
                         className="subgroup-header"
                         style={{
-                            '--parent-color': rootColor
+                            '--parent-color': headerColor
                         }}
                     />
                     <ConceptMasonry

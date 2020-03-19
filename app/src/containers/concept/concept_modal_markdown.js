@@ -32,6 +32,8 @@ import { showFullscreenMarkdown } from '../../actions/markdown';
 // Markdown rendering of markdown components, specific for this application
 import MDSectionComponent from '../md_components/MDSectionComponent'
 
+import { gradients, getTextColor, getHeaderColor } from '../forms/gradient_helper.js';
+
 const BackDropDiv = posed.div({
     visible: { opacity: 1 },
     hidden: { 
@@ -326,10 +328,13 @@ class ConceptModalMD extends Component {
     }
 
     renderCardHeader(concept, headerBackground){
+
+        const textColor = getTextColor(headerBackground);
+
         return (<CardHeader
             className="concept-detail-card-header"
             title={concept.name}
-            style={{backgroundColor: headerBackground, background: headerBackground}}
+            style={{backgroundColor: headerBackground, background: headerBackground, color:textColor}}
             action={
                 this.props.isAuthenticated && <MenuGroup 
                     isAuthenticated={this.props.isAuthenticated}

@@ -50,7 +50,7 @@ class FormBoard extends Component {
                     className="form-control"
                     margin="normal"
                     multiline
-                    rows="5"
+                    rows="2"
                     {...field.input}
                 />
             </div>
