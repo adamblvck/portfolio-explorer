@@ -14,7 +14,7 @@ const gradients = [
 	{ value: 'linear-gradient(45deg, #3F2B96 0%, #A8C0FF 100%)', name: 'Trusty Approach', textColor: white, headerColor: '#3F2B96'},
 	{ value: 'linear-gradient(45deg, #4b6cb7 0%, #182848 100%)', name: 'Black Sea Residu', textColor: white, headerColor: '#4b6cb7'},
 	{ value: 'linear-gradient(45deg, #0700b8 0%, #00ff88 100%)', name: 'Overused Bolt', textColor: white, headerColor: '#0700b8'},
-	{ value: 'linear-gradient(45deg, #fcff9e 0%, #c67700 100%)', name: 'Sunlit Cinamon', textColor: dark, headerColor: '#fcff9e'},
+	{ value: 'linear-gradient(45deg, #fcff9e 0%, #c67700 100%)', name: 'Sunlit Cinamon', textColor: dark, headerColor: '#c67700'},
 	{ value: 'linear-gradient(45deg, #9ebd13 0%, #008552 100%)', name: 'Lemon With Avocado', textColor: white, headerColor: '#9ebd13'},
 	{ value: 'linear-gradient(45deg, #FDBB2D 0%, #22C1C3 100%)', name: 'Tropical Parrot', textColor: dark, headerColor: '#FDBB2D'},
 
