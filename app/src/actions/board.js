@@ -99,6 +99,7 @@ export function fetchBoard(board_id) {
         board (board_id:"${board_id}"){
             id
             board_id
+            background
             group_layouts {
                 name
                 layout

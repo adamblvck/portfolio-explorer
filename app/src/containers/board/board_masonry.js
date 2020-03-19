@@ -622,7 +622,7 @@ class BoardMasonry extends Component {
                                 initialValues: {
                                     board_id: this.props.board_name,
                                     _boardId: this.props.board_id,
-                                    background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
+                                    background: gradients[0].value,
                                     n_depth:0,
                                     parent_groupId:null}
                             };
@@ -632,6 +632,11 @@ class BoardMasonry extends Component {
                             Add Group
                         </Button>
                 </Grid>
+
+                <div className="board-background-characteristics" style={{backgroundColor: this.props.board_background, background: this.props.board_background}}>
+
+                </div>
+                
             </div>
         );
     }
@@ -641,9 +646,12 @@ function mapStateToProps (state) {
 
     if (state.boards !== null && !_.isEmpty(state.boards) && !_.isEmpty(state.boards.groups)){ // only if groups exist, and result is NOT EMPTY
 
+        console.log(state.boards);
+
         return {
             board_id: state.boards.id,
             board_name: state.boards.board_id,
+            board_background: state.boards.background,
             group_layouts: state.boards.group_layouts,
             groups: state.boards.groups.groups,
             concepts: state.boards.groups.concepts,

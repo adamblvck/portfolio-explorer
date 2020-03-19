@@ -393,3 +393,11 @@ li [class*="MuiSvgIcon"] {
     margin-top: 10px !important;
     margin-bottom: 10px !important;
 }
+
+.board-background-characteristics {
+    top: 0px;
+    left: 0px;
+    height: 5px;
+    width: 100vw;
+    position: fixed;
+}
