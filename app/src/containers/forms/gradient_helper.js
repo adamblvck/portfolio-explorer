@@ -26,7 +26,8 @@ const gradients = [
 ];
 
 const getTextColor = (gradient_value) => {
-	return _.find(gradients, {value: gradient_value}).textColor;
+	const grad = _.find(gradients, {value: gradient_value});
+	return grad != undefined ? grad.textColor : "white";
 };
 
 export {

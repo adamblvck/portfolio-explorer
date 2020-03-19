@@ -292,7 +292,9 @@ class BoardMasonry extends Component {
     renderGroup(group){
         const { classes } = this.props;
 
-        const groupId = group.id;
+        const {id, name, description, background } = group;
+        console.log('background', background);
+        const text_color = getTextColor(background);
 
         return (
             <Card className={`${classes.card} board_group_card`} elevation={3}>
@@ -311,7 +313,7 @@ class BoardMasonry extends Component {
                                 },
                                 {
                                     label: "New Subgroup",
-                                    parent_groupId: group.id,
+                                    parent_groupId: id,
                                     needAuth: true,
                                     render: this.renderFormAddSubgroup
                                 },
@@ -324,23 +326,23 @@ class BoardMasonry extends Component {
                             ]}
                         />
                     }
-                    title={group.name}
-                    subheader={group.description}
-                    style={{backgroundColor: group.color, background: group.background}}
+                    title={name}
+                    subheader={description}
+                    style={{backgroundColor: background, background: background, color: text_color}}
                     className='RootGroupHeader'
                 />
 
                 {/* Create container with draggable subgroups */}
                 <CardContent className={classes.content}>
                     { this.props.isAuthenticated && <Container // drag and drop container
-                        groupName={`board-subgroups${groupId}`} // to group places where it's possible to drag and drop
+                        groupName={`board-subgroups${id}`} // to group places where it's possible to drag and drop
                         // style={{ paddingBottom: '200px' }}
                         dragClass="form-ghost" // dragged class
                         dropClass="form-ghost-drop" // drop region class
-                        onDrop={dnd_results => this.dnd_onDropSubgroup(groupId, dnd_results)} // perform this on drop
-                        getChildPayload={index => this.dnd_getSubgroup(groupId, index)} // get column index, and index of dragged item
+                        onDrop={dnd_results => this.dnd_onDropSubgroup(id, dnd_results)} // perform this on drop
+                        getChildPayload={index => this.dnd_getSubgroup(id, index)} // get column index, and index of dragged item
                         // nonDragAreaSelector=".field"
-                        key={`draggable_subgroup_container_${groupId}`} // small key to make this one shine
+                        key={`draggable_subgroup_container_${id}`} // small key to make this one shine
                     >
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
@@ -348,7 +350,7 @@ class BoardMasonry extends Component {
 
                     { !this.props.isAuthenticated && <div
 
-                        key={`draggable_subgroup_container_${groupId}`}
+                        key={`draggable_subgroup_container_${id}`}
                     >
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderSubgroups({...group, rootColor: group.color, background: group.background})}
