@@ -79,13 +79,13 @@ class HomeOverview extends Component {
                     {/* <Button> New Note </Button> */}
 
                     {
-                        isAuthenticated() && (
+                        isAuthenticated && (
                             <Button onClick={this.handleLogout} > Logout <Avatar alt="avatar" src={this.props.auth.getPicture()} style={{marginLeft:'7px'}} /> </Button>
                         )
                     }
 
                     {
-                        !isAuthenticated() && (
+                        !isAuthenticated && (
                             <Button onClick={this.handleLogin} > Login </Button>
                         )
                     }
@@ -144,11 +144,14 @@ class HomeOverview extends Component {
 
         const link_to_board = `/b/${board.board_id}`;
 
+        const isAuthenticated = this.props.auth.isAuthenticated();
+        console.log("isAuthenticated", isAuthenticated);
+
         return (
             <Card className={`${classes.card} board_overview_board`} elevation={3}>
                 <CardHeader
                     action={
-                        this.props.auth.isAuthenticated() && // if authenticated
+                        // isAuthenticated && // if authenticated
                         <MenuGroup 
                             className="groupmenu-btn"
                             isAuthenticated={this.props.auth}
@@ -171,7 +174,7 @@ class HomeOverview extends Component {
                     title={board.name}
                     subheader={board.description}
                     style={{backgroundColor: background_color, background: background_color, color: text_header_color}}
-                    className='RootGroupHeader'
+                    className='RootGroupHeaderHome'
                 />
                 <CardContent className={classes.content}>
                     <Link to={link_to_board}>
@@ -196,7 +199,6 @@ class HomeOverview extends Component {
     }
 
     renderMasonry(isAuthenticated) {
-        console.log(this.props);
         return (
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
@@ -205,7 +207,7 @@ class HomeOverview extends Component {
                     {this.renderBoards()}
 
                     {/* TODO: Refactor below item into a function */}
-                    { isAuthenticated() && 
+                    { isAuthenticated && 
                         <Button
                             elevation={1}
                             variant="outlined"
@@ -233,7 +235,7 @@ class HomeOverview extends Component {
     }
 
     render(){
-        const { isAuthenticated } = this.props.auth; // function inside auth to check if logged in
+        const isAuthenticated = this.props.auth.isAuthenticated(); // function inside auth to check if logged in
 
         return (
             <div className="groups-masonry">
@@ -245,8 +247,8 @@ class HomeOverview extends Component {
                 { this.renderMasonry(isAuthenticated) }
         
                 {/* Holds the overview of all boards*/}
-                { isAuthenticated() && <Typography variant="h4" className="home-overview-header">Private Boards</Typography> }
-                { isAuthenticated() && this.renderMasonry(isAuthenticated) }
+                { isAuthenticated && <Typography variant="h4" className="home-overview-header">Private Boards</Typography> }
+                { isAuthenticated && this.renderMasonry(isAuthenticated) }
 
                 {/* Holds form for creating/editing concepts */}
                 <FormBoard

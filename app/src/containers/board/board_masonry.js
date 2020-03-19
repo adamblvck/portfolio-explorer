@@ -78,8 +78,10 @@ class BoardMasonry extends Component {
     }
 
     componentDidMount = () => {
+        // fetch board info (based on boardId)
         this.props.fetchBoard(this.props.boardID);
 
+        // attach event listener to resize, so that we can go responsive
         window.addEventListener('resize', this.updateDimensions);
         this.updateDimensions();
     }
@@ -307,16 +309,16 @@ class BoardMasonry extends Component {
                             isAuthenticated={this.props.isAuthenticated}
                             components={ [
                                 {
+                                    label: "Add Subgroup",
+                                    parent_groupId: id,
+                                    needAuth: true,
+                                    render: this.renderFormAddSubgroup
+                                },
+                                {
                                     label: "Edit Group",
                                     needAuth: true,
                                     group: group,
                                     render: this.renderFormEditGroup
-                                },
-                                {
-                                    label: "New Subgroup",
-                                    parent_groupId: id,
-                                    needAuth: true,
-                                    render: this.renderFormAddSubgroup
                                 },
                                 {
                                     label: "Delete Group",

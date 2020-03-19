@@ -33,18 +33,25 @@ class ConceptMasonry extends Component {
 
             else
             return (
-                <Draggable
-                    key={`${conceptID}-draggable`}
-                    render={(setRef) => (
-                        <div ref={setRef} key={`${conceptID}-btn`}>
-                            <ConceptMasonryButton
-                                className="concept-masonry-item"
-                                concept={concept}
-                                background={background}
-                            />
-                        </div>
-                    )}
-                />
+                <div classname="holon-lvl-4" key={`${conceptID}-btn`}>
+                    <ConceptMasonryButton
+                        className="concept-masonry-item"
+                        concept={concept}
+                        background={background}
+                    />
+                </div>
+                // <Draggable
+                //     key={`${conceptID}-draggable`}
+                //     render={(setRef) => (
+                //         <div ref={setRef} key={`${conceptID}-btn`}>
+                //             <ConceptMasonryButton
+                //                 className="concept-masonry-item"
+                //                 concept={concept}
+                //                 background={background}
+                //             />
+                //         </div>
+                //     )}
+                // />
             )
         });
     }
@@ -54,21 +61,25 @@ class ConceptMasonry extends Component {
 
         // if (this.props.isAuthenticated)
         return (
-            <Container // drag and drop container
-                groupName="concept-holders"
-                dragClass="form-ghost"
-                dropClass="form-ghost-drop"
-                onDrop={dnd_results => this.props.dnd_onDropConcept(parent_groupId, groupId, dnd_results)} // perform this on drop
-                getChildPayload={index => this.props.dnd_getConcept(parent_groupId, groupId, index)} // get column index, and index of dragged item
-                nonDragAreaSelector=".field"
-                dragBeginDelay={500}
-                orientation="horizontal"
-                render={(setRef) => (
-                    <div className="concept-grid" ref={setRef}> 
-                        {this.renderConcepts()}
-                    </div>
-                )}
-            />
+            <div className="concept-grid-flexbox" style={{}}> 
+                {this.renderConcepts()}
+            </div>
+
+            // <Container // drag and drop container
+            //     groupName="concept-holders"
+            //     dragClass="form-ghost"
+            //     dropClass="form-ghost-drop"
+            //     onDrop={dnd_results => this.props.dnd_onDropConcept(parent_groupId, groupId, dnd_results)} // perform this on drop
+            //     getChildPayload={index => this.props.dnd_getConcept(parent_groupId, groupId, index)} // get column index, and index of dragged item
+            //     nonDragAreaSelector=".field"
+            //     dragBeginDelay={500}
+            //     orientation="horizontal"
+            //     render={(setRef) => (
+            //         <div className="concept-grid" ref={setRef}> 
+            //             {this.renderConcepts()}
+            //         </div>
+            //     )}
+            // />
         );
     }
 }

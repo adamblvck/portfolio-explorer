@@ -128,15 +128,6 @@ body {
     max-height: 100%;
 }
 
-.RootGroupHeader [class*="MuiCardHeader-title"] {
-    color: inherit;
-}
-
-.RootGroupHeader [class*="MuiCardHeader-subheader"] {
-    color: inherit;
-    font-weight: 200;
-}
-
 /* subgroup styling */
 
 .subgroup-header{
@@ -152,6 +143,16 @@ body {
 }
 
 /* Concepts */
+
+.holon-lvl-4 {
+    width: 75px;
+}
+
+.concept-grid-flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
 .concept-grid {
     margin-left: auto;
@@ -400,4 +401,34 @@ li [class*="MuiSvgIcon"] {
     height: 5px;
     width: 100vw;
     position: fixed;
+}
+
+/* Subgroup headers */
+.RootGroupHeaderHome .MuiCardHeader-action {
+    
+}
+
+.RootGroupHeader .MuiCardHeader-action {
+    right: 20px;
+    float: right;
+    position: absolute;
+}
+
+.RootGroupHeader .MuiIconButton-root {
+    color: inherit;
+}
+
+.subgroup-header .MuiCardHeader-action {
+    right: -4px;
+    float: right;
+    position: absolute;
+}
+
+.RootGroupHeaderHome .MuiCardHeader-title {
+    color: inherit;
+}
+
+.RootGroupHeaderHome .MuiCardHeader-subheader {
+    color: inherit;
+    font-weight: 200;
 }
