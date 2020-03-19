@@ -24,6 +24,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
 
+import { gradients, getTextColor } from './gradient_helper.js';
+import { renderField, renderTextField, renderGradientField } from './form_fields.js';
+
 const useStyles = makeStyles(theme => ({
     // root: {
     //   maxWidth: 345,
@@ -64,9 +67,6 @@ class FormEditConcept extends Component {
 
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.renderReferenceDetails = this.renderReferenceDetails.bind(this);
-        this.renderProsCons = this.renderProsCons.bind(this);
-        this.renderGroupIds = this.renderGroupIds.bind(this);
 
         this.onNewLogoUrl = this.onNewLogoUrl.bind(this);
         this.updateMarkdown = this.updateMarkdown.bind(this);
@@ -107,25 +107,6 @@ class FormEditConcept extends Component {
 
         // and close the form
         this.props.closeConceptForm();
-    }
-
-    // Render functions
-    renderField(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        return (
-            <div className={className}>
-                <TextField
-                    id={field.name}
-                    label={field.label}
-                    className="form-control"
-                    margin="normal"
-                    style={{'marginTop':'2px'}}
-                    {...field.input}
-                />
-            </div>
-        );
     }
 
     updateMarkdown = (markdown) => {
@@ -182,119 +163,6 @@ class FormEditConcept extends Component {
         );
     }
 
-    renderMarkdown(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        return (
-            <MDEditor
-                className={className}
-                initialValue="# Hello!"
-                onChange={console.log}
-            />
-        )
-    }
-
-    renderProsCons({ fields, meta: { error, submitFailed } } ) {
-        const fieldName = fields.name.split('.').pop(); // get the last part of the component name, which is 'pros' or 'cons'
-
-        return (
-            <div>
-                <Button type="button" variant="outlined" color="primary" onClick={() => fields.push({})}>
-                    <AddRoundedIcon/> {fieldName}
-                </Button><br/>
-                { fields.map((argument, index) => (
-                    <Grid key={index}>
-                        <Col xs={10} md={10}>
-                            <Field
-                                name={argument}
-                                type="text"
-                                component={this.renderField}
-                                label={`${fieldName} #${index + 1}`}
-                            />
-                        </Col>
-                        <Col xs={1} md={1}>
-                            <Button className="delete-button-edit-form"  type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
-                                <DeleteRoundedIcon></DeleteRoundedIcon>
-                            </Button>
-                        </Col>
-                    </Grid>
-                )) }
-            </div>
-        );
-    }
-
-    renderReferenceDetails( { fields, meta: { error, submitFailed } } ) {
-        return (
-            <div>
-                <Button variant="outlined" color="primary" type="button" onClick={() => fields.push({})}>
-                    <AddRoundedIcon/> Link
-                </Button>
-                { fields.map((link, index) => (
-                    <Grid key={index}>
-                        <Col xs={5} md={5}>
-                            <Field
-                                name={`${link}.name`}
-                                type="text"
-                                component={this.renderField}
-                                label={`Link #${index}`}
-                            />
-                        </Col>
-                        <Col xs={5} md={5}>
-                            <Field
-                                name={`${link}.url`}
-                                type="text"
-                                component={this.renderField}
-                                label={`URL #${index}`}
-                            />
-                        </Col>
-                        <Col xs={1} md={1}>
-                            <Button className="delete-button-edit-form" type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove Detail">
-                                <DeleteRoundedIcon></DeleteRoundedIcon>
-                            </Button>
-                        </Col>
-                    </Grid>
-                )) }
-            </div>
-        );
-    }
-
-    renderGroupIds( { fields, meta: { error, submitFailed } } ) {
-        return (
-            <div>
-                <Grid>
-                    <Row>
-                        <Col xs={10} md={10}/>
-                        <Col xs={1} md={1}>
-                            <Button className="add-group-id-button" variant="outlined" color="primary" type="button" onClick={() => fields.push({})}><AddRoundedIcon/></Button>
-                        </Col>
-                    </Row>
-
-                    { fields.map((groupId, index) => (
-                        <Row key={index}>
-                            <Col xs={10} md={10}>
-                                <Field
-                                    name={groupId}
-                                    type="text"
-                                    component={this.renderField}
-                                    label={`groupID #${index}`}
-                                />
-                            </Col>
-                            <Col xs={1} md={1}>
-                                <Button className="delete-button-edit-form"  type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove groupID">
-                                    <DeleteRoundedIcon/>
-                                </Button>
-                            </Col>
-                        </Row>                        
-                    ))}
-
-                </Grid>
-                
-                
-            </div>
-        );
-    }
-
     onNewLogoUrl(event) {
         this.setState({logo_url: event.target.value});
     }
@@ -308,7 +176,8 @@ class FormEditConcept extends Component {
         // retrieve header background for usage here in this app
         const { activeConcept } = this.props;
         const show_details = !activeConcept ? false : true;
-        const headerBackground = show_details ? activeConcept.background : null;
+        const headerBackground = show_details ? activeConcept.background : "";
+        const text_color = headerBackground != "" ? getTextColor(headerBackground) : 'white';
 
         const { extraSettingsExpanded } = this.state // get extraSettingsExpanded
 
@@ -323,7 +192,7 @@ class FormEditConcept extends Component {
                 <CardHeader
                     className="concept-detail-card-header"
                     title={title}
-                    style={{backgroundColor: headerBackground, background: headerBackground}}
+                    style={{backgroundColor: headerBackground, background: headerBackground, color: text_color}}
                 />
 
                 <CardContent style={{'overflowY':'auto', 'max-height':'500px'}}>
@@ -338,7 +207,7 @@ class FormEditConcept extends Component {
                                     <Field
                                         label="Name"
                                         name="name"
-                                        component={this.renderField}
+                                        component={renderField}
                                         tabIndex={0}
                                     />
                                 </Col>
@@ -346,7 +215,7 @@ class FormEditConcept extends Component {
                                     <Field
                                         label="Image URL"
                                         name="logo_url"
-                                        component={this.renderField}
+                                        component={renderField}
                                         onChange={this.onNewLogoUrl}
                                         tabIndex={1}
                                     />                                            

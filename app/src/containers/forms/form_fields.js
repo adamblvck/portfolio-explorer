@@ -76,8 +76,33 @@ const renderGradientField = (field) => {
     );
 }
 
+// const renderMDField = (field) => {
+// 	const { meta : { touched, error } } = field;
+// 	const className = `form-group ${touched && error ? 'has-danger' : ''}`;
+
+// 	// const [value, setValue] = React.useState("**Hello world!!!**");
+// 	const [selectedTab, setSelectedTab] = React.useState("write");
+
+// 	return (
+// 		<div className={className}>
+// 			<ReactMde
+// 				{...field.input}
+// 				selectedTab={selectedTab}
+// 				onTabChange={setSelectedTab}
+// 				generateMarkdownPreview={markdown =>
+// 					Promise.resolve(this.converter.makeHtml(markdown))
+// 				}
+// 				loadSuggestions={this.loadSuggestions}
+// 				minEditorHeight={300}
+// 				maxEditorHeight={520}
+// 			/>
+// 		</div>
+// 	);
+// }
+
 export {
 	renderField,
 	renderTextField,
-	renderGradientField
+	renderGradientField,
+	// renderMDField
 };
