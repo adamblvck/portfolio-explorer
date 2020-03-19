@@ -129,11 +129,11 @@ body {
 }
 
 .RootGroupHeader [class*="MuiCardHeader-title"] {
-    color: #fff;
+    color: inherit;
 }
 
 .RootGroupHeader [class*="MuiCardHeader-subheader"] {
-    color: #fff;
+    color: inherit;
     font-weight: 200;
 }
 
@@ -289,7 +289,7 @@ li [class*="MuiSvgIcon"] {
 }
 
 .concept-detail-card-header [class*="MuiCardHeader-title"]{
-    color: #fff;
+    color: inherit;
     font-size: 1.5rem;
 }
 
@@ -386,4 +386,10 @@ li [class*="MuiSvgIcon"] {
 .home-overview-header {
     margin-top: 15px !important;
     margin-bottom: 20px !important;
+}
+
+.gradient-select-form {
+    width: 100%;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
 }

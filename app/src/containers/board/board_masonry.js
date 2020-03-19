@@ -25,6 +25,7 @@ import { applyDrag } from './utils';
 import { chunk } from 'lodash';
 
 import { Grid, Row, Col } from 'react-bootstrap';
+import { gradients, getTextColor } from '../forms/gradient_helper.js';
 
 const styles = {
         card: {

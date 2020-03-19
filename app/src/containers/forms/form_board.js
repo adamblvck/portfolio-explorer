@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { Typography, Modal, Button, Paper, TextField, Card, CardHeader, CardContent, CardActions} from '@material-ui/core';
+import { Typography, Modal, Button, Paper, TextField, Card, CardHeader, CardContent, CardActions, Select, MenuItem, FormControl, FormHelperText} from '@material-ui/core';
 
 import { closeBoardForm } from '../../actions/form';
 import { updateBoard, addBoard } from '../../actions/board';
+
+// to make multi-column layouts
+import { Grid, Row, Col } from 'react-bootstrap';
+
+import { gradients, getTextColor } from './gradient_helper.js';
 
 class FormBoard extends Component {
     constructor(props) {
@@ -52,6 +57,43 @@ class FormBoard extends Component {
         );
     }
 
+    renderGradientField(field) {
+        const { meta : { touched, error } } = field;
+        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
+
+        console.log(gradients);
+        
+        const background_color = field.input.value;
+        const matching_textColor = getTextColor(background_color);
+
+        return (
+            <div className={className}>
+                <FormControl variant="outlined" className="gradient-select-form">
+                    <Select
+                        // label={field.label}
+                        id={field.name}
+                        style={{backgroundColor: background_color, background: background_color, color: matching_textColor}}
+                        {...field.input}
+                    >
+                        {_.map(gradients, gradient => {
+                            const gradient_background = gradient.value;
+                            const { name, textColor } = gradient;
+                            return (
+                                <MenuItem
+                                    value={gradient_background}
+                                    style={{backgroundColor: `${gradient_background}`, background: `${gradient_background}`, color: `${textColor}`}}
+                                >
+                                    {name}
+                                </MenuItem>);
+                        })}
+                    </Select>
+                    <FormHelperText>{field.label}</FormHelperText>
+                </FormControl>
+                
+            </div>
+        );
+    }
+
     handleClose() {
         this.props.closeBoardForm();
     }
@@ -73,6 +115,7 @@ class FormBoard extends Component {
         const { handleSubmit } = this.props;
         const title = this.props.mode == "update" ? "Edit Board" : (this.props.mode == "new" ? "Add Board" : "corona");
         const background_color = this.props.initialValues ? this.props.initialValues.background : "";
+        const text_color = background_color != "" ? getTextColor(background_color) : 'white';
 
         return (
             <div>
@@ -90,37 +133,58 @@ class FormBoard extends Component {
                             <CardHeader
                                 className="concept-detail-card-header"
                                 title={title}
-                                style={{backgroundColor: background_color, background: background_color}}
+                                style={{backgroundColor: background_color, background: background_color, color: text_color}}
                             />
 
                             <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
                                 <CardContent>
-                                    <Field
-                                        label="Name"
-                                        name="name"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Board URL identifier"
-                                        name="board_id"
-                                        component={this.renderField}
-                                    />
-                                    <Field
-                                        label="Description"
-                                        name="description"
-                                        component={this.renderTextField}
-                                    />
-                                    <Field
-                                        label="Background"
-                                        name="background"
-                                        component={this.renderField}
-                                    />                                
-                                    <Field
-                                        label="Board ID"
-                                        name="id"
-                                        disabled={true}
-                                        component={this.renderField}
-                                    />
+                                    <Grid>
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                <Field
+                                                    label="Name"
+                                                    name="name"
+                                                    component={this.renderField}
+                                                />
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                            <Field
+                                                label="Board URL Identifier - /b/..."
+                                                name="board_id"
+                                                component={this.renderField}
+                                            />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={12}>
+                                                <Field
+                                                    label="Description"
+                                                    name="description"
+                                                    component={this.renderTextField}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={12}>
+                                                <Field
+                                                    label="Background"
+                                                    name="background"
+                                                    component={this.renderGradientField}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={12}>
+                                                <Field
+                                                    label="Board ID"
+                                                    name="id"
+                                                    disabled={true}
+                                                    component={this.renderField}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Grid>
+                                    
                                 </CardContent>
 
                                 <CardActions>
