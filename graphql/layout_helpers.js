@@ -19,9 +19,9 @@ const verify_layout_structures = (layouts, layout_type) => {
 	if (layouts.length == 0 ) {
 		switch (layout_type){
 			case 'board_layout':
-				new_layout.push( { name:'1', layout:[[]] } );
-				new_layout.push( { name:'2', layout:[[]] } );
-				new_layout.push( { name:'3', layout:[[]] } );
+				new_layout.push( { name:'1', layout:[[]]} );
+				new_layout.push( { name:'2', layout:[[],[]] } );
+				new_layout.push( { name:'3', layout:[[],[],[]] } );
 				break;
 
 			case 'group_layout':
@@ -73,16 +73,23 @@ const verify_holon_layout_structures = (parent_holon, layouts, layout_type) => {
 			case 'board_layout':
 				Group.find({_boardId: parent_holon.id})
 				.then(groups => {
-					const _groups = _.mapKeys(groups, "_id");
-
-					console.log(create_n_column_layout(_groups, 1));
-					console.log(create_n_column_layout(_groups, 2));
-					console.log(create_n_column_layout(_groups, 3));
-
+					
+					console.log(groups);
 					let new_layout = [ ...layouts ];
-					new_layout.push( { name:'1', layout: create_n_column_layout(_groups, 1) } );
-					new_layout.push( { name:'2', layout: create_n_column_layout(_groups, 2) } );
-					new_layout.push( { name:'3', layout: create_n_column_layout(_groups, 3) } );
+
+					if (groups.length == 0 ){
+						new_layout.push( { name:'1', layout:[[]] } );
+						new_layout.push( { name:'2', layout:[[],[]] } );
+						new_layout.push( { name:'3', layout:[[],[],[]] } );
+					}
+					else // length > 0
+					{ 
+						const _groups = _.mapKeys(groups, "_id");
+
+						new_layout.push( { name:'1', layout: create_n_column_layout(_groups, 1) } );
+						new_layout.push( { name:'2', layout: create_n_column_layout(_groups, 2) } );
+						new_layout.push( { name:'3', layout: create_n_column_layout(_groups, 3) } );
+					}
 
 					resolve(new_layout);
 				})
@@ -139,8 +146,8 @@ const verify_holon_layout_structures = (parent_holon, layouts, layout_type) => {
 		switch (layout_type){
 			case 'board_layout':
 				new_layout.push( { name:'1', layout:[[]] } );
-				new_layout.push( { name:'2', layout:[[]] } );
-				new_layout.push( { name:'3', layout:[[]] } );
+				new_layout.push( { name:'2', layout:[[],[]] } );
+				new_layout.push( { name:'3', layout:[[],[],[]] } );
 				break;
 
 			case 'group_layout':
