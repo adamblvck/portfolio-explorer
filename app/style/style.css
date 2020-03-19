@@ -408,6 +408,8 @@ li [class*="MuiSvgIcon"] {
     
 }
 
+/* ACTIONS IN HEADERS */
+
 .RootGroupHeader .MuiCardHeader-action {
     right: 20px;
     float: right;
@@ -422,6 +424,20 @@ li [class*="MuiSvgIcon"] {
     right: -4px;
     float: right;
     position: absolute;
+}
+
+.RootGroupHeaderHome .MuiIconButton-root {
+    color: inherit;
+}
+
+/* TITLE & HEADER */
+.RootGroupHeader .MuiCardHeader-title {
+    color: inherit;
+}
+
+.RootGroupHeader .MuiCardHeader-subheader {
+    color: inherit;
+    font-weight: 200;
 }
 
 .RootGroupHeaderHome .MuiCardHeader-title {
