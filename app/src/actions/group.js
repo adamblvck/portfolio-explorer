@@ -29,7 +29,6 @@ export function addGroup(groupInfo) {
             background:$background){
                 id
                 name
-                color
                 background
                 description
                 n_depth
@@ -100,7 +99,7 @@ export function editGroup(groupInfo) {
             board_id:$board_id, _boardId:$_boardId){
                 id
                 name
-                color # used for subgroup-title color
+                background
                 description
                 n_depth # needed for group editing, in case when needed
                 parent_groupId # needed for group editing, in case when needed

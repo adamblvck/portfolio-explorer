@@ -20,7 +20,7 @@ const gradients = [
 
 	{ value: 'linear-gradient(45deg, #FDBB2D 0%, #3A1C71 100%)', name: 'Evening Chills', textColor: white, headerColor: '#FDBB2D'},
 	{ value: 'linear-gradient(45deg, #00d2ff 0%, #3a47d5 100%)', name: 'Cool Wound Spray', textColor: dark, headerColor: '#00d2ff'},
-	{ value: 'linear-gradient(45deg, #efd5ff 0%, #515ada 100%)', name: 'Lavender Field', textColor: dark, headerColor: '#efd5ff'},
+	{ value: 'linear-gradient(45deg, #efd5ff 0%, #515ada 100%)', name: 'Lavender Field', textColor: dark, headerColor: '#515ada'},
 	{ value: 'linear-gradient(90deg, #f8ff00 0%, #3ad59f 100%)', name: 'Sour Lemon Tastes Lime', textColor: dark, headerColor: '#f8ff00'},
 	{ value: 'linear-gradient(90deg, #FEE140 0%, #FA709A 100%)', name: 'Sweet Love', textColor: dark, headerColor: '#FEE140'},
 ];

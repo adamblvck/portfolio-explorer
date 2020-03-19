@@ -107,7 +107,6 @@ export function fetchBoard(board_id) {
                 id
                 name
                 # used for background colors
-                color
                 # used for background gradients or pictures
                 background 
                 description

@@ -11,87 +11,13 @@ import { updateBoard, addBoard } from '../../actions/board';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import { gradients, getTextColor } from './gradient_helper.js';
+import { renderField, renderTextField, renderGradientField } from './form_fields.js';
 
 class FormBoard extends Component {
     constructor(props) {
         super(props);
 
         this.handleClose = this.handleClose.bind(this);
-    }
-
-    renderField(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        return (
-            <div className={className}>
-                <TextField
-                    id={field.name}
-                    label={field.label}
-                    className="form-control"
-                    margin="normal"
-                    disabled={field.disabled}
-
-                    {...field.input}
-                />
-            </div>
-        );
-    }
-
-    renderTextField(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        return (
-            <div className={className}>
-                <TextField
-                    id={field.name}
-                    label={field.label}
-                    className="form-control"
-                    margin="normal"
-                    multiline
-                    rows="2"
-                    {...field.input}
-                />
-            </div>
-        );
-    }
-
-    renderGradientField(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        console.log(gradients);
-        
-        const background_color = field.input.value;
-        const matching_textColor = getTextColor(background_color);
-
-        return (
-            <div className={className}>
-                <FormControl variant="outlined" className="gradient-select-form">
-                    <Select
-                        // label={field.label}
-                        id={field.name}
-                        style={{backgroundColor: background_color, background: background_color, color: matching_textColor}}
-                        {...field.input}
-                    >
-                        {_.map(gradients, gradient => {
-                            const gradient_background = gradient.value;
-                            const { name, textColor } = gradient;
-                            return (
-                                <MenuItem
-                                    value={gradient_background}
-                                    style={{backgroundColor: `${gradient_background}`, background: `${gradient_background}`, color: `${textColor}`}}
-                                >
-                                    {name}
-                                </MenuItem>);
-                        })}
-                    </Select>
-                    <FormHelperText>{field.label}</FormHelperText>
-                </FormControl>
-                
-            </div>
-        );
     }
 
     handleClose() {
@@ -144,14 +70,14 @@ class FormBoard extends Component {
                                                 <Field
                                                     label="Name"
                                                     name="name"
-                                                    component={this.renderField}
+                                                    component={renderField}
                                                 />
                                             </Col>
                                             <Col xs={12} md={6}>
                                             <Field
                                                 label="Board URL Identifier - /b/..."
                                                 name="board_id"
-                                                component={this.renderField}
+                                                component={renderField}
                                             />
                                             </Col>
                                         </Row>
@@ -160,7 +86,7 @@ class FormBoard extends Component {
                                                 <Field
                                                     label="Description"
                                                     name="description"
-                                                    component={this.renderTextField}
+                                                    component={renderTextField}
                                                 />
                                             </Col>
                                         </Row>
@@ -169,7 +95,7 @@ class FormBoard extends Component {
                                                 <Field
                                                     label="Background"
                                                     name="background"
-                                                    component={this.renderGradientField}
+                                                    component={renderGradientField}
                                                 />
                                             </Col>
                                         </Row>
@@ -179,7 +105,7 @@ class FormBoard extends Component {
                                                     label="Board ID"
                                                     name="id"
                                                     disabled={true}
-                                                    component={this.renderField}
+                                                    component={renderField}
                                                 />
                                             </Col>
                                         </Row>

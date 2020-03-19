@@ -7,6 +7,10 @@ import { Field, FieldArray, FormSection, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { addGroup, editGroup } from '../../actions/group'
 import { closeGroupForm } from '../../actions/form';
+import { Grid, Row, Col } from 'react-bootstrap';
+
+import { gradients, getTextColor } from './gradient_helper.js';
+import { renderField, renderTextField, renderGradientField } from './form_fields.js';
 
 class FormEditGroup extends Component {
     constructor(props) {
@@ -49,48 +53,11 @@ class FormEditGroup extends Component {
         this.props.closeGroupForm();
     }
 
-    renderField(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        return (
-            <div className={className}>
-                <TextField
-                    id={field.name}
-                    label={field.label}
-                    className="form-control"
-                    margin="normal"
-
-                    {...field.input}
-                />
-
-            </div>
-        );
-    }
-
-    renderTextField(field) {
-        const { meta : { touched, error } } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
-
-        return (
-            <div className={className}>
-                <TextField
-                    id={field.name}
-                    label={field.label}
-                    className="form-control"
-                    margin="normal"
-                    multiline
-                    rows="5"
-                    {...field.input}
-                />
-            </div>
-        );
-    }
-
     render() {
         const { handleSubmit } = this.props;
         const title = this.props.mode == "update" ? "Edit Group" : (this.props.mode == "new" ? "Add Group" : "corona");
         const background_color = this.props.initialValues ? this.props.initialValues.background : "";
+        const text_color = background_color != "" ? getTextColor(background_color) : 'white';
 
         return (
             <div>
@@ -108,53 +75,77 @@ class FormEditGroup extends Component {
                             <CardHeader
                                 className="concept-detail-card-header"
                                 title={title}
-                                style={{backgroundColor: background_color, background: background_color}}
+                                style={{backgroundColor: background_color, background: background_color, color: text_color}}
                             />
-
                             <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
 
                                 <CardContent>
-                                        <Field
-                                            label="Name"
-                                            name="name"
-                                            component={this.renderField}
-                                        />
-                                        <Field
-                                            label="Color"
-                                            name="color"
-                                            component={this.renderField}
-                                        />
-                                        <Field
-                                            label="Background"
-                                            name="background"
-                                            component={this.renderField}
-                                        />
-                                        <Field
-                                            label="Description"
-                                            name="description"
-                                            component={this.renderTextField}
-                                        />
-                                        <Field
-                                            label="N Depth"
-                                            name="n_depth"
-                                            component={this.renderField}
-                                        />
-                                        <Field
-                                            label="Parent Group ID"
-                                            name="parent_groupId"
-                                            component={this.renderField}
-                                        />
-                                        <Field
-                                            label="Board ID"
-                                            name="board_id"
-                                            component={this.renderField}
-                                        />
-                                        <Field
-                                            label="Board DB ID"
-                                            name="_boardId"
-                                            component={this.renderField}
-                                        />
-                                    
+                                    <Grid>
+                                        <Row>
+                                            <Col xs={12} md={12}>
+                                                <Field
+                                                    label="Name"
+                                                    name="name"
+                                                    component={renderField}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={12}>
+                                                <Field
+                                                    label="Description"
+                                                    name="description"
+                                                    component={renderTextField}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={12}>
+                                                <Field
+                                                    label="Background"
+                                                    name="background"
+                                                    component={renderGradientField}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                <Field
+                                                    label="N Depth"
+                                                    name="n_depth"
+                                                    component={renderField}
+                                                    disabled={true}
+                                                />
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Field
+                                                    label="Parent Group ID"
+                                                    name="parent_groupId"
+                                                    component={renderField}
+                                                    disabled={true}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                <Field
+                                                    label="Board ID"
+                                                    name="board_id"
+                                                    component={renderField}
+                                                    disabled={true}
+                                                />
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Field
+                                                    label="Board DB ID"
+                                                    name="_boardId"
+                                                    component={renderField}
+                                                    disabled={true}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Grid>
+
                                 </CardContent>
 
                                 <CardActions>
