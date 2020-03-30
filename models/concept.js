@@ -29,7 +29,16 @@ var ConceptSchema = new Schema({
             cons: [String],
         }
     },
-    groupIds: [String]  // links to many group
+
+    // links
+    groupIds: [String],  // links to many group
+
+    scope: String, // scope: ['public' or 'private']
+    // if scope is private
+    // - have user logged in
+    // - check user permission for this object, 
+    //    if permission found, the object is allowed to perform the action
+    //    else abort action
 });
 
 module.exports = mongoose.model('Concept', ConceptSchema);

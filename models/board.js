@@ -19,7 +19,12 @@ var BoardSchema = new Schema({
     layout: [[String]]
   }],
 
-  scope: String, // scope: ['public', 'private']
+  scope: String, // scope: ['public' or 'private']
+  // if scope is private
+  // - have user logged in
+  // - check user permission for this object, 
+  //    if permission found, the object is allowed to perform the action
+  //    else abort action
 });
 
 module.exports = mongoose.model('Board', BoardSchema);

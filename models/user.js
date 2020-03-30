@@ -13,6 +13,7 @@ var UserSchema = new Schema({
     email_verified: Boolean,
     username: String,
     role: String // admin, contributor, boardadmin
+    
     // boards: [Boards] // Personal boards of this user
 });
 

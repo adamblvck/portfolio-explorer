@@ -70,8 +70,6 @@ const addBoardResolver = {
 			throw new Error('User has no permissions to add groups to the database');
 		}
 
-
-
 		// get initial layout structure
 		const group_layouts = verify_layout_structures([], 'board_layout');
 
@@ -80,7 +78,7 @@ const addBoardResolver = {
 			board_id: args.board_id,
 			background: args.background,
 			description: args.description,
-			scope: args.scope,
+			scope: 'private', // boards are always created privately first
 			group_layouts: group_layouts
 		});
 

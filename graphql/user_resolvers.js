@@ -23,6 +23,7 @@ const Group = require('../models/group');
 const Concept = require('../models/concept');
 const Board = require('../models/board');
 const User = require('../models/user');
+const Permission = require('../models/permission');
 
 // GraphQL Schemas
 const {
@@ -62,7 +63,10 @@ const addUserResolver = {
 
 		// if we didn't find a user, create a new one
 		else{
-			// create new user
+
+			// Here we create a user
+
+			// Create new user
 			let user = new User({
 				email: email,
 				email_verified: email_verified,
@@ -70,8 +74,42 @@ const addUserResolver = {
 				role: "user"
 			});
 
-			// save to DB
-			return user.save();
+			// save to DB, and create required permissions to the game
+			return new Promise((resolve,reject) => {
+				user.save()
+				.then((user) => {
+					let permission_board = new Permission({
+						subject: user._id,
+						action: 'create',
+						object: 'board'
+					});
+					permission_board.save();
+
+					return user;
+				}).then((user)=>{
+					let permission_group = new Permission({
+						subject: user._id,
+						action: 'create',
+						object: 'group'
+					});
+					permission_group.save();
+
+					return user;
+				}).then((user)=>{
+					let permission_concept = new Permission({
+						subject: user._id,
+						action: 'create',
+						object: 'concept'
+					});
+					permission_concept.save();
+
+					resolve(user);
+				})
+				.catch((err) => {
+					console.log(err);
+					reject(err);
+				});
+			}) 
 		}
 
 	}

@@ -151,7 +151,7 @@ class HomeOverview extends Component {
             <Card className={`${classes.card} board_overview_board`} elevation={3}>
                 <CardHeader
                     action={
-                        // isAuthenticated && // if authenticated
+                        isAuthenticated && // if authenticated
                         <MenuGroup 
                             className="groupmenu-btn"
                             isAuthenticated={this.props.auth}

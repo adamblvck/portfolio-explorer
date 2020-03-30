@@ -16,7 +16,7 @@ export function addBoard(boardInfo) {
         $name:String,
         $board_id: String,
         $background: String,
-        $description: String,
+        $description: String
     ) {
         addBoard(
             name:$name,

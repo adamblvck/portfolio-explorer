@@ -26,7 +26,14 @@ var GroupSchema = new Schema({
     concept_layouts: [{
       name: String, // name of the layout
       layout: [[String]]
-    }]
+    }],
+
+    scope: String, // scope: ['public' or 'private']
+    // if scope is private
+    // - have user logged in
+    // - check user permission for this object, 
+    //    if permission found, the object is allowed to perform the action
+    //    else abort action
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

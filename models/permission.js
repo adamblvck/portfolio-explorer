@@ -10,16 +10,14 @@ const Schema = mongoose.Schema;
 
 var PermissionSchema = new Schema({ 
     // this user
-    subject: String,
+    subject: String, // this user
 
     // can do ...
-    action: String, // can [ read | edit | delete | allow | forbid | publish | takedown ]
+    action: String, // can [ read | edit | delete | allow | forbid | publish | takedown, admin]
 
-    // to this
+    // to this id
     object: String, // object id of [board, group, concept, user]
-    // or with this
-    type: String // can be [ board, group, concept ]
-
+    depth: Number // depth of how 'deep' these rights go. 1=this object only (default), 0 is infinite depth (stopping at overview levels)
 });
 
 module.exports = mongoose.model('Permission', PermissionSchema);
