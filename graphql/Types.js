@@ -114,6 +114,8 @@ const ConceptType = new GraphQLObjectType({
                 return Group.findById(parent.groupIds[0]);
             }
         },
+
+        scope: { type: GraphQLString},
         
         groupIds: { type: new GraphQLList(GraphQLID)}
     })
@@ -169,6 +171,8 @@ const GroupType = new GraphQLObjectType({
         // saved layouts for 1,2,3,4 (or even different columns)
         group_layouts: { type: new GraphQLList(LayoutType) }, // groups
         concept_layouts: { type: new GraphQLList(LayoutType) }, // concepts
+
+        scope: { type: GraphQLString},
 
         // concepts belonging to this group
         concepts: {
@@ -230,7 +234,9 @@ const BoardType = new GraphQLObjectType({
             resolve(parent, args){
                 return Group.find({n_depth:0, board_id:parent.board_id});
             }
-        }
+        },
+
+        scope: { type: GraphQLString}
     })
 });
 

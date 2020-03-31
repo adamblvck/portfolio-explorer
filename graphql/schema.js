@@ -108,8 +108,18 @@ const RootQuery = new GraphQLObjectType({
 
         boards: { // all boards in the database
             type: new GraphQLList(BoardType),
-            resolve(parent, args){
-                return Board.find();
+            resolve(parent, args, {isAuthenticated, credentials}){
+
+                let scope = args.scope == undefined ? 'public' : args.scope;
+
+                if (!isAuthenticated) {
+                    return Board.find({scope:"public"});
+                } else {
+                    // fetch boards that belong to current user
+
+                    return Board.find({scope:"public"});
+                    
+                }
             }
         },
 

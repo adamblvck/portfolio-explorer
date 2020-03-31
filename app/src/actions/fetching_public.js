@@ -16,12 +16,13 @@ const CRYPTO_URL_END = '&tsym=USD&limit=60&aggregate=1&e=CCCAGG';
 export function fetchBoards() {
     const query = `
         query getBoards {
-            boards{
+            boards {
               id
               name
               board_id
               background
               description
+              scope
             }
         }
     `;

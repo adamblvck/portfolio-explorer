@@ -188,8 +188,11 @@ class HomeOverview extends Component {
         );
     }
 
-    renderBoards(){
-        return _.map(this.props.boards, board => {
+    renderBoards(scope){
+
+        const boards = _.filter(this.props.boards, (board) => { return board.scope == scope });
+
+        return _.map(boards, board => {
             return (
                 <div key={board.id}>
                     {this.renderCard(board)}
@@ -198,13 +201,13 @@ class HomeOverview extends Component {
         });
     }
 
-    renderMasonry(isAuthenticated) {
+    renderMasonry(isAuthenticated, scope) {
         return (
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
                 <Masonry gutter="0 auto 0 auto">
-                    {this.renderBoards()}
+                    {this.renderBoards(scope)}
 
                     {/* TODO: Refactor below item into a function */}
                     { isAuthenticated && 
@@ -242,13 +245,13 @@ class HomeOverview extends Component {
                 {/* Toolbar */}
                 {this.renderAppBar(isAuthenticated)}
 
-                {/* Holds the overview of all boards*/}
+                {/* scope: public (public boards) */}
                 <Typography variant="h4" className="home-overview-header">Editorial</Typography>
-                { this.renderMasonry(isAuthenticated) }
+                { this.renderMasonry(isAuthenticated, 'public') }
         
-                {/* Holds the overview of all boards*/}
+                {/* scope: private (private boards) */}
                 { isAuthenticated && <Typography variant="h4" className="home-overview-header">Private Boards</Typography> }
-                { isAuthenticated && this.renderMasonry(isAuthenticated) }
+                { isAuthenticated && this.renderMasonry(isAuthenticated, 'private') }
 
                 {/* Holds form for creating/editing concepts */}
                 <FormBoard
