@@ -1,7 +1,7 @@
 /*
   Author: Adam Blvck (adamblvck.com)
-  Product: Blockchain Ecosystem Explorer
-  Year: 2018-2019
+  Product: Boards - A Blockchain Explorer
+  Year: 2018-2020
   Smartie.be
 */
 
@@ -39,6 +39,7 @@ const {
 } = require('./Types');
 
 const { verify_layout_structures } = require('./layout_helpers');
+const { checkPermission, giveAdminAccess } = require('./auth_resolvers');
 
 const addBoardResolver = {
 	type: BoardType,
@@ -49,40 +50,77 @@ const addBoardResolver = {
 		description: { type: GraphQLString },
 		scope: { type: GraphQLString }
 	},
-	resolve(parent, args, {isAuthenticated, credentials}){
+	resolve(parent, args, {isAuthenticated, credentials}) {
 		// authentication check
 		if (!isAuthenticated) {
 			throw new Error('User needs to be authenticated to make changes to the database');
 		}
 
-		// gather which action is being asked for
+		return new Promise( (resolve, reject) => {
 
+			// gather which action is being asked for
+			checkPermission(credentials, 'create', 'board').then( user => {
+				const { allowed } = user;
+				console.log(user);
+				if (!allowed == true) throw new Error('No permissions to add boards');
 
-		// authorization check
+				// set default layout structures for app
+				const group_layouts = verify_layout_structures([], 'board_layout');
 
-		// 1. download permission on: user, publish, type: BOARD,
+				let board = new Board({
+					name: args.name,
+					board_id: args.board_id,
+					background: args.background,
+					description: args.description,
+					scope: 'private', // boards are always created privately first
+					type: 'board',
+					group_layouts: group_layouts
+				});
 
-		const email = credentials.payload.email;
-		console.log("Logged in email:", email);
+				board.save()
+				.then( board => {
+					// create admin permissions to this object
+					giveAdminAccess(user, board)
+					.then(resolve(board));
+				})
+				.catch( err => {
+					console.log(err);
+					reject(err);
+				});
 
-		// check if user is allowed to create new board
-		if (email != 'eragon.blizzard@gmail.com'){
-			throw new Error('User has no permissions to add groups to the database');
-		}
+			})
+			.catch(err => {
+				console.log(err);
+				reject(err);
+			});
 
-		// get initial layout structure
-		const group_layouts = verify_layout_structures([], 'board_layout');
-
-		let board = new Board({
-			name: args.name,
-			board_id: args.board_id,
-			background: args.background,
-			description: args.description,
-			scope: 'private', // boards are always created privately first
-			group_layouts: group_layouts
 		});
 
-		return board.save();
+		// // authorization check
+
+		// // 1. download permission on: user, publish, type: BOARD,
+
+		// const email = credentials.payload.email;
+		// console.log("Logged in email:", email);
+
+		// // check if user is allowed to create new board
+		// if (email != 'eragon.blizzard@gmail.com'){
+		// 	throw new Error('User has no permissions to add groups to the database');
+		// }
+
+		// // get initial layout structure
+		// const group_layouts = verify_layout_structures([], 'board_layout');
+
+		// let board = new Board({
+		// 	name: args.name,
+		// 	board_id: args.board_id,
+		// 	background: args.background,
+		// 	description: args.description,
+		// 	scope: 'private', // boards are always created privately first
+		// 	group_layouts: group_layouts
+		// });
+
+		// return board.save();
 	}
 };
 

@@ -23,6 +23,7 @@ const Group = require('../models/group');
 const Concept = require('../models/concept');
 const Board = require('../models/board');
 const User = require('../models/user');
+const Permission = require('../models/permission');
 
 // GraphQL Schemas
 const {
@@ -35,7 +36,8 @@ const {
     GroupType,
     BoardType,
     LayoutType,
-    LayoutInputType
+    LayoutInputType,
+    PermissionType
 } = require('./Types');
 
 // MUTATION RESOLVERS
@@ -44,6 +46,8 @@ const { addGroupResolver, updateGroupResolver, deleteGroupResolver, updateConcep
 const { addConceptResolver, updateConceptResolver, deleteConceptResolver } = require('./concept_resolvers');
 
 const { addUserResolver, removeUserResolver } = require('./user_resolvers');
+
+const { getUserObjects } = require ('./auth_resolvers');
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -117,7 +121,32 @@ const RootQuery = new GraphQLObjectType({
                 } else {
                     // fetch boards that belong to current user
 
-                    return Board.find({scope:"public"});
+                    return new Promise((resolve, reject) => {
+                        Board.find({scope:"public"})
+                        .then( boards => {
+                            
+                            getUserObjects(credentials, 'board')
+                            .then( user_boards => {
+
+                                // console.log(boards);
+                                // console.log(user_boards);
+
+                                resolve ( boards.concat(user_boards));
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                reject(err);
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            reject(err);
+                        })
+                    });
+
+                    
+
+                    return 
                     
                 }
             }
@@ -165,7 +194,16 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args){
                 return Concept.find();
             }
-        }
+        },
+
+        // return specific group
+        permissions: {
+            type: new GraphQLList(PermissionType),
+            // args: { id: {type: GraphQLID}},
+            resolve(parent, args){
+                return Permission.find();
+            }
+        },
     }
 })
 

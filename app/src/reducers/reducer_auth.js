@@ -1,5 +1,7 @@
 import { GETUSERINFO, CREATEUSER, CHECKUSERNAME } from '../actions/user';
 
+import { fetchBoards } from '../actions/fetching_public';
+
 function handleErrors(response){
     const obj = JSON.parse(response);
 

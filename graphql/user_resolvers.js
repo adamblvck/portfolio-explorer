@@ -81,7 +81,8 @@ const addUserResolver = {
 					let permission_board = new Permission({
 						subject: user._id,
 						action: 'create',
-						object: 'board'
+						object: 'board',
+						object_type: 'type'
 					});
 					permission_board.save();
 
@@ -90,7 +91,8 @@ const addUserResolver = {
 					let permission_group = new Permission({
 						subject: user._id,
 						action: 'create',
-						object: 'group'
+						object: 'group',
+						object_type: 'type'
 					});
 					permission_group.save();
 
@@ -99,7 +101,8 @@ const addUserResolver = {
 					let permission_concept = new Permission({
 						subject: user._id,
 						action: 'create',
-						object: 'concept'
+						object: 'concept',
+						object_type: 'type'
 					});
 					permission_concept.save();
 

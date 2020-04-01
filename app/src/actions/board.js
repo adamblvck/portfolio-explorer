@@ -29,6 +29,7 @@ export function addBoard(boardInfo) {
             board_id
             background
             description
+            scope
         }
     }`;
 
@@ -100,6 +101,7 @@ export function fetchBoard(board_id) {
             id
             board_id
             background
+            scope
             group_layouts {
                 name
                 layout
@@ -210,6 +212,7 @@ export function updateBoard(boardInfo) {
             board_id
             background
             description
+            scope
         }
     }`;
 

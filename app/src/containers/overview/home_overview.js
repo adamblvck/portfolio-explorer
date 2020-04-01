@@ -190,6 +190,7 @@ class HomeOverview extends Component {
 
     renderBoards(scope){
 
+        // filter out boards, based on scope (to put them in different UI spots)
         const boards = _.filter(this.props.boards, (board) => { return board.scope == scope });
 
         return _.map(boards, board => {

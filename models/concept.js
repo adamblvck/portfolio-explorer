@@ -34,6 +34,7 @@ var ConceptSchema = new Schema({
     groupIds: [String],  // links to many group
 
     scope: String, // scope: ['public' or 'private']
+    type: String
     // if scope is private
     // - have user logged in
     // - check user permission for this object, 

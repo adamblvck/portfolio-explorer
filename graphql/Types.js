@@ -116,6 +116,7 @@ const ConceptType = new GraphQLObjectType({
         },
 
         scope: { type: GraphQLString},
+        type: { type: GraphQLString},
         
         groupIds: { type: new GraphQLList(GraphQLID)}
     })
@@ -254,18 +255,36 @@ const UserType = new GraphQLObjectType({
     })
 });
 
+const PermissionType = new GraphQLObjectType({
+    name: 'Permission',
+    fields: () => ({
+        // Graphql ID
+        id: { type: GraphQLID },
+
+        // user insight
+        subject: { type: GraphQLString },
+        action: { type: GraphQLString },
+        object: { type: GraphQLString },
+        object_type: { type: GraphQLString },
+
+    })
+});
+
 module.exports = {
     UserType,
+
+    PermissionType,
+
     BoardType,
     GroupType,
-    
-    LayoutType,
-    LayoutInputType,
-
     ConceptType,
+
     ConceptDetailType,
     ConceptDetailInputType,
     MetaInputType,
     MetaType,
-    LinkType
+    LinkType,
+    
+    LayoutType,
+    LayoutInputType
 };
