@@ -207,7 +207,7 @@ class HomeOverview extends Component {
             <ResponsiveMasonry
                 columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
             >
-                <Masonry gutter="0 auto 0 auto">
+                <Masonry gutter="0 auto 0 auto" className="overview-masonry">
                     {this.renderBoards(scope)}
 
                     {/* TODO: Refactor below item into a function */}

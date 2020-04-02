@@ -158,7 +158,7 @@ export default function (state = {}, action) {
         case ADD_GROUP:
             if (action.payload.status == 200){
 
-                // console.log("We have 200!", state, 'action', action);
+                console.log("We have 200!", state, 'action', action);
 
                 const { addGroup } = action.payload.data.data;
                 const newState = {...state};

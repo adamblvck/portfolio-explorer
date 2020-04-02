@@ -25,11 +25,9 @@ const getUser = (credentials) => {
 	return new Promise((resolve, reject) => {
 		User.find({email:email})
 		.then((users) => {
-
 			if (users.length >= 1){
 				const user = users[0];
 				user['allowed'] = true;
-				console.log(user);
 				resolve(user);
 			}
 			else
@@ -51,11 +49,7 @@ const getUserObjects = (credentials, object_type) => {
 					Permission.find({subject: user._id, action:'admin', object_type:object_type})
 					.then( permissions => {
 
-						console.log(permissions);
-
-						const object_ids = permissions.map( ({object}) => object)
-
-						console.log('object_ids', object_ids)
+						const object_ids = permissions.map( ({object}) => object);
 
 						Board.find().where('_id').in(object_ids)
 						.then( boards => {
@@ -90,9 +84,12 @@ const checkPermission = (credentials, action, object) => {
 	return new Promise((resolve, reject) => {
 		getUser(credentials)
 		.then( user => {
-			if (user === undefined) reject("User not found");
 
 			console.log(user);
+
+			if (user === undefined) reject("User not found");
+
+			console.log( {subject: user._id, action: action, object: object} );
 
 			Permission.find({subject: user._id, action: action, object: object})
 			.then( permissions => {

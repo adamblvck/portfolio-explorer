@@ -448,3 +448,7 @@ li [class*="MuiSvgIcon"] {
     color: inherit;
     font-weight: 200;
 }
+
+.overview-masonry > div > div {
+    width: 100%;
+}

@@ -39,6 +39,7 @@ const {
 } = require('./Types');
 
 const { verify_layout_structures, add_id_to_layouts, verify_holon_layout_structures } = require('./layout_helpers');
+const { checkPermission, giveAdminAccess } = require('./auth_resolvers');
 
 const addGroupResolver = {
 	type: GroupType,
@@ -58,11 +59,7 @@ const addGroupResolver = {
 			throw new Error('User needs to be authenticated to make changes to the database');
 		}
 
-		console.log("Logged in email:", credentials.payload.email);
-
-		if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
-			throw new Error('User has no permissions to add groups to the database');
-		}
+		console.log(args);
 
 		// create new group
 		let group = new Group({
@@ -73,123 +70,161 @@ const addGroupResolver = {
 			board_id: args.board_id,
 			_boardId: args._boardId,
 			color: args.color,
-			background: args.background
+			background: args.background,
+
+			scope: 'private',
+			type: 'group'
 		});
 
 		// Return new promise which will save new group, and add that gruop to the layouts, one tier up higher...
 
 		return new Promise((resolve, reject) => {
-			group.save().then(function (savedGroup) {
-				// 1. get list of layouts of board in Board group
-				// executes, name LIKE john and only selecting the "name" and "friends" fields
 
-				// IF BOARD as PARENT
-				if (args.parent_groupId === null && args._boardId  !== null) 
-					Board.findById(args._boardId, function (err, board) {
-						if (err) {
-							console.log(err);
-							reject(err);
-						} else {
-							console.log("board", board);
-							// A: go through each board with board_id (should be only one)
-							// 1. get group_layouts attached to _board_id
+			// gather which action is being asked for
+			checkPermission(credentials, 'create', 'group').then( user => {
+				const { allowed } = user;
+				if ( !allowed == true ) throw new Error( 'No permissions to add boards' );
 
-							const _board_id = board._id;
-							const _new_group_id = savedGroup._id.toHexString() + '';
-							let group_layouts = [ ...board.group_layouts ];
+				group.save()
+				.then( savedGroup => {
+					// 1. get list of layouts of board in Board group
+					// executes, name LIKE john and only selecting the "name" and "friends" fields
 
-							// IMPORTANT STEP HEER
-							verify_holon_layout_structures(board, group_layouts, 'board_layout')
-							.then(group_layouts => {
+					// IF BOARD as PARENT
+					if (args.parent_groupId === null && args._boardId  !== null) {
 
-								// 2. add _new_group_id to every layout
-								for(let j = 0; j<group_layouts.length;j++){
-									let group_layout = group_layouts[j];
+						console.log("_boardId", args._boardId);
 
-									// !!!! Add to first list, assumes 2D List
-									if (group_layout.layout.length >= 1) {
-										let a = group_layout.layout[0];
-										let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
-										group_layout.layout[0] = b;
-									}
-									group_layouts[j] = group_layout;
-								}
+						Board.findById( args._boardId, (err, board) => {
+							if (err) {
+								console.log(err);
+								reject(err);
+							} else {
 
-								// 3. push new layout to board
-								let mod = { 'group_layouts': group_layouts }
+								// A: go through each board with board_id (should be only one)
+								// 1. get group_layouts attached to _board_id
 
-								Board.findByIdAndUpdate(
-									_board_id,
-									{ $set: mod},
-									{ new: true}, function(err, results){
-										if (err) {
-											console.log("Error when updating board layout after adding new group", err);
-											reject(err);
-										} else {
-											resolve(savedGroup);
+								console.log(board);
+
+								const _board_id = board._id;
+								const _new_group_id = savedGroup._id.toHexString() + '';
+								let group_layouts = [ ...board.group_layouts ];
+
+								// IMPORTANT STEP HEER
+								verify_holon_layout_structures(board, group_layouts, 'board_layout')
+								.then( group_layouts => {
+
+									// 2. add _new_group_id to every layout
+									for(let j = 0; j<group_layouts.length;j++){
+										let group_layout = group_layouts[j];
+
+										// !!!! Add to first list, assumes 2D List
+										if (group_layout.layout.length >= 1) {
+											let a = group_layout.layout[0];
+											let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
+											group_layout.layout[0] = b;
 										}
+										group_layouts[j] = group_layout;
 									}
-								);
 
-							});
+									// 3. push new layout to board
+									let mod = { 'group_layouts': group_layouts }
 
-						} // if we have no issues finding a correct board;
-					});
+									Board.findByIdAndUpdate( _board_id, { $set: mod}, { new: true}, results => {
 
-				// if GROUP as PARENT
-				else if (args.parent_groupId !== null) { // if we have a group that belongs to a group
-					Group.findById(args.parent_groupId, function (err, group) {
-						if (err) {
+										giveAdminAccess(user, savedGroup)
+										.then(resolve(savedGroup))
+										.catch(err => reject(err));
+										// resolve(savedGroup);
+									})
+									.catch( err => {
+										console.log(err);
+										reject(err);
+									});
+
+								});
+							}
+						})
+						.catch( err => {
 							console.log(err);
 							reject(err);
-						} else {
-							console.log("group", group);
+						})
+					}
+					// if GROUP as PARENT
+					else if (args.parent_groupId !== null) { // if we have a group that belongs to a group
+						Group.findById(args.parent_groupId, (err, group) => {
 
-							// 1. get group_layouts attached to _board_id
-							const _group_id_of_layout = group._id;
-							const _added_group_id = savedGroup._id.toHexString() + '';
+							if (err) {
+								console.log(err);
+								reject(err);
+							} else {
 
-							let group_layouts = [ ...group.group_layouts ];
+								console.log("group", group);
 
-							verify_holon_layout_structures(group, group_layouts, 'group_layout')
-							.then(group_layouts => {
-							// group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
+								// 1. get group_layouts attached to _board_id
+								const _group_id_of_layout = group._id;
+								const _added_group_id = savedGroup._id.toHexString() + '';
 
-								// 2. add _added_group_id to every layout
-								for(let j = 0; j<group_layouts.length;j++){
-									let group_layout = group_layouts[j];
+								let group_layouts = [ ...group.group_layouts ];
 
-									// !!!! Add to first list, assumes 2D List
-									if (group_layout.layout.length >= 1) {
-										let a = group_layout.layout[0];
-										let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
-										group_layout.layout[0] = b;
+								verify_holon_layout_structures(group, group_layouts, 'group_layout')
+								.then(group_layouts => {
+								// group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
+
+									// 2. add _added_group_id to every layout
+									for(let j = 0; j<group_layouts.length;j++){
+										let group_layout = group_layouts[j];
+
+										// !!!! Add to first list, assumes 2D List
+										if (group_layout.layout.length >= 1) {
+											let a = group_layout.layout[0];
+											let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
+											group_layout.layout[0] = b;
+										}
+										group_layouts[j] = group_layout;
 									}
-									group_layouts[j] = group_layout;
-								}
 
-								// 3. push new layout to board
-								let mod = { 'group_layouts': group_layouts }
+									console.log({ 'group_layouts': group_layouts });
 
-								return Group.findByIdAndUpdate(
-									_group_id_of_layout,
-									{ $set: mod},
-									{ new: true}, function(err, results){
+									// 3. push new layout to board
+									let mod = { 'group_layouts': group_layouts };
+
+									Group.findByIdAndUpdate( _group_id_of_layout, { $set: mod}, { new: true}, (err, result) => {
 										if (err) {
 											console.log("Error when updating group layout after adding new group", err);
 											reject(err);
 										} else {
-											resolve(savedGroup);
+											giveAdminAccess(user, savedGroup)
+											.then(resolve(savedGroup))
+											.catch(err => reject(err));
 										}
-									}
-								);
-							})
-							.catch(err => { console.log("fafa", err); reject(err); });
-						} // if we have no issues finding a correct board;
-					});
-				}
-				
-			}); // end of group save
+									});
+									
+									// , function(err, results){
+									// 		if (err) {
+									// 			console.log("Error when updating group layout after adding new group", err);
+									// 			reject(err);
+									// 		} else {
+									// 			resolve(savedGroup);
+									// 		}
+									// 	}
+									// );
+								})
+								.catch(err => { console.log("fafa", err); reject(err); });
+							}
+
+						})
+						.catch(err => { console.log("fafa", err); reject(err); });;
+					}
+					
+				}) // end of group save
+				.catch(err => { console.log("fafa", err); reject(err); });
+
+			})
+			.catch(err => {
+				console.log(err);
+				reject(err);
+			});
 
 		}); // end of returned promise
 	}
@@ -217,33 +252,38 @@ const updateGroupResolver = {
 			throw new Error('User needs to be authenticated to make changes to the database');
 		}
 
-		console.log("Logged in email:", credentials.payload.email);
+		return new Promise((resolve, reject) => {
 
-		if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
-			throw new Error('User has no permissions to update groups in the database');
-		}
+			// gather which action is being asked for
+			checkPermission(credentials, 'admin', args.id).then( user => {
+				const { allowed } = user;
+				if ( !allowed == true ) throw new Error( 'No permissions to add boards' );
 
-		// query resolve
-		let mod = {}
-		if (args.name) mod.name = args.name;
-		if (args.sector) mod.sector = args.sector;
-		if (args.color) mod.color = args.color;
-		if (args.background) mod.background = args.background;
-		if (args.description) mod.description = args.description;
-		if (args.n_depth) mod.n_depth = args.n_depth;
-		if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;
-		if (args.board_id) mod.board_id = args.board_id;
-		if (args._boardId) mod._boardId = args._boardId;
-		if (args.group_layouts) mod.group_layouts = args.group_layouts;
-		if (args.concept_layouts) mod.concept_layouts = args.concept_layouts;
+				// query resolve
+				let mod = {}
+				if (args.name) mod.name = args.name;
+				if (args.sector) mod.sector = args.sector;
+				if (args.color) mod.color = args.color;
+				if (args.background) mod.background = args.background;
+				if (args.description) mod.description = args.description;
+				if (args.n_depth) mod.n_depth = args.n_depth;
+				if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;
+				if (args.board_id) mod.board_id = args.board_id;
+				if (args._boardId) mod._boardId = args._boardId;
+				if (args.group_layouts) mod.group_layouts = args.group_layouts;
+				if (args.concept_layouts) mod.concept_layouts = args.concept_layouts;
 
-		console.log(mod);
+				Group.findByIdAndUpdate( args.id, { $set: mod }, { new: true })
+				.then(group => resolve(group))
+				.catch( err => {console.log(err); reject(err)});
 
-		return Group.findByIdAndUpdate(
-			args.id,
-			{ $set: mod },
-			{ new: true }
-		);
+			})
+			.catch( err => {
+				console.log(err)
+				reject(err);
+			});
+		});
+		
 	}
 };
 
@@ -263,80 +303,90 @@ const updateConceptLayoutResolver = {
 			throw new Error('User needs to be authenticated to make changes to the database');
 		}
 
-		console.log("Logged in email:", credentials.payload.email);
-
-		if (credentials.payload.email != 'eragon.blizzard@gmail.com') {
-			throw new Error('User has no permissions to update groups in the database');
-		}
-
-		// construct a list of groups Ids we'll be returning after the DnD is done
-		const returnGroupIds = [args.to_id, args.from_id];
-
 		return new Promise((resolve, reject) => {
 
-			// from query layout MOD
-			let mod_from = {
-				concept_layouts: args.from_concept_layouts
-			};
-			
-			// to query layout MOD
-			let mod_to = {
-				concept_layouts: args.to_concept_layouts
-			};
+			// gather which action is being asked for
+			checkPermission(credentials, 'admin', args.to_id).then( user => {
+				const { allowed } = user;
+				if ( !allowed == true ) throw new Error( 'No permissions to add boards' );
 
-			Group.findByIdAndUpdate(args.from_id, { $set: mod_from }, { new: true }).then(function(ok1){ // update from group
-				Group.findByIdAndUpdate(args.to_id, { $set: mod_to }, { new: true }).then(function(ok2){ // update to group
+				return user;
+			}).then( user => {
+				checkPermission(credentials, 'admin', args.from_id).then( user => {
 
-					// update the concept 'groupIds' this concept belongs
-					Concept.findById(args.concept_id, function (err, concept) {
-						if (err) {
-							console.log("Error when updating groupIds in concept", concept_id, ":", err);
-							reject(err);
-						} else {
+					const { allowed } = user;
+					if ( !allowed == true ) throw new Error( 'No permissions to add boards' );
 
-							let groupIds = [...concept.groupIds];
-							console.log("+++", groupIds, args.from_id, args.to_id);
+					// from query layout MOD
+					let mod_from = {
+						concept_layouts: args.from_concept_layouts
+					};
+					
+					// to query layout MOD
+					let mod_to = {
+						concept_layouts: args.to_concept_layouts
+					};
 
-							// filter out from_id
-							groupIds = groupIds.filter(item => item !== args.from_id)
+					Group.findByIdAndUpdate(args.from_id, { $set: mod_from }, { new: true }).then(function(ok1){ // update from group
+						Group.findByIdAndUpdate(args.to_id, { $set: mod_to }, { new: true }).then(function(ok2){ // update to group
 
-							// add to_id to the list
-							groupIds.push(args.to_id);
-
-							console.log("---", groupIds, args.from_id, args.to_id);
-
-							// push this new groupIds
-							let mod = { 'groupIds': groupIds }
-							
-							Concept.findByIdAndUpdate(args.concept_id, { $set: mod}, { new: true}, function(err, results){
+							// update the concept 'groupIds' this concept belongs
+							Concept.findById(args.concept_id, function (err, concept) {
 								if (err) {
-									console.log("Error when updating concept after SETTING CONCEPT LAYOUT in group", args.id, err);
+									console.log("Error when updating groupIds in concept", concept_id, ":", err);
 									reject(err);
 								} else {
+
+									let groupIds = [...concept.groupIds];
+									console.log("+++", groupIds, args.from_id, args.to_id);
+
+									// filter out from_id
+									groupIds = groupIds.filter(item => item !== args.from_id)
+
+									// add to_id to the list
+									groupIds.push(args.to_id);
+
+									console.log("---", groupIds, args.from_id, args.to_id);
+
+									// push this new groupIds
+									let mod = { 'groupIds': groupIds }
 									
-									// now return a list of updated groups
-									Group.find().where('_id').in(returnGroupIds).exec((err, groups) => {
+									Concept.findByIdAndUpdate(args.concept_id, { $set: mod}, { new: true}, function(err, results){
 										if (err) {
-											console.log("Error when getting result groups", returnGroupIds, ":", err);
+											console.log("Error when updating concept after SETTING CONCEPT LAYOUT in group", args.id, err);
 											reject(err);
 										} else {
-											console.log(groups);
-											resolve(groups);
+											
+											// now return a list of updated groups
+											Group.find().where('_id').in(returnGroupIds).exec((err, groups) => {
+												if (err) {
+													console.log("Error when getting result groups", returnGroupIds, ":", err);
+													reject(err);
+												} else {
+													console.log(groups);
+													resolve(groups);
+												}
+											});
 										}
 									});
+
 								}
 							});
 
-						}
+						}).catch(function(err){
+							console.log("Error when deleting group by id", args.id, ":", err);
+							reject(err);
+						});
+					}).catch(function(err){
+						console.log("Error when deleting group by id", args.id, ":", err);
+						reject(err);
 					});
 
-				}).catch(function(err){
-					console.log("Error when deleting group by id", args.id, ":", err);
+				})
+				.catch( err => {
+					console.log(err)
 					reject(err);
 				});
-			}).catch(function(err){
-				console.log("Error when deleting group by id", args.id, ":", err);
-				reject(err);
 			});
 		});
 	}
@@ -353,115 +403,131 @@ const deleteGroupResolver = {
 			throw new Error('User needs to be authenticated to make changes to the database');
 		}
 
-		console.log("Logged in email:", credentials.payload.email);
-
-		if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
-			throw new Error('User has no permissions to delete groups from the database');
-		}
-
-		// Query resolve
-		// a) Delete group
-		// b) Delete groupid from all layouts in the board (or group) it belongs to
 		return new Promise((resolve, reject) => {
-			return Group.findByIdAndRemove(args.id, function(err, deletedGroup){
-				if (err){
-					console.log("Error when deleting group by id", args.id, ":", err);
-					reject(err);
-				} else {
-					console.log("deletedGroup", deletedGroup);
 
-					const _deletedId = deletedGroup._id;
-					const _boardId = deletedGroup._boardId;
-					const _parentGroupId = deletedGroup.parent_groupId;
+			// gather which action is being asked for
+			checkPermission(credentials, 'admin', args.id).then( user => {
+				const { allowed } = user;
+				if ( !allowed == true ) throw new Error( 'No permissions to delete groups' );
 
-					// If we have a _boardId, we have a board "parent", thus change the layout of board
-					if ( _parentGroupId === null && _boardId !== null && _boardId !== undefined )
-						Board.findById(_boardId, function (err, board) {
-							if (err) {
-								console.log("Error when finding board by id", _boardId, ":", err);
-								reject(err);
-							} else {
-								// 1. make a copy of the layouts
-								let group_layouts = [ ...board.group_layouts];
-
-								// 2. from EVERY LAYOUT in this BOARD
-								for(let j = 0; j<group_layouts.length;j++){
-									let group_layout = group_layouts[j];
-
-									// filter out any instance of "_groupId" (args.id)
-									for (let x = 0; x<group_layout.layout.length; x++){
-										// remove new_col from every column
-										let new_col = group_layout.layout[x].filter(item => item !== args.id);
-										group_layout.layout[x] = new_col;
+				return Group.findByIdAndRemove(args.id, function(err, deletedGroup){
+					if (err){
+						console.log("Error when deleting group by id", args.id, ":", err);
+						reject(err);
+					} else {
+						console.log("deletedGroup", deletedGroup);
+	
+						const _deletedId = deletedGroup._id;
+						const _boardId = deletedGroup._boardId;
+						const _parentGroupId = deletedGroup.parent_groupId;
+	
+						// If we have a _boardId, we have a board "parent", thus change the layout of board
+						if ( _parentGroupId === null && _boardId !== null && _boardId !== undefined )
+							Board.findById(_boardId, function (err, board) {
+								if (err) {
+									console.log("Error when finding board by id", _boardId, ":", err);
+									reject(err, board);
+								} else {
+									// 1. make a copy of the layouts
+									let group_layouts = [ ...board.group_layouts];
+	
+									// 2. from EVERY LAYOUT in this BOARD
+									for(let j = 0; j<group_layouts.length;j++){
+										let group_layout = group_layouts[j];
+	
+										// filter out any instance of "_groupId" (args.id)
+										for (let x = 0; x<group_layout.layout.length; x++){
+											// remove new_col from every column
+											let new_col = group_layout.layout[x].filter(item => item !== args.id);
+											group_layout.layout[x] = new_col;
+										}
+	
+										// re-assign group_layout to group_layouts[j];
+										group_layouts[j] = group_layout;
 									}
-
-									// re-assign group_layout to group_layouts[j];
-									group_layouts[j] = group_layout;
+	
+									// 3. push new layout to board
+									let mod = { 'group_layouts': group_layouts }
+	
+									return Board.findByIdAndUpdate(_boardId, { $set: mod}, { new: true}, function(err, results){
+										if (err) {
+											console.log("Error when updating layout in board after REMOVING group", args.id, err);
+											reject(err);
+										} else {
+											// console.log("deletedGroup", deletedGroup, "results", results);
+											resolve(deletedGroup);
+										}
+									});
+	
 								}
-
-								// 3. push new layout to board
-								let mod = { 'group_layouts': group_layouts }
-
-								return Board.findByIdAndUpdate(_boardId, { $set: mod}, { new: true}, function(err, results){
-									if (err) {
-										console.log("Error when updating layout in board after REMOVING group", args.id, err);
-										reject(err);
-									} else {
-										// console.log("deletedGroup", deletedGroup, "results", results);
-										resolve(deletedGroup);
+							});
+							
+						else if (_parentGroupId !== null) {
+							Group.findById(_parentGroupId, function (err, group) {
+								if (err) {
+									console.log("Error when finding board by id", _parentGroupId, ":", err);
+									reject(err);
+								} else {
+									let group_layouts = [ ...group.group_layouts];
+									group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
+									
+									// console.log("group_layouts", group_layouts);
+	
+									// 2. from EVERY LAYOUT in this GROUP
+									for(let j = 0; j<group_layouts.length;j++){
+										let group_layout = group_layouts[j];
+	
+										// filter out any instance of "_groupId" (args.id)
+										for (let x = 0; x<group_layout.layout.length; x++){
+											// remove args.id from every column
+											let new_col = group_layout.layout[x].filter(item => item !== args.id);
+											group_layout.layout[x] = new_col;
+										}
+	
+										// re-assign group_layout to group_layouts[j];
+										group_layouts[j] = group_layout;
 									}
-								});
-
-							}
-						});
-						
-					else if (_parentGroupId !== null) {
-						Group.findById(_parentGroupId, function (err, group) {
-							if (err) {
-								console.log("Error when finding board by id", _parentGroupId, ":", err);
-								reject(err);
-							} else {
-								let group_layouts = [ ...group.group_layouts];
-								group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
-								
-								// console.log("group_layouts", group_layouts);
-
-								// 2. from EVERY LAYOUT in this GROUP
-								for(let j = 0; j<group_layouts.length;j++){
-									let group_layout = group_layouts[j];
-
-									// filter out any instance of "_groupId" (args.id)
-									for (let x = 0; x<group_layout.layout.length; x++){
-										// remove args.id from every column
-										let new_col = group_layout.layout[x].filter(item => item !== args.id);
-										group_layout.layout[x] = new_col;
-									}
-
-									// re-assign group_layout to group_layouts[j];
-									group_layouts[j] = group_layout;
+	
+									console.log("group_layouts", group_layouts);
+	
+									// 3. push new layout to group
+									let mod = { 'group_layouts': group_layouts }
+	
+									return Group.findByIdAndUpdate(_parentGroupId, { $set: mod}, { new: true}, function(err, results){
+										if (err) {
+											console.log("Error when updating layout in group after REMOVING group", args.id, err);
+											reject(err);
+										} else {
+											// console.log("deletedGroup", deletedGroup, "results", results);
+											resolve(deletedGroup);
+										}
+									});
+	
 								}
-
-								console.log("group_layouts", group_layouts);
-
-								// 3. push new layout to group
-								let mod = { 'group_layouts': group_layouts }
-
-								return Group.findByIdAndUpdate(_parentGroupId, { $set: mod}, { new: true}, function(err, results){
-									if (err) {
-										console.log("Error when updating layout in group after REMOVING group", args.id, err);
-										reject(err);
-									} else {
-										// console.log("deletedGroup", deletedGroup, "results", results);
-										resolve(deletedGroup);
-									}
-								});
-
-							}
-						});
+							});
+						}
 					}
-				}
+				});
+
+			})
+			.catch( err => {
+				console.log(err)
+				reject(err);
 			});
 		});
+
+		// console.log("Logged in email:", credentials.payload.email);
+
+		// if (credentials.payload.email != 'eragon.blizzard@gmail.com'){
+		// 	throw new Error('User has no permissions to delete groups from the database');
+		// }
+
+		// // Query resolve
+		// // a) Delete group
+		// // b) Delete groupid from all layouts in the board (or group) it belongs to
+		// return new Promise((resolve, reject) => {
+			
+		// });
 	}
 };
 
