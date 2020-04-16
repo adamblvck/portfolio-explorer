@@ -85,14 +85,17 @@ const checkPermission = (credentials, action, object) => {
 		getUser(credentials)
 		.then( user => {
 
-			console.log(user);
-
+			// console.log(user);
 			if (user === undefined) reject("User not found");
 
-			console.log( {subject: user._id, action: action, object: object} );
+			console.log("retrieving the following permission:", {subject: user._id, action: action, object: object} );
 
+			// check if document is gucci
 			Permission.find({subject: user._id, action: action, object: object})
 			.then( permissions => {
+
+				console.log(permissions);
+
 				if (permissions.length >= 1){
 					resolve( {...user._doc, allowed:true} );
 				}

@@ -23,7 +23,6 @@ class ConceptMasonry extends Component {
         
 
         return _.map(layout, (conceptID) => {
-
             const concept = concepts[conceptID]
 
             if (concept == undefined){

@@ -121,8 +121,12 @@ const addGroupResolver = {
 										// !!!! Add to first list, assumes 2D List
 										if (group_layout.layout.length >= 1) {
 											let a = group_layout.layout[0];
-											let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
-											group_layout.layout[0] = b;
+											if (a.indexOf(_new_group_id) < 0) { // only add this new one if not present in list
+
+												let b = a.concat([_new_group_id]); // here we add, pushing gives weird behavior
+												group_layout.layout[0] = b;
+												
+											}
 										}
 										group_layouts[j] = group_layout;
 									}
@@ -178,8 +182,12 @@ const addGroupResolver = {
 										// !!!! Add to first list, assumes 2D List
 										if (group_layout.layout.length >= 1) {
 											let a = group_layout.layout[0];
-											let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
-											group_layout.layout[0] = b;
+
+											if (a.indexOf(_added_group_id) < 0) { // only add this new one if not present in list
+
+												let b = a.concat([_added_group_id]); // here we add, pushing gives weird behavior
+												group_layout.layout[0] = b;
+											}
 										}
 										group_layouts[j] = group_layout;
 									}
@@ -410,14 +418,19 @@ const deleteGroupResolver = {
 				const { allowed } = user;
 				if ( !allowed == true ) throw new Error( 'No permissions to delete groups' );
 
+				// find group and remove
 				return Group.findByIdAndRemove(args.id, function(err, deletedGroup){
 					if (err){
 						console.log("Error when deleting group by id", args.id, ":", err);
 						reject(err);
 					} else {
-						console.log("deletedGroup", deletedGroup);
+						console.log("deletedGroup", deletedGroup); // then update the parent of this group
+
+						if (deletedGroup === null) {
+							console.log("can't delete group with id ", args.id);
+							reject("can't delete group with id ", args.id);
+						}
 	
-						const _deletedId = deletedGroup._id;
 						const _boardId = deletedGroup._boardId;
 						const _parentGroupId = deletedGroup.parent_groupId;
 	
@@ -425,7 +438,7 @@ const deleteGroupResolver = {
 						if ( _parentGroupId === null && _boardId !== null && _boardId !== undefined )
 							Board.findById(_boardId, function (err, board) {
 								if (err) {
-									console.log("Error when finding board by id", _boardId, ":", err);
+									console.log("Error when finding group by id", _boardId, ":", err);
 									reject(err, board);
 								} else {
 									// 1. make a copy of the layouts
@@ -465,13 +478,13 @@ const deleteGroupResolver = {
 						else if (_parentGroupId !== null) {
 							Group.findById(_parentGroupId, function (err, group) {
 								if (err) {
-									console.log("Error when finding board by id", _parentGroupId, ":", err);
+									console.log("Error when finding group by id", _parentGroupId, ":", err);
 									reject(err);
 								} else {
 									let group_layouts = [ ...group.group_layouts];
 									group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
 									
-									// console.log("group_layouts", group_layouts);
+									console.log("group_layouts before", group_layouts);
 	
 									// 2. from EVERY LAYOUT in this GROUP
 									for(let j = 0; j<group_layouts.length;j++){
@@ -488,7 +501,7 @@ const deleteGroupResolver = {
 										group_layouts[j] = group_layout;
 									}
 	
-									console.log("group_layouts", group_layouts);
+									console.log("group_layouts after", group_layouts);
 	
 									// 3. push new layout to group
 									let mod = { 'group_layouts': group_layouts }

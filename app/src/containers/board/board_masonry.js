@@ -195,13 +195,16 @@ class BoardMasonry extends Component {
     renderDeleteGroup(component) {
         const { group, label } = component;
 
+        console.log(group);
+
         return (
             <MenuItem
                 color="secondary" 
                 key={`delete${group.id}`}
                 onClick={() => {
                     if( confirm('Sure want to delete group?')) {
-                        this.props.deleteGroup(group)
+                        console.log("going to delete: ", group);
+                        this.props.deleteGroup(group);
                     }
                 }}>
                 {label}
@@ -235,6 +238,11 @@ class BoardMasonry extends Component {
         // for every subgroup present, render a `CardHeader` and a `ConceptMasonry`
         return _.map(subgroup_layout, (subgroup_id) => {
             const subgroup = subgroups[subgroup_id];
+
+            if (subgroup == undefined){
+                console.log("subgroup", subgroup);
+                return (<div key={`subgroup_render_${subgroup_id}`}> {subgroup_id} missing subgroup</div>);
+            }
 
             // console.log("subgroup", subgroup);
 

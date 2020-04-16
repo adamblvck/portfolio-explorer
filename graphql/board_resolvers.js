@@ -165,6 +165,7 @@ const updateBoardLayoutResolver = {
 				
 				if (!allowed == true) throw new Error('No permissions to modify boards');
 
+				// find board to update
 				Board.findById( args.id, function (err, board) {
 					if (err){
 						console.log("Got an error when finding board to update its layout");
