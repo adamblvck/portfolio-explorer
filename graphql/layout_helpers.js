@@ -173,7 +173,10 @@ const add_id_to_layouts = (layouts, id) => {
 
 		// !!!! Add to first list in thr presummed 2D list
 		if (l.layout.length >= 1) {
-			l.layout[0] = l.layout[0].concat([id]); // here we concat, pushing gives weird behavior
+			if (l.layout[0].indexOf(id) < 0) { // only add this new one if not present in list
+				l.layout[0] = l.layout[0].concat([id]);
+			}
+			// l.layout[0] = l.layout[0].concat([id]); // here we concat, pushing gives weird behavior
 		}
 
 		layouts[j] = l; // assign a new one

@@ -163,6 +163,42 @@ class FormEditConcept extends Component {
         );
     }
 
+    renderGroupIds( { fields, meta: { error, submitFailed } } ) {
+        return (
+            <div>
+                <Grid>
+                    <Row>
+                        <Col xs={10} md={10}/>
+                        <Col xs={1} md={1}>
+                            <Button className="add-group-id-button" variant="outlined" color="primary" type="button" onClick={() => fields.push({})}><AddRoundedIcon/></Button>
+                        </Col>
+                    </Row>
+
+                    { fields.map((groupId, index) => (
+                        <Row key={index}>
+                            <Col xs={10} md={10}>
+                                <Field
+                                    name={groupId}
+                                    type="text"
+                                    component={renderField}
+                                    label={`groupID #${index}`}
+                                />
+                            </Col>
+                            <Col xs={1} md={1}>
+                                <Button className="delete-button-edit-form"  type="button" variant="outlined" color="secondary" onClick={() => fields.remove(index)} title="Remove groupID">
+                                    <DeleteRoundedIcon/>
+                                </Button>
+                            </Col>
+                        </Row>                        
+                    ))}
+
+                </Grid>
+
+
+            </div>
+        );
+    }
+
     onNewLogoUrl(event) {
         this.setState({logo_url: event.target.value});
     }

@@ -16,7 +16,7 @@ class ConceptMasonry extends Component {
 
     renderConcepts(){
         const { background }  = this.props;
-        const { conceptIDs, concepts, concept_layouts} = this.props;
+        const { conceptIDs, concepts, concept_layouts, groupId} = this.props;
 
         const layout = concept_layouts['1'] ? concept_layouts['1'].layout[0] : [];
         // console.log(layout, concept_layouts);
@@ -27,7 +27,7 @@ class ConceptMasonry extends Component {
 
             if (concept == undefined){
                 console.log(conceptID);
-                return (<div>{conceptID} missing</div>);
+                return (<div style={{'fontSize':'10px'}}>{conceptID} concept missing in {groupId}</div>);
             } 
 
             else

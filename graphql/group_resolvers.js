@@ -80,8 +80,14 @@ const addGroupResolver = {
 
 		return new Promise((resolve, reject) => {
 
+			// AUTH RULES - admin action
+			action = 'admin'
+			// - if adding to board, check if admin of board
+			// - if adding to group, check if admin of group
+			target = args._boardId !== undefined ? args._boardId : args.parent_groupId;
+
 			// gather which action is being asked for
-			checkPermission(credentials, 'create', 'group').then( user => {
+			checkPermission(credentials, action, target).then( user => {
 				const { allowed } = user;
 				if ( !allowed == true ) throw new Error( 'No permissions to add boards' );
 
@@ -416,111 +422,110 @@ const deleteGroupResolver = {
 			// gather which action is being asked for
 			checkPermission(credentials, 'admin', args.id).then( user => {
 				const { allowed } = user;
-				if ( !allowed == true ) throw new Error( 'No permissions to delete groups' );
+				if ( !allowed == true ) throw new Error( 'No permissions to delete this group' );
 
 				// find group and remove
-				return Group.findByIdAndRemove(args.id, function(err, deletedGroup){
-					if (err){
-						console.log("Error when deleting group by id", args.id, ":", err);
-						reject(err);
-					} else {
-						console.log("deletedGroup", deletedGroup); // then update the parent of this group
+				return Group.findByIdAndRemove(args.id).then( deletedGroup => {
+					console.log("deletedGroup", deletedGroup); // then update the parent of this group
 
-						if (deletedGroup === null) {
-							console.log("can't delete group with id ", args.id);
-							reject("can't delete group with id ", args.id);
-						}
-	
-						const _boardId = deletedGroup._boardId;
-						const _parentGroupId = deletedGroup.parent_groupId;
-	
-						// If we have a _boardId, we have a board "parent", thus change the layout of board
-						if ( _parentGroupId === null && _boardId !== null && _boardId !== undefined )
-							Board.findById(_boardId, function (err, board) {
-								if (err) {
-									console.log("Error when finding group by id", _boardId, ":", err);
-									reject(err, board);
-								} else {
-									// 1. make a copy of the layouts
-									let group_layouts = [ ...board.group_layouts];
-	
-									// 2. from EVERY LAYOUT in this BOARD
-									for(let j = 0; j<group_layouts.length;j++){
-										let group_layout = group_layouts[j];
-	
-										// filter out any instance of "_groupId" (args.id)
-										for (let x = 0; x<group_layout.layout.length; x++){
-											// remove new_col from every column
-											let new_col = group_layout.layout[x].filter(item => item !== args.id);
-											group_layout.layout[x] = new_col;
-										}
-	
-										// re-assign group_layout to group_layouts[j];
-										group_layouts[j] = group_layout;
-									}
-	
-									// 3. push new layout to board
-									let mod = { 'group_layouts': group_layouts }
-	
-									return Board.findByIdAndUpdate(_boardId, { $set: mod}, { new: true}, function(err, results){
-										if (err) {
-											console.log("Error when updating layout in board after REMOVING group", args.id, err);
-											reject(err);
-										} else {
-											// console.log("deletedGroup", deletedGroup, "results", results);
-											resolve(deletedGroup);
-										}
-									});
-	
-								}
-							});
-							
-						else if (_parentGroupId !== null) {
-							Group.findById(_parentGroupId, function (err, group) {
-								if (err) {
-									console.log("Error when finding group by id", _parentGroupId, ":", err);
-									reject(err);
-								} else {
-									let group_layouts = [ ...group.group_layouts];
-									group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
-									
-									console.log("group_layouts before", group_layouts);
-	
-									// 2. from EVERY LAYOUT in this GROUP
-									for(let j = 0; j<group_layouts.length;j++){
-										let group_layout = group_layouts[j];
-	
-										// filter out any instance of "_groupId" (args.id)
-										for (let x = 0; x<group_layout.layout.length; x++){
-											// remove args.id from every column
-											let new_col = group_layout.layout[x].filter(item => item !== args.id);
-											group_layout.layout[x] = new_col;
-										}
-	
-										// re-assign group_layout to group_layouts[j];
-										group_layouts[j] = group_layout;
-									}
-	
-									console.log("group_layouts after", group_layouts);
-	
-									// 3. push new layout to group
-									let mod = { 'group_layouts': group_layouts }
-	
-									return Group.findByIdAndUpdate(_parentGroupId, { $set: mod}, { new: true}, function(err, results){
-										if (err) {
-											console.log("Error when updating layout in group after REMOVING group", args.id, err);
-											reject(err);
-										} else {
-											// console.log("deletedGroup", deletedGroup, "results", results);
-											resolve(deletedGroup);
-										}
-									});
-	
-								}
-							});
-						}
+					if (deletedGroup === null) {
+						console.log("can't delete group with id ", args.id);
+						reject("can't delete group with id ", args.id);
 					}
-				});
+
+					const _boardId = deletedGroup._boardId;
+					const _parentGroupId = deletedGroup.parent_groupId;
+
+					// If we have a _boardId, we have a board "parent", thus change the layout of board
+					if ( _parentGroupId === null && _boardId !== null && _boardId !== undefined )
+						Board.findById(_boardId, function (err, board) {
+							if (err) {
+								console.log("Error when finding group by id", _boardId, ":", err);
+								reject(err, board);
+							} else {
+								// 1. make a copy of the layouts
+								let group_layouts = [ ...board.group_layouts];
+
+								// 2. from EVERY LAYOUT in this BOARD
+								for(let j = 0; j<group_layouts.length;j++){
+									let group_layout = group_layouts[j];
+
+									// filter out any instance of "_groupId" (args.id)
+									for (let x = 0; x<group_layout.layout.length; x++){
+										// remove new_col from every column
+										let new_col = group_layout.layout[x].filter(item => item !== args.id);
+										group_layout.layout[x] = new_col;
+									}
+
+									// re-assign group_layout to group_layouts[j];
+									group_layouts[j] = group_layout;
+								}
+
+								// 3. push new layout to board
+								let mod = { 'group_layouts': group_layouts }
+
+								return Board.findByIdAndUpdate(_boardId, { $set: mod}, { new: true}, function(err, results){
+									if (err) {
+										console.log("Error when updating layout in board after REMOVING group", args.id, err);
+										reject(err);
+									} else {
+										// console.log("deletedGroup", deletedGroup, "results", results);
+										resolve(deletedGroup);
+									}
+								});
+
+							}
+						});
+						
+					else if (_parentGroupId !== null) {
+						Group.findById(_parentGroupId, function (err, group) {
+							if (err) {
+								console.log("Error when finding group by id", _parentGroupId, ":", err);
+								reject(err);
+							} else {
+								let group_layouts = [ ...group.group_layouts];
+								group_layouts = verify_layout_structures(group_layouts, 'group_layout'); // group level layout check
+								
+								console.log("group_layouts before", group_layouts);
+
+								// 2. from EVERY LAYOUT in this GROUP
+								for(let j = 0; j<group_layouts.length;j++){
+									let group_layout = group_layouts[j];
+
+									// filter out any instance of "_groupId" (args.id)
+									for (let x = 0; x<group_layout.layout.length; x++){
+										// remove args.id from every column
+										let new_col = group_layout.layout[x].filter(item => item !== args.id);
+										group_layout.layout[x] = new_col;
+									}
+
+									// re-assign group_layout to group_layouts[j];
+									group_layouts[j] = group_layout;
+								}
+
+								console.log("group_layouts after", group_layouts);
+
+								// 3. push new layout to group
+								let mod = { 'group_layouts': group_layouts }
+
+								return Group.findByIdAndUpdate(_parentGroupId, { $set: mod}, { new: true}, function(err, results){
+									if (err) {
+										console.log("Error when updating layout in group after REMOVING group", args.id, err);
+										reject(err);
+									} else {
+										// console.log("deletedGroup", deletedGroup, "results", results);
+										resolve(deletedGroup);
+									}
+								});
+
+							}
+						});
+					}
+				}) // end of delete group
+				.catch( err => {
+					console.log(err)
+					reject(err);
+				});;
 
 			})
 			.catch( err => {
