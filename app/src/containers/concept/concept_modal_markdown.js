@@ -434,6 +434,7 @@ class ConceptModalMD extends Component {
                     <Button
                         type="Edit" 
                         onClick={this.handleEditConcept}
+                        style={{'color': 'inherit'}}
                     >
                         Edit
                     </Button> 

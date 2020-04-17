@@ -287,6 +287,7 @@ li [class*="MuiSvgIcon"] {
 .concept-detail-card-header {
     /* to compensate for overflow:visible! */
     border-radius: 4px 4px 0px 0px;
+    padding: 8px 16px 4px 16px;
 }
 
 .concept-detail-card-header [class*="MuiCardHeader-title"]{
@@ -451,4 +452,8 @@ li [class*="MuiSvgIcon"] {
 
 .overview-masonry > div > div {
     width: 100%;
+}
+
+.concept-detail-card-header .MuiIconButton-root {
+    color: inherit;
 }

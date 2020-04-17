@@ -1,0 +1,14 @@
+
+/* For devices below 600px in width */
+@media only screen and (max-width: 600px) {
+    .concept-detail-content {
+		margin: 0px 0%;
+	}
+} 
+
+/* from resolutions with 600px width and up */
+@media only screen and (min-width: 600px) {
+    .concept-detail-content {
+		margin: 0px 20%;
+	}
+} 
