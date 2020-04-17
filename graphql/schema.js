@@ -154,10 +154,13 @@ const RootQuery = new GraphQLObjectType({
 
         board: { // get board from database
             type: BoardType,
-            args: { board_id: {type: GraphQLString} },
+            args: { id: {type: GraphQLID}},
             resolve(parent, args){
-                console.log(args.board_id);
-                return Board.findOne({board_id: args.board_id});
+                console.log(args.id);
+
+                // check here if allowed (look foor public permission)
+
+                return Board.findById(args.id);
             }
         },
 

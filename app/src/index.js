@@ -87,7 +87,7 @@ ReactDOM.render(
 
                         {/* Show specific board */}
                         <Route 
-                            path="/b/:id" 
+                            path="/b/:url_name/:id" 
                             render={
                                 (props) => <Board auth={auth} {...props} />
                             }    

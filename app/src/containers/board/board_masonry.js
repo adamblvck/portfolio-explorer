@@ -79,7 +79,7 @@ class BoardMasonry extends Component {
 
     componentDidMount = () => {
         // fetch board info (based on boardId)
-        this.props.fetchBoard(this.props.boardID);
+        this.props.fetchBoard(this.props._boardId);
 
         // attach event listener to resize, so that we can go responsive
         window.addEventListener('resize', this.updateDimensions);
@@ -594,6 +594,8 @@ class BoardMasonry extends Component {
                         {/* {this.generateForm(this.state.form)} */}
                         {this.renderGroups(groups, column)}
                     </div>}
+
+                    {/* <div class="emptyspace-in-col">aa</div> */}
 
                     {/* Add a simple button click0r */}
                     { col_index_is_zero && <Button onClick={() => {

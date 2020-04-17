@@ -36,7 +36,8 @@ class Board extends Component {
         this.boardID = "blockchain"
 
         if (this.props.match.params)
-            this.boardID = this.props.match.params['id'];
+            this.boardID = this.props.match.params['url_name'];
+            this._boardId = this.props.match.params['id'];
     }
 
     componentDidMount(){
@@ -102,7 +103,7 @@ class Board extends Component {
 
                     {/* Groups Overview */}
                     <div className="groups-masonry">
-                        <BoardMasonry isAuthenticated={isAuthenticated()} boardID={this.boardID.toLowerCase()} />
+                        <BoardMasonry isAuthenticated={isAuthenticated()} _boardId={this._boardId} boardID={this.boardID.toLowerCase()} />
                     </div>
                 </div>
 

@@ -94,10 +94,10 @@ export function updateBoardLayout(boardInfo) {
     };
 }
 
-export function fetchBoard(board_id) {
+export function fetchBoard(boardId) { // pass board id, as stored in database
     const query = `
     query getBoardGroups {
-        board (board_id:"${board_id}"){
+        board (id:"${boardId}"){
             id
             board_id
             background
