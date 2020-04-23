@@ -79,7 +79,10 @@ class BoardMasonry extends Component {
 
     componentDidMount = () => {
         // fetch board info (based on boardId)
-        this.props.fetchBoard(this.props._boardId);
+        const id_or_url_name = this.props._boardId !== undefined ? this.props._boardId: this.props.boardID;
+        console.log("scope", this.props.scope, this.props._boardId, id_or_url_name);
+
+        this.props.fetchBoard(id_or_url_name, this.props.scope);
 
         // attach event listener to resize, so that we can go responsive
         window.addEventListener('resize', this.updateDimensions);
@@ -658,10 +661,11 @@ function mapStateToProps (state) {
 
     if (state.boards !== null && !_.isEmpty(state.boards) && !_.isEmpty(state.boards.groups)){ // only if groups exist, and result is NOT EMPTY
 
-        console.log(state.boards);
+        console.log("state.boards", state.boards);
 
         return {
             board_id: state.boards.id,
+            board_scope: state.boards.scope,
             board_name: state.boards.board_id,
             board_background: state.boards.background,
             group_layouts: state.boards.group_layouts,

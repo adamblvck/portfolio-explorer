@@ -142,7 +142,7 @@ class HomeOverview extends Component {
         const background_color = board.background ? board.background : default_background;
         const text_header_color = getTextColor(background_color);
 
-        const link_to_board = `/b/${board.board_id}/${board.id}`;
+        const link_to_board = board.scope == 'public' ? `/b/${board.board_id}`: `/b/${board.id}/${board.board_id}`;
 
         const isAuthenticated = this.props.auth.isAuthenticated();
         console.log("isAuthenticated", isAuthenticated);

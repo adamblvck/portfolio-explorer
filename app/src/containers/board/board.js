@@ -35,9 +35,13 @@ class Board extends Component {
 
         this.boardID = "blockchain"
 
-        if (this.props.match.params)
+        if (this.props.match.params && this.props.scope=="private"){  
             this.boardID = this.props.match.params['url_name'];
-            this._boardId = this.props.match.params['id'];
+            this._boardId = this.props.match.params['id'];    
+                
+        } else if (this.props.match.params && this.props.scope=="public") {
+            this.boardID = this.props.match.params['url_name'];
+        }
     }
 
     componentDidMount(){
@@ -93,6 +97,8 @@ class Board extends Component {
 	render() {
         const { isAuthenticated } = this.props.auth; // function inside auth to check if logged in
 
+        console.log(this._boardId, this.boardID.toLowerCase());
+
 		return (
             <div>
             {/* <div style={{'position': 'relative', 'min-height': '100vh'}}> */}
@@ -103,7 +109,7 @@ class Board extends Component {
 
                     {/* Groups Overview */}
                     <div className="groups-masonry">
-                        <BoardMasonry isAuthenticated={isAuthenticated()} _boardId={this._boardId} boardID={this.boardID.toLowerCase()} />
+                        <BoardMasonry isAuthenticated={isAuthenticated()} scope={this.props.scope} _boardId={this._boardId} boardID={this.boardID.toLowerCase()} />
                     </div>
                 </div>
 

@@ -104,6 +104,7 @@ export default function (state = {}, action) {
                 const reduced = {
                     id: action.payload.data.data.board.id,
                     board_id: action.payload.data.data.board.board_id,
+                    scope: action.payload.data.data.board.scope,
                     background: action.payload.data.data.board.background,
                     group_layouts: _.mapKeys(action.payload.data.data.board.group_layouts, 'name'),
                     groups: mapKeysRecursive(action.payload.data.data.board.groups)
