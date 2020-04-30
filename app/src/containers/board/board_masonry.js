@@ -27,6 +27,11 @@ import { chunk } from 'lodash';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { gradients, getTextColor, getHeaderColor } from '../forms/gradient_helper.js';
 
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+
 const styles = {
         card: {
         maxWidth: 400,
@@ -559,6 +564,7 @@ class BoardMasonry extends Component {
 
                             this.props.openGroupForm(params)
                         }}>
+                            <AddIcon />
                             Add Group
                         </Button>
                 </div>
@@ -614,6 +620,7 @@ class BoardMasonry extends Component {
 
                             this.props.openGroupForm(params)
                         }}>
+                            <AddIcon />
                             Add Group
                         </Button>
                     }
@@ -644,10 +651,12 @@ class BoardMasonry extends Component {
 
                             this.props.openGroupForm(params)
                         }}>
+                            <AddIcon />
                             Add Group
                         </Button>
                 </Grid>
 
+                {/* This is the colored bar at the top of the browser */}
                 <div className="board-background-characteristics" style={{backgroundColor: this.props.board_background, background: this.props.board_background}}>
 
                 </div>

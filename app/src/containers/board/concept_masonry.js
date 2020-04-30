@@ -7,6 +7,11 @@ import ConceptMasonryButton from './concept_masonry_button';
 import { Container, Draggable } from 'react-smooth-dnd';
 import { applyDrag } from './utils';
 
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+
 class ConceptMasonry extends Component {
     constructor (props) {
         super(props);
@@ -39,18 +44,6 @@ class ConceptMasonry extends Component {
                         background={background}
                     />
                 </div>
-                // <Draggable
-                //     key={`${conceptID}-draggable`}
-                //     render={(setRef) => (
-                //         <div ref={setRef} key={`${conceptID}-btn`}>
-                //             <ConceptMasonryButton
-                //                 className="concept-masonry-item"
-                //                 concept={concept}
-                //                 background={background}
-                //             />
-                //         </div>
-                //     )}
-                // />
             )
         });
     }
@@ -62,6 +55,9 @@ class ConceptMasonry extends Component {
         return (
             <div className="concept-grid-flexbox" style={{}}> 
                 {this.renderConcepts()}
+                {/* <Fab className="add-concept-floating-button" color="colorInherit" aria-label="add" size="small">
+                    <AddIcon />
+                </Fab> */}
             </div>
 
             // <Container // drag and drop container

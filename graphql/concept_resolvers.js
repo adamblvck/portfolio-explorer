@@ -182,7 +182,7 @@ const updateConceptResolver = {
 			// gather which action is being asked for
 			checkPermission(credentials, action, target).then( user => {
 				const { allowed } = user;
-				if ( !allowed == true ) throw new Error( 'No permissions to update concept' );
+				if ( !allowed == true ) reject('No permissions to update concept');
 
 				// query resolve
 				let mods = {}

@@ -13,6 +13,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 
 // import icons
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
 import PlusIcon from '@material-ui/icons/AddCircleRounded';
 import MinusIcon from '@material-ui/icons/RemoveCircleRounded';
 import LinkIcon from '@material-ui/icons/LinkRounded';
@@ -430,7 +432,7 @@ class ConceptModalMD extends Component {
     renderCardActions(concept){
         return (
             <CardActions>
-                { this.props.isAuthenticated && 
+                {/* { this.props.isAuthenticated && 
                     <Button
                         type="Edit" 
                         onClick={this.handleEditConcept}
@@ -438,7 +440,7 @@ class ConceptModalMD extends Component {
                     >
                         Edit
                     </Button> 
-                }
+                } */}
                 <Button
                     type="Back" 
                     onClick={this.handleClose}
@@ -542,6 +544,11 @@ class ConceptModalMD extends Component {
                     <MarkdownPopup
                         markdown={{open:false}}
                     />
+
+                    <Fab className="concept-edit-button" size="small" color="secondary" aria-label="edit" onClick={this.handleEditConcept}>
+                        <EditIcon/>
+                    </Fab>
+
                 </ModalAnimated>
             </Modal>                            
         );

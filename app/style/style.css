@@ -457,3 +457,19 @@ li [class*="MuiSvgIcon"] {
 .concept-detail-card-header .MuiIconButton-root {
     color: inherit;
 }
+
+.add-concept-floating-button {
+    width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+}
+
+.add-concept-floating-button .MuiSvgIcon-root {
+    height: 10px;
+}
+
+.concept-edit-button {
+    float: right;
+    bottom: 50px;
+    right: 10px;
+}
