@@ -44,6 +44,13 @@ class ConceptMasonry extends Component {
                         background={background}
                     />
                 </div>
+                // <Draggable classname="holon-lvl-4" key={`${conceptID}-btn`}>
+                //     <ConceptMasonryButton
+                //         className="concept-masonry-item"
+                //         concept={concept}
+                //         background={background}
+                //     />
+                // </Draggable>
             )
         });
     }
@@ -67,10 +74,9 @@ class ConceptMasonry extends Component {
             //     onDrop={dnd_results => this.props.dnd_onDropConcept(parent_groupId, groupId, dnd_results)} // perform this on drop
             //     getChildPayload={index => this.props.dnd_getConcept(parent_groupId, groupId, index)} // get column index, and index of dragged item
             //     nonDragAreaSelector=".field"
-            //     dragBeginDelay={500}
             //     orientation="horizontal"
             //     render={(setRef) => (
-            //         <div className="concept-grid" ref={setRef}> 
+            //         <div className="concept-grid-draggable" ref={setRef}> 
             //             {this.renderConcepts()}
             //         </div>
             //     )}

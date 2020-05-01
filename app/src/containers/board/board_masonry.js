@@ -32,6 +32,8 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
+import { useState } from 'react';
+
 const styles = {
         card: {
         maxWidth: 400,
@@ -200,6 +202,25 @@ class BoardMasonry extends Component {
         );
     }
 
+    // renderToggleDnD(component) {
+    //     const { label, group, toggle } = component;
+
+    //     const group_form_params = {
+    //         mode: "update",
+    //         initialValues: group
+    //     };
+
+    //     return (
+    //         <MenuItem
+    //             color="secondary" 
+    //             key={`toggle-${group.id}`}
+    //             onClick={() => toggle(1)}
+    //         >
+    //             {label}
+    //         </MenuItem>
+    //     );
+    // }
+
     renderDeleteGroup(component) {
         const { group, label } = component;
 
@@ -252,7 +273,7 @@ class BoardMasonry extends Component {
                 return (<div key={`subgroup_render_${subgroup_id}`}> {subgroup_id} missing subgroup</div>);
             }
 
-            // console.log("subgroup", subgroup);
+            // console.log("dragndropstate", dragndrop, "for subgroupid", subgroup_id);
 
             return (
                 <Draggable key={`subgroup_render_${subgroup.id}`}>
@@ -275,6 +296,13 @@ class BoardMasonry extends Component {
                                         group: subgroup,
                                         render: this.renderFormEditGroup
                                     },
+                                    // {
+                                    //     label: "Re-Arrange Icons",
+                                    //     needAuth: true,
+                                    //     group: subgroup,
+                                    //     toggle: toggle,
+                                    //     render: this.renderToggleDnD
+                                    // },
                                     {
                                         label: "Delete Subgroup",
                                         needAuth: true,
@@ -607,7 +635,8 @@ class BoardMasonry extends Component {
                     {/* <div class="emptyspace-in-col">aa</div> */}
 
                     {/* Add a simple button click0r */}
-                    { col_index_is_zero && <Button onClick={() => {
+                    {/* col_index_is_zero && <-- add to button bellow if only apply this to first column */}
+                    {  <Button onClick={() => {
                             const params = {
                                 mode: "new",
                                 initialValues: {
@@ -636,9 +665,9 @@ class BoardMasonry extends Component {
         return (
             <div>
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
-                <Grid>
+                <Grid align="center">
                     { this.renderGrid() }
-                    <Button onClick={() => {
+                    {/* <Button onClick={() => {
                             const params = {
                                 mode: "new",
                                 initialValues: {
@@ -653,7 +682,7 @@ class BoardMasonry extends Component {
                         }}>
                             <AddIcon />
                             Add Group
-                        </Button>
+                    </Button> */}
                 </Grid>
 
                 {/* This is the colored bar at the top of the browser */}
