@@ -33,7 +33,7 @@ export default class MenuGroup extends Component {
                     aria-haspopup="true"
                     onClick={this.handleClick}
                 >
-                <MoreVertIcon />
+                    <MoreVertIcon />
                 </IconButton>
                 <Menu
                     disableAutoFocusItem={false}

@@ -18,7 +18,11 @@ import FormNoteTaker from '../forms/forms_noteditor'
 import MarkdownPopup from '../forms/form_markdown';
 
 // Import material-design toolbar
-import { Button, Typography, Toolbar, AppBar, Avatar } from '@material-ui/core';
+import { Button, IconButton, Typography, Toolbar, AppBar, Avatar } from '@material-ui/core';
+import { Menu, MenuItem } from '@material-ui/core';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+import MenuGroup from '../../components/menus/menu_groups';
 
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
@@ -61,6 +65,20 @@ class Board extends Component {
         this.props.NewNoteInNotetaker({});
     }
 
+    menu_addGroupToBoard(component) {
+        const { label } = component;
+
+        return (
+            <MenuItem
+                color="secondary" 
+                key={`menu-${label.toLowerCase().split(' ').join('-')}`}
+                // onClick={() => (this.function or component.function)}
+            >
+                {label}
+            </MenuItem>
+        );
+    }
+
     renderAppBar(isAuthenticated){
 
         return (
@@ -72,9 +90,33 @@ class Board extends Component {
                         </Button>
                     </Link>
 
-                    <Typography variant="h1" className="menubar-header">
-                        /b/{this.boardID}
-                    </Typography>
+                    {/* <div className="board-name-container"> */}
+                        <Typography variant="h1" className="menubar-header">
+                            {this.boardID}
+                        </Typography>
+
+                        <MenuGroup 
+                            className="groupmenu-btn"
+                            isAuthenticated={isAuthenticated}
+                            components={ [
+                                {
+                                    label: "Add Group to Board",
+                                    needAuth: true,
+                                    render: this.menu_addGroupToBoard
+                                },
+                                {
+                                    label: "Open Board Settings",
+                                    needAuth: true,
+                                    render: this.menu_addGroupToBoard
+                                },
+                                {
+                                    label: "Publish Board",
+                                    needAuth: true,
+                                    render: this.menu_addGroupToBoard
+                                }
+                            ]}
+                        />
+                    {/* </div> */}
 
                     {/* <Button onClick={this.handleNewNote}> New Note </Button> */}
 

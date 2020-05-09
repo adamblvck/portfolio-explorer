@@ -142,6 +142,10 @@ body {
     text-align: center;
 }
 
+.subgroup-header svg {
+    height: 20px;
+}
+
 /* Concepts */
 
 .holon-lvl-4 {
