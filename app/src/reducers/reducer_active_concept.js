@@ -28,6 +28,7 @@ function handleErrors(response){
 }
 
 export default function(state = null, action) {
+
     switch(action.type) {
         case FETCH_AND_SHOW_CONCEPT_DETAIL:
             return { ...action.meta, concept: action.payload.data.data.concept};

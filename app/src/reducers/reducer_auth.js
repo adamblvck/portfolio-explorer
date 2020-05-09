@@ -21,12 +21,14 @@ export default function(state = null, action) {
     // action.payload contains the data
     var error = false;
 
+    const action_types = [CREATEUSER, GETUSERINFO, CHECKUSERNAME];
+
     ///// Handle Errors
-    if (action && action.payload && action.payload.request){
+    if (action && action.payload && action.payload.request && action_types.includes(action.type)){
         const { response } = action.payload.request;
         var error = handleErrors(response);
     }
-
+    
     if (error)
         return state;
 

@@ -68,7 +68,7 @@ function handleErrors(response){
 
     if (obj.errors){
         obj.errors.forEach(function(element){
-            alert("Error " + element.message);
+            alert("Reducer Boards - Error " + element.message);
         });
 
         return "errors";
@@ -81,8 +81,15 @@ export default function (state = {}, action) {
     // action.payload contains the data
     var error = false;
 
+    const action_types = [FETCH_BOARD, UPDATE_BOARD_LAYOUT, FETCH_BOARDS, 
+        ADD_BOARD, EDIT_BOARD, DELETE_BOARD,
+        ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT,
+        UPDATE_CONCEPT_LAYOUT_SPECIAL,
+        ADD_CONCEPT, UPDATE_CONCEPT, DELETE_CONCEPT
+    ];
+
     // Handle Errors
-    if (action && action.payload && action.payload.request){
+    if (action && action.payload && action.payload.request && action_types.includes(action.type)){
         const { response } = action.payload.request;
         var error = handleErrors(response);
     }

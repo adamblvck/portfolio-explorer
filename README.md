@@ -1,6 +1,6 @@
 # Blockchain Ecosystem Explorer
 
-This is an api for recalling blockchain ecosystem details, used by the blockchain ecosystem explorer!
+Give yourself the chance to document, organize, and share ideas in way that goes beyond lists.
 
 ## Deployment on heroku
 

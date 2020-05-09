@@ -78,13 +78,13 @@ export default function (state = {}, action) {
     var error = false;
 
     // Handle Errors
-    if (action && action.payload && action.payload.request){
-        const { response } = action.payload.request;
-        var error = handleErrors(response);
-    }
+    // if (action && action.payload && action.payload.request){
+    //     const { response } = action.payload.request;
+    //     var error = handleErrors(response);
+    // }
 
-    if (error)
-        return state;
+    // if (error)
+    //     return state;
 
     // because we're returning in each switch
     // we don't need a break in each case statement
