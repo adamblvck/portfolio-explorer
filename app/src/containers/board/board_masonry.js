@@ -245,6 +245,68 @@ class BoardMasonry extends Component {
         Render cascading groups of information!
     */
 
+    render_subgroup_headerWithConcepts = (subgroup, headerColor, concepts, background) => {
+        return (
+            <div>
+                <CardHeader
+                    action={
+                        this.props.isAuthenticated && // if authenticated
+                        <MenuGroup 
+                            className="groupmenu-btn"
+                            isAuthenticated={this.props.isAuthenticated}
+                            components={ [
+                                {
+                                    label: "Add Concept",
+                                    needAuth: true,
+                                    group: subgroup,
+                                    render: this.renderFormAddConcept
+                                },
+                                {
+                                    label: "Edit Subgroup",
+                                    needAuth: true,
+                                    group: subgroup,
+                                    render: this.renderFormEditGroup
+                                },
+                                // {
+                                //     label: "Re-Arrange Icons",
+                                //     needAuth: true,
+                                //     group: subgroup,
+                                //     toggle: toggle,
+                                //     render: this.renderToggleDnD
+                                // },
+                                {
+                                    label: "Delete Subgroup",
+                                    needAuth: true,
+                                    group: subgroup,
+                                    render: this.renderDeleteGroup
+                                }
+                            ]}
+                        />
+                    }
+                    subheader={subgroup.name}
+                    // title={group.name}
+                    component="h3"
+                    className="subgroup-header"
+                    style={{
+                        '--parent-color': headerColor
+                    }}
+                />
+                <ConceptMasonry
+                    groupId={subgroup.id} // used in D&D
+                    parent_groupId={subgroup.parent_groupId} // used in D&D
+                    dnd_enabled={this.props.dnd_enabled}
+                    dnd_onDropConcept={this.dnd_onDropConcept}
+                    dnd_getConcept={this.dnd_getConcept}
+                    concept_layouts={subgroup.concept_layouts}
+                    conceptIDs={subgroup.concepts}
+                    concepts={concepts}
+                    background={background}
+                    isAuthenticated={this.props.isAuthenticated}
+                />
+            </div>
+        );
+    }
+
     renderSubgroups(group) {
         const { classes, concepts } = this.props;
 
@@ -275,64 +337,18 @@ class BoardMasonry extends Component {
 
             // console.log("dragndropstate", dragndrop, "for subgroupid", subgroup_id);
 
-            return (
-                <Draggable key={`subgroup_render_${subgroup.id}`}>
-                    <CardHeader
-                        action={
-                            this.props.isAuthenticated && // if authenticated
-                            <MenuGroup 
-                                className="groupmenu-btn"
-                                isAuthenticated={this.props.isAuthenticated}
-                                components={ [
-                                    {
-                                        label: "Add Concept",
-                                        needAuth: true,
-                                        group: subgroup,
-                                        render: this.renderFormAddConcept
-                                    },
-                                    {
-                                        label: "Edit Subgroup",
-                                        needAuth: true,
-                                        group: subgroup,
-                                        render: this.renderFormEditGroup
-                                    },
-                                    // {
-                                    //     label: "Re-Arrange Icons",
-                                    //     needAuth: true,
-                                    //     group: subgroup,
-                                    //     toggle: toggle,
-                                    //     render: this.renderToggleDnD
-                                    // },
-                                    {
-                                        label: "Delete Subgroup",
-                                        needAuth: true,
-                                        group: subgroup,
-                                        render: this.renderDeleteGroup
-                                    }
-                                ]}
-                            />
-                        }
-                        subheader={subgroup.name}
-                        // title={group.name}
-                        component="h3"
-                        className="subgroup-header"
-                        style={{
-                            '--parent-color': headerColor
-                        }}
-                    />
-                    <ConceptMasonry
-                        groupId={subgroup.id} // used in D&D
-                        parent_groupId={subgroup.parent_groupId} // used in D&D
-                        dnd_onDropConcept={this.dnd_onDropConcept}
-                        dnd_getConcept={this.dnd_getConcept}
-                        concept_layouts={subgroup.concept_layouts}
-                        conceptIDs={subgroup.concepts}
-                        concepts={concepts}
-                        background={background}
-                        isAuthenticated={this.props.isAuthenticated}
-                    />
-                </Draggable>
-            );
+            if (this.props.dnd_enabled)
+                return (
+                    <Draggable key={`subgroup_render_${subgroup.id}`}>
+                        {this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                    </Draggable>
+                );
+            else
+                return (
+                    <div key={`subgroup_render_${subgroup.id}`}>
+                        {this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                    </div>
+                );
         });
     }
 
@@ -415,11 +431,18 @@ class BoardMasonry extends Component {
             if (g === undefined)
                 return ( <div>MISSING GROUP_ID IN GROUPS: {group_id}</div> );
 
-            return (
-                <Draggable key={`draggable_g_${g.id}`}>
-                    {this.renderGroup(g)}
-                </Draggable>
-            );
+            if (this.props.dnd_enabled)
+                return (
+                    <Draggable key={`draggable_g_${g.id}`}>
+                        {this.renderGroup(g)}
+                    </Draggable>
+                );
+            else
+                return (
+                    <div key={`draggable_g_${g.id}`}>
+                        {this.renderGroup(g)}
+                    </div>
+                );
         });
     }
 

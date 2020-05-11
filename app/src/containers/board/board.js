@@ -46,6 +46,10 @@ class Board extends Component {
         } else if (this.props.match.params && this.props.scope=="public") {
             this.boardID = this.props.match.params['url_name'];
         }
+
+        this.state = {
+            dnd_enabled: false
+        }
     }
 
     componentDidMount(){
@@ -61,18 +65,21 @@ class Board extends Component {
         this.forceUpdate();
     }
 
-    handleNewNote() {
+    handleNewNote () {
         this.props.NewNoteInNotetaker({});
     }
 
-    menu_addGroupToBoard(component) {
-        const { label } = component;
+    handleEditLayout = () => {
+        this.setState({dnd_enabled: !this.state.dnd_enabled});
+    }
+
+    renderMenuItem(component) {
+        const { label, handler } = component;
 
         return (
             <MenuItem
-                color="secondary" 
-                key={`menu-${label.toLowerCase().split(' ').join('-')}`}
-                // onClick={() => (this.function or component.function)}
+                color="secondary" key={`menu-${label.toLowerCase().split(' ').join('-')}`}
+                onClick={() => (handler())}
             >
                 {label}
             </MenuItem>
@@ -100,19 +107,28 @@ class Board extends Component {
                             isAuthenticated={isAuthenticated}
                             components={ [
                                 {
-                                    label: "Add Group to Board",
+                                    label: "Add Group",
                                     needAuth: true,
-                                    render: this.menu_addGroupToBoard
+                                    render: this.renderMenuItem,
+                                    handler: this.handleEditLayout
+                                },
+                                {
+                                    label: "Edit Layout",
+                                    needAuth: true,
+                                    render: this.renderMenuItem,
+                                    handler: this.handleEditLayout
                                 },
                                 {
                                     label: "Open Board Settings",
-                                    needAuth: true,
-                                    render: this.menu_addGroupToBoard
+                                    needAuth: false,
+                                    render: this.renderMenuItem,
+                                    handler: this.handleEditLayout
                                 },
                                 {
                                     label: "Publish Board",
                                     needAuth: true,
-                                    render: this.menu_addGroupToBoard
+                                    render: this.renderMenuItem,
+                                    handler: this.handleEditLayout
                                 }
                             ]}
                         />
@@ -151,7 +167,13 @@ class Board extends Component {
 
                     {/* Groups Overview */}
                     <div className="groups-masonry">
-                        <BoardMasonry isAuthenticated={isAuthenticated()} scope={this.props.scope} _boardId={this._boardId} boardID={this.boardID.toLowerCase()} />
+                        <BoardMasonry
+                            isAuthenticated={isAuthenticated()}
+                            scope={this.props.scope}
+                            _boardId={this._boardId}
+                            boardID={this.boardID.toLowerCase()}
+                            dnd_enabled={this.state.dnd_enabled}
+                         />
                     </div>
                 </div>
 
