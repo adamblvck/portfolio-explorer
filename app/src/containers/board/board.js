@@ -11,6 +11,7 @@ import ConceptModalMarkdown from '../concept/concept_modal_markdown';
 // Forms
 import FormEditGroup from '../forms/form_group';
 import FormEditConcept from '../forms/form_concept';
+import FormBoard from '../forms/form_board';
 
 
 import Footer from '../../components/footer';
@@ -27,7 +28,10 @@ import MenuGroup from '../../components/menus/menu_groups';
 // Navigation to different Router Links
 import { Link } from 'react-router-dom';
 
+// import actions
 import { NewNoteInNotetaker } from '../../actions/notetaker';
+import { openGroupForm, openBoardForm } from '../../actions/form';
+
 
 class Board extends Component {
     constructor(props){
@@ -88,6 +92,8 @@ class Board extends Component {
 
     renderAppBar(isAuthenticated){
 
+        console.log(this.props.board);
+
         return (
             <AppBar className="menubar">
                 <Toolbar className="toolbar">
@@ -110,7 +116,20 @@ class Board extends Component {
                                     label: "Add Group",
                                     needAuth: true,
                                     render: this.renderMenuItem,
-                                    handler: this.handleEditLayout
+                                    handler: () => {
+                                        const params = {
+                                            mode: "new",
+                                            initialValues: {
+                                                board_id: this.boardID,
+                                                _boardId: this._boardId,
+                                                background:"linear-gradient(45deg, #4532E6, #1cb5e0)",
+                                                n_depth:0,
+                                                parent_groupId:null
+                                            }
+                                        };
+            
+                                        this.props.openGroupForm(params)
+                                    }
                                 },
                                 {
                                     label: "Edit Layout",
@@ -122,7 +141,14 @@ class Board extends Component {
                                     label: "Open Board Settings",
                                     needAuth: false,
                                     render: this.renderMenuItem,
-                                    handler: this.handleEditLayout
+                                    handler: () => {
+                                        const params = {
+                                            mode: "update",
+                                            initialValues: this.props.board
+                                        };
+
+                                        this.props.openBoardForm(params);
+                                    }
                                 },
                                 {
                                     label: "Publish Board",
@@ -201,9 +227,37 @@ class Board extends Component {
                     open={false}
                 />
 
+                <FormBoard
+                    label="default"
+                    mode="new"
+                    open={false}
+                />
+
             </div>
 		);
 	}
 }
 
-export default connect(null, { NewNoteInNotetaker })(Board);
+function mapStateToProps (state) {
+
+    if (state.boards !== null && !_.isEmpty(state.boards) ){ // only if groups exist, and result is NOT EMPTY
+
+        console.log("state.boards", state.boards);
+
+        return {
+            board: state.boards // WHY THE FUCK DOES THIS IS CALLED FUCKING BOARDS IF ITS ONLY ONE BOARD?!
+            // board_id: state.boards.id,
+            // board_scope: state.boards.scope,
+            // board_name: state.boards.board_id,
+            // board_background: state.boards.background,
+            // group_layouts: state.boards.group_layouts,
+            // groups: state.boards.groups.groups,
+            // concepts: state.boards.groups.concepts,
+            // modified: state.boards.groups.modified // increases with 1 if groups/concepts are modified
+        };
+    }
+
+    return {};
+}
+
+export default connect(mapStateToProps, { NewNoteInNotetaker, openGroupForm, openBoardForm })(Board);

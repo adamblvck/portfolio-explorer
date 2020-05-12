@@ -101,6 +101,8 @@ export function fetchBoard(boardId, scope) { // pass board id, as stored in data
             id
             board_id
             background
+            name
+            description
             scope
             group_layouts {
                 name

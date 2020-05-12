@@ -111,6 +111,8 @@ export default function (state = {}, action) {
                 const reduced = {
                     id: action.payload.data.data.board.id,
                     board_id: action.payload.data.data.board.board_id,
+                    name: action.payload.data.data.board.name,
+                    description: action.payload.data.data.board.description,
                     scope: action.payload.data.data.board.scope,
                     background: action.payload.data.data.board.background,
                     group_layouts: _.mapKeys(action.payload.data.data.board.group_layouts, 'name'),
