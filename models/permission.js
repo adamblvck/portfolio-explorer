@@ -16,7 +16,7 @@ var PermissionSchema = new Schema({
     action: String, // can [ read | edit | delete | allow | forbid | publish | takedown, admin]
 
     // to this id
-    object: String, // object id of [board, group, concept, user
+    object: String, // object id of [board, group, concept, user]
     object_type: String,
     
     depth: Number // depth of how 'deep' these rights go. 1=this object only (default), 0 is infinite depth (stopping at overview levels)

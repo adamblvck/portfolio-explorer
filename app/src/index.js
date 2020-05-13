@@ -87,19 +87,19 @@ ReactDOM.render(
 
                         {/* Show private board */}
                         <Route 
-                            path="/b/:id/:url_name" 
+                            path="/:scope/:id/:url_name" 
                             render={
-                                (props) => <Board auth={auth} {...props} scope={'private'} />
+                                (props) => <Board auth={auth} {...props}/>
                             }    
                         />
 
                         {/* Show public board */}
-                        <Route 
-                            path="/b/:url_name" 
+                        {/* <Route 
+                            path="/:scope/:url_name" 
                             render={
                                 (props) => <Board auth={auth} {...props} scope={'public'} />
                             }    
-                        />
+                        /> */}
 
                         {/* Show boards */}
                         <Route 

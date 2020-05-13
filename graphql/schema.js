@@ -47,7 +47,7 @@ const { addConceptResolver, updateConceptResolver, deleteConceptResolver } = req
 
 const { addUserResolver, removeUserResolver } = require('./user_resolvers');
 
-const { getUserObjects, checkPermission } = require ('./auth_resolvers');
+const { getUserObjects, checkPermission_PublicReadAccess, checkPermission_AuthenticatedReadAccess} = require ('./auth_resolvers');
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -117,7 +117,7 @@ const RootQuery = new GraphQLObjectType({
                 let scope = args.scope == undefined ? 'public' : args.scope;
 
                 if (!isAuthenticated) {
-                    return Board.find({scope:"public"});
+                    return Board.find({scope:"public"}); // default scope to return
                 } else {
                     // fetch boards that belong to current user
 
@@ -156,36 +156,35 @@ const RootQuery = new GraphQLObjectType({
             type: BoardType,
             args: { id: {type: GraphQLID}, scope: {type: GraphQLString}},
             resolve(parent, args, {isAuthenticated, credentials}){
-                // console.log("call!", args);
 
-                switch (args.scope){
-                    case "public":
-                        return Board.findOne({board_id: args.id, scope: args.scope});
+                // authentication check
+                if (!isAuthenticated) {
+                    return new Promise((resolve, reject) => {
+                        // gather which action is being asked for
+                        checkPermission_PublicReadAccess(args.id).then( permission => {
+                            const { allowed } = permission;
+                            if ( !allowed == true ) reject( 'No permissions to read this group' );
 
-                    case "private":
-
-                        // authentication check
-                        if (!isAuthenticated) {
-                            throw new Error('User needs to be authenticated to read a private board');
-                        }
-                
-                        return new Promise((resolve, reject) => {
-
-                            // gather which action is being asked for
-                            checkPermission(credentials, 'admin', args.id).then( user => {
-                                const { allowed } = user;
-                                if ( !allowed == true ) reject( 'No permissions to read this group' );
-
-                                Board.findById(args.id)
-                                .then(board => {resolve(board)})
-                                .catch(err=>reject(err));
-                            });
+                            Board.findById(args.id)
+                            .then(board => {resolve(board)})
+                            .catch(err=>reject(err));
                         });
-                        // here we'll perform a security check
-                        
-                    default:
-                        return Board.findOne({board_id: args.id, scope: 'public'});
+                    });
+                } else {
+        
+                    return new Promise((resolve, reject) => {
+                        // gather which action is being asked for
+                        checkPermission_AuthenticatedReadAccess(credentials, args.id).then( user => {
+                            const { allowed } = user;
+                            if ( !allowed == true ) reject( 'No permissions to read this group' );
+
+                            Board.findById(args.id)
+                            .then(board => {resolve(board)})
+                            .catch(err=>reject(err));
+                        });
+                    });
                 }
+                // }
             }
         },
 

@@ -104,9 +104,9 @@ export default function (state = {}, action) {
 
     switch(action.type) {
         case FETCH_BOARD:
-            if (action.payload.status == 200 && action.payload.data){
+            if (action.payload.status == 200 && action.payload.data !== null ){
 
-                // console.log(action.payload.data.data.board);
+                console.log("board reducer", action.payload.data);
 
                 const reduced = {
                     id: action.payload.data.data.board.id,

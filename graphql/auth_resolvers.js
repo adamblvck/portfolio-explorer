@@ -78,6 +78,58 @@ const getUserObjects = (credentials, object_type) => {
 	});
 }
 
+checkPermission_PublicReadAccess = (object) => {
+	return new Promise((resolve, reject) => {
+		Permission.find({subject: object, action: 'public', object: "*"})
+		.then( permissions => {
+			if ( permissions.length >= 1)
+				resolve( {allowed:true} );
+			else
+				resolve( {allowed:false} );
+		})
+		.catch( err => {
+			console.log(`Error when retrieving public rights for object ${object} with error ${err}`);
+			reject(`Error when retrieving public rights for object ${object} with error ${err}`);
+		});
+	});
+}
+
+const checkPermission_AuthenticatedReadAccess = (credentials, object) => {
+	return new Promise((resolve, reject) => {
+		getUser(credentials)
+		.then( user => {
+
+			// console.log(user);
+			if (user === undefined) reject("User not found");
+
+			console.log("Checking read permissions on the following parameters:");
+			console.log("\t"+`{subject: ${user._id}, action: 'admin', object: ${object}}`);
+			console.log("\t"+`{subject: ${object}, action: 'public', object: "*"}`);
+
+			Permission.find({ $or: [ // one of both needs to hold
+				{subject: user._id, action: 'admin', object: object}, // user can read action
+				{subject: object, action: 'public', object: "*"} // 
+			]})
+			// Permission.find( {subject: user._id, action: action, object: object})
+			.then( permissions => {
+				if ( permissions.length >= 1)
+					resolve( {...user._doc, allowed:true} );
+				else
+					resolve( {...user._doc, allowed:false} );
+			})
+			.catch( err => {
+				console.log("Error when retrieving user permission for object", user_id, " with error:", err);
+				reject(err);
+			});
+
+		})
+		.catch(err => {
+			console.log("Error when retrieving user id, error:", err);
+			reject(err);
+		});
+	});
+};
+
 // see if login user (with credetials) is allowed to perform 'action' on 'object'
 const checkPermission = (credentials, action, object) => {
 
@@ -90,16 +142,18 @@ const checkPermission = (credentials, action, object) => {
 
 			console.log("retrieving the following permission:", {subject: user._id, action: action, object: object} );
 
-			// check if document is gucci
-			Permission.find({subject: user._id, action: action, object: object})
+			// check if document is gucci to get
+
+			
+
+			// Permission.find({ $or: [ // one of both needs to hold
+			// 	{subject: user._id, action: action, object: object}, // user can perform action
+			// 	{subject: object, action: 'read', object: "public"} // 
+			// ]})
+			Permission.find( {subject: user._id, action: action, object: object})
 			.then( permissions => {
-
-				console.log(permissions);
-
-				if (permissions.length >= 1){
+				if ( permissions.length >= 1)
 					resolve( {...user._doc, allowed:true} );
-				}
-					
 				else
 					resolve( {...user._doc, allowed:false} );
 			})
@@ -139,6 +193,8 @@ const giveAdminAccess = (user, object) => {
 module.exports = {
 	getUser,
 	checkPermission,
+	checkPermission_AuthenticatedReadAccess,
+	checkPermission_PublicReadAccess,
 	giveAdminAccess,
 	getUserObjects
 };

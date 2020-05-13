@@ -43,13 +43,16 @@ class Board extends Component {
 
         this.boardID = "blockchain"
 
-        if (this.props.match.params && this.props.scope=="private"){  
+        if (this.props.match.params ){  
+            console.log("props.match", this.props.match);
             this.boardID = this.props.match.params['url_name'];
             this._boardId = this.props.match.params['id'];    
-                
-        } else if (this.props.match.params && this.props.scope=="public") {
-            this.boardID = this.props.match.params['url_name'];
+            this.scope = this.props.match.params['scope'];
         }
+                
+        // } else if (this.props.match.params && this.props.scope=="public") {
+        //     this.boardID = this.props.match.params['url_name'];
+        // }
 
         this.state = {
             dnd_enabled: false
@@ -195,7 +198,7 @@ class Board extends Component {
                     <div className="groups-masonry">
                         <BoardMasonry
                             isAuthenticated={isAuthenticated()}
-                            scope={this.props.scope}
+                            scope={this.scope}
                             _boardId={this._boardId}
                             boardID={this.boardID.toLowerCase()}
                             dnd_enabled={this.state.dnd_enabled}
