@@ -102,9 +102,9 @@ const checkPermission_AuthenticatedReadAccess = (credentials, object) => {
 			// console.log(user);
 			if (user === undefined) reject("User not found");
 
-			console.log("Checking read permissions on the following parameters:");
-			console.log("\t"+`{subject: ${user._id}, action: 'admin', object: ${object}}`);
-			console.log("\t"+`{subject: ${object}, action: 'public', object: "*"}`);
+			// console.log("Checking read permissions on the following parameters:");
+			// console.log("\t"+`{subject: ${user._id}, action: 'admin', object: ${object}}`);
+			// console.log("\t"+`{subject: ${object}, action: 'public', object: "*"}`);
 
 			Permission.find({ $or: [ // one of both needs to hold
 				{subject: user._id, action: 'admin', object: object}, // user can read action
