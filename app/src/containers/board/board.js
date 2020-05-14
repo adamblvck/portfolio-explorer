@@ -12,7 +12,7 @@ import ConceptModalMarkdown from '../concept/concept_modal_markdown';
 import FormEditGroup from '../forms/form_group';
 import FormEditConcept from '../forms/form_concept';
 import FormBoard from '../forms/form_board';
-
+import FormPublish from '../forms/form_publish';
 
 import Footer from '../../components/footer';
 import FormNoteTaker from '../forms/forms_noteditor'
@@ -30,7 +30,7 @@ import { Link } from 'react-router-dom';
 
 // import actions
 import { NewNoteInNotetaker } from '../../actions/notetaker';
-import { openGroupForm, openBoardForm } from '../../actions/form';
+import { openGroupForm, openBoardForm, openPublishForm } from '../../actions/form';
 
 
 class Board extends Component {
@@ -142,7 +142,7 @@ class Board extends Component {
                                 },
                                 {
                                     label: "Open Board Settings",
-                                    needAuth: false,
+                                    needAuth: true,
                                     render: this.renderMenuItem,
                                     handler: () => {
                                         const params = {
@@ -157,7 +157,13 @@ class Board extends Component {
                                     label: "Publish Board",
                                     needAuth: true,
                                     render: this.renderMenuItem,
-                                    handler: this.handleEditLayout
+                                    handler: () => {
+                                        const params = {
+                                            initialValues: this.props.board
+                                        };
+
+                                        this.props.openPublishForm(params);
+                                    }
                                 }
                             ]}
                         />
@@ -236,6 +242,11 @@ class Board extends Component {
                     open={false}
                 />
 
+                <FormPublish
+                    label="default"
+                    open={false}
+                />
+
             </div>
 		);
 	}
@@ -263,4 +274,4 @@ function mapStateToProps (state) {
     return {};
 }
 
-export default connect(mapStateToProps, { NewNoteInNotetaker, openGroupForm, openBoardForm })(Board);
+export default connect(mapStateToProps, { NewNoteInNotetaker, openGroupForm, openBoardForm, openPublishForm})(Board);

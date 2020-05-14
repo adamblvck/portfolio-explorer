@@ -1,4 +1,4 @@
-import { OPEN_GROUP_FORM, CLOSE_GROUP_FORM, OPEN_CONCEPT_FORM, CLOSE_CONCEPT_FORM, OPEN_BOARD_FORM, CLOSE_BOARD_FORM } from '../actions/form';
+import { OPEN_GROUP_FORM, CLOSE_GROUP_FORM, OPEN_CONCEPT_FORM, CLOSE_CONCEPT_FORM, OPEN_BOARD_FORM, CLOSE_BOARD_FORM, OPEN_PUBLISH_FORM, CLOSE_PUBLISH_FORM } from '../actions/form';
 
 export default function(state = null, action) {
     switch(action.type){
@@ -37,6 +37,18 @@ export default function(state = null, action) {
                 open: false
             }
             return close_board_state;
+
+        case OPEN_PUBLISH_FORM:
+            const new_publish_state = { ...action.payload};
+            return new_publish_state;
+    
+        case CLOSE_PUBLISH_FORM:
+            // keep previous position
+            const close_publish_state = {
+                ...state,
+                open: false
+            }
+            return close_publish_state;
 
         default:
             return state;
