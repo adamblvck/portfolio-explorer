@@ -4,6 +4,7 @@ export const ADD_BOARD = 'add_board';
 export const EDIT_BOARD = 'edit_board';
 export const DELETE_BOARD = 'delete_board';
 export const UPDATE_BOARD_LAYOUT = 'update_board_layout';
+export const UPDATE_BOARD_SCOPE = 'update_board_scope';
 export const FETCH_BOARD = 'fetch_board';
 
 // Local development has a different url than when deployed on heroku
@@ -235,6 +236,46 @@ export function updateBoard(boardInfo) {
 
     return {
         type: EDIT_BOARD,
+        payload: request
+    };
+}
+
+export function updateBoardScope(boardInfo) {
+    let query = `
+    mutation updateBoardScope (
+        $id: ID!,
+        $scope: String!
+    ) {
+        updateBoardScope (
+            id:$id,
+            scope:$scope
+        ) {
+            id
+            name
+            board_id
+            background
+            description
+            scope
+        }
+    }`;
+
+    const headers = {
+        Authorization: localStorage.getItem('id_token'),
+        'content-type': 'application/json'
+    }
+
+    const request = axios({
+        method:'post',
+        url:`${ROOT_URL}`,
+        data: {
+            query: query,
+            variables: boardInfo
+        },
+        headers: localStorage.getItem('is_authenticated') ? headers : {}
+    });
+
+    return {
+        type: UPDATE_BOARD_SCOPE,
         payload: request
     };
 }

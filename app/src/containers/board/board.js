@@ -232,9 +232,9 @@ class Board extends Component {
                     open={false}
                 />
 
-                <FormNoteTaker
+                {/* <FormNoteTaker
                     open={false}
-                />
+                /> */}
 
                 <FormBoard
                     label="default"

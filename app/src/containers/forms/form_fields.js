@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, Select, MenuItem, FormControl, FormHelperText} from '@material-ui/core';
+import { TextField, Select, MenuItem, Switch, FormGroup, FormControl, FormControlLabel, FormHelperText} from '@material-ui/core';
 import { gradients, getTextColor } from './gradient_helper.js';
 
 const renderField = (field) => {

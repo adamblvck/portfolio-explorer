@@ -127,12 +127,12 @@ class FormBoard extends Component {
     }
 }
 
-function validate(){
+function validate () {
     const errors = {};
     return errors;
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
     if (state.forms && state.forms.form_type == "board"){
         return {
             open: state.forms.open,

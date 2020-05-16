@@ -58,7 +58,7 @@ class ConceptMasonry extends Component {
                 } 
                 else
                     return (
-                        <div classname="holon-lvl-4" key={`${conceptID}-btn`}>
+                        <div className="holon-lvl-4" key={`${conceptID}-btn`}>
                             <ConceptMasonryButton
                                 className="concept-masonry-item"
                                 concept={concept}

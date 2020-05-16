@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { FETCH_BOARDS } from '../actions/fetching_public';
-import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT} from '../actions/board';
+import { ADD_BOARD, EDIT_BOARD, DELETE_BOARD, FETCH_BOARD, UPDATE_BOARD_LAYOUT, UPDATE_BOARD_SCOPE} from '../actions/board';
 import { UPDATE_CONCEPT, DELETE_CONCEPT, ADD_CONCEPT} from '../actions/concept';
 import { ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT, UPDATE_CONCEPT_LAYOUT, UPDATE_CONCEPT_LAYOUT_SPECIAL} from '../actions/group';
 
@@ -81,7 +81,7 @@ export default function (state = {}, action) {
     // action.payload contains the data
     var error = false;
 
-    const action_types = [FETCH_BOARD, UPDATE_BOARD_LAYOUT, FETCH_BOARDS, 
+    const action_types = [FETCH_BOARD, UPDATE_BOARD_LAYOUT, UPDATE_BOARD_SCOPE, FETCH_BOARDS, 
         ADD_BOARD, EDIT_BOARD, DELETE_BOARD,
         ADD_GROUP, EDIT_GROUP, DELETE_GROUP, UPDATE_GROUP_LAYOUT,
         UPDATE_CONCEPT_LAYOUT_SPECIAL,
@@ -140,26 +140,39 @@ export default function (state = {}, action) {
                 return state;
 
         case FETCH_BOARDS:
-            let b = action.payload.data.data.boards;
-            return _.mapKeys(b, 'id'); // made key-value store based on id
+            if (action.payload.status == 200 && action.payload.data){
+                let b = action.payload.data.data.boards;
+                return _.mapKeys(b, 'id'); // made key-value store based on id
+            } else return state;
         
         case ADD_BOARD:
-            const { addBoard } = action.payload.data.data;
-            return { ...state, [addBoard.id]:addBoard};
+            if (action.payload.status == 200 && action.payload.data){
+                const { addBoard } = action.payload.data.data;
+                return { ...state, [addBoard.id]:addBoard};
+            } else return state;
 
         case EDIT_BOARD:
-            const { updateBoard } = action.payload.data.data;
+            if (action.payload.status == 200 && action.payload.data){
+                const { updateBoard } = action.payload.data.data;
+                return { ...state, [updateBoard.id]:updateBoard};
+            } else return state;
 
-            // console.log(updateBoard);
-
-            return { ...state, [updateBoard.id]:updateBoard};
+        case UPDATE_BOARD_SCOPE:
+            if (action.payload.status == 200 && action.payload.data){
+                const { updateBoardScope } = action.payload.data.data;
+                console.log("update board scope", action.payload.data.data);
+                // return { ...state, [updateBoardScope.id]:updateBoardScope};
+                return state;
+            } else return state;
 
         case DELETE_BOARD:
-            const { deleteBoard } = action.payload.data.data;
+            if (action.payload.status == 200 && action.payload.data){
+                const { deleteBoard } = action.payload.data.data;
 
-            const newState = { ...state };
-            delete newState[deleteBoard.id];
-            return newState;
+                const newState = { ...state };
+                delete newState[deleteBoard.id];
+                return newState;
+            } else return state;
 
         // -----------------------------
         // GROUP MUTATIONS CAPTURED HERE
