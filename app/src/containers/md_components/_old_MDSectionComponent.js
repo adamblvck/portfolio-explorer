@@ -43,7 +43,7 @@ import {
 //   }
 // });
 
-class MDSectionComponent extends Component {
+class OldMDSectionComponent extends Component {
   
 	constructor(props) {
 		super(props);

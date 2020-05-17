@@ -154,6 +154,30 @@ export default class MDSectionComponent extends Component {
 		);
 	};
 
+	r_title_text = (title, rest_lines) => {
+		// returns a simple title header, and unparsed plaintext inside a paragraph
+		let md = rest_lines.join("\n");
+
+		return (
+			<div>
+				<h1>{title}</h1>
+				{/* <p className="concept-short-copy-header">{md}</p> */}
+				<ReactMarkdown source={md} />
+			</div>
+		);
+	};
+
+	r_plain_md = (lines) => {
+		// returns a simple title header, and unparsed plaintext inside a paragraph
+		let md = lines.join("\n");
+
+		return (
+			<div>
+				<ReactMarkdown source={md} />
+			</div>
+		);
+	};
+
 	r_concept_subsection = (lines, depth) => {
 		let { _title, _tags, _rest_lines } = parse_first_line(lines, depth, false);
 
@@ -176,32 +200,42 @@ export default class MDSectionComponent extends Component {
 		//   - Parses "core information" > title, tag, hashtags, ...
 		//   - Parses subsections (## ...) > and render appropriate elements per subsection
 
+		// parse first line up to first "##"
 		let { _title, _tags, _rest_lines } = parse_core_information(lines, depth, false);
 
-		// parse subsectionss
+		// parse subsections (at ##)
 		const { line_i_at_section, section_from_i_to_j } = parse_md_sections( _tags, _rest_lines, depth + 1 );
+
+		// get lines till first ##
+		let first_section_lines = [];
+		if (line_i_at_section.length >= 1){
+			// const skip_first = _title == "notitle_noheader" ? 0 : 1; // skip first line for title?
+			first_section_lines = lines.slice(0, Math.min(lines.length, line_i_at_section[0]));
+		}
 
 		return (
 			<div>
 				<CardContent className="concept-detail-content">
-					{/* <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 600: 2}}> */}
-						{/* <Masonry gutter="0 auto 0 auto"> */}
-							{/* iterate through sections */}
-							{_.map(section_from_i_to_j, from_to => {
-								const { from, to } = from_to;
+					{/* we have NO title until the first ## */}
+					{ _title == "notitle_noheader" && this.r_plain_md(first_section_lines) }
 
-								// are we parsing a section at this depth level?
-								if (line_i_at_section.includes(from)) {
-									const subsection_lines = _rest_lines.slice(from, to);
-									return (
-										<div key={from + "" + to}>
-											{this.r_concept_subsection(subsection_lines, depth + 1)}
-										</div>
-									);
-								}
-							})}
-						{/* </Masonry> */}
-					{/* </ResponsiveMasonry> */}
+					{/* we have a title until the first ## */}
+					{ _title != "notitle_noheader" && this.r_plain_md(first_section_lines) }
+
+					{/* iterate through ## sections */}
+					{_.map(section_from_i_to_j, from_to => {
+						const { from, to } = from_to;
+
+						// are we parsing a section at this depth level?
+						if (line_i_at_section.includes(from)) {
+							const subsection_lines = _rest_lines.slice(from, to);
+							return (
+								<div key={from + "" + to}>
+									{this.r_concept_subsection(subsection_lines, depth + 1)}
+								</div>
+							);
+						}
+					})}
 				</CardContent>
 			</div>
 		);
@@ -222,11 +256,11 @@ export default class MDSectionComponent extends Component {
     render() {
 		const { markdown } = this.props;
 
-		// stop rendering if we have no markdown to be explorer here
+		// stop rendering if we have no markdown to render
 		if (markdown === null)
 			return <div/>
 
-		// render based on markdown
+		// render based on markdown - create a concept_section - always
         return (
 			<div> {this.md_render( markdown , 1 , "concept_sections" )} </div>
 		);

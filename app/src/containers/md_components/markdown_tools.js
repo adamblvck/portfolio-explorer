@@ -130,6 +130,34 @@ export const parse_core_information = (lines, depth, has_key) => {
 export const parse_md_sections = (tag, lines, depth) => {
 	// splits lines into sections with a certain depth (#, ##, ###, ...)
 	// return position of sections (line i, j, k), and the interval (line i to i', j yo j', k to k', ...)
+
+	// example markdown
+	/*
+	0
+	1
+	## 2
+	3
+	4
+	5
+	## 6
+	7
+	8
+	## 9
+	10
+	11
+	*/
+
+	/* with depth = 2, result object = {
+		line_i_at_section: [2, 6, 9],
+		section_from_i_to_j: {
+			0: {from: 0, to: 2}
+			1: {from: 2, to: 6}
+			2: {from: 6, to: 9}
+			3: {from: 9, to: 11}
+		}
+	}	
+	*/
+
 	const N = lines.length;
 
 	// parse where subsection components are located
@@ -171,7 +199,7 @@ export const parse_md_sections = (tag, lines, depth) => {
 			// if at the last ## component, check if the value is end of lines, if not, add one more till end of linse
 			if (i == n - 1) {
 				// console.log(i, ss_idx, N, n-1);
-				if (ss_idx < N - 1) from_tos.push({ from: ss_idx, to: N - 1 });
+				if (ss_idx < N - 1) from_tos.push({ from: ss_idx, to: N });
 			}
 		}
 	}
