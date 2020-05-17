@@ -19,7 +19,8 @@ import FormNoteTaker from '../forms/forms_noteditor'
 import MarkdownPopup from '../forms/form_markdown';
 
 // Import material-design toolbar
-import { Button, IconButton, Typography, Toolbar, AppBar, Avatar } from '@material-ui/core';
+import { Button, IconButton, Typography, Toolbar, AppBar, Avatar, Chip} from '@material-ui/core';
+
 import { Menu, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -259,7 +260,7 @@ function mapStateToProps (state) {
         console.log("state.boards", state.boards);
 
         return {
-            board: state.boards // WHY THE FUCK DOES THIS IS CALLED FUCKING BOARDS IF ITS ONLY ONE BOARD?!
+            board: state.boards // WHY THE FUCK DOES THIS IS CALLED BOARDS IF ITS ONLY ONE BOARD?!
             // board_id: state.boards.id,
             // board_scope: state.boards.scope,
             // board_name: state.boards.board_id,

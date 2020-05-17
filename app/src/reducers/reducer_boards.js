@@ -160,9 +160,11 @@ export default function (state = {}, action) {
         case UPDATE_BOARD_SCOPE:
             if (action.payload.status == 200 && action.payload.data){
                 const { updateBoardScope } = action.payload.data.data;
-                console.log("update board scope", action.payload.data.data);
-                // return { ...state, [updateBoardScope.id]:updateBoardScope};
-                return state;
+
+                // update current board information, and update id:board scope list :)
+                const n_state = { ...state, ...updateBoardScope, [updateBoardScope.id]:updateBoardScope};
+                return n_state;
+                
             } else return state;
 
         case DELETE_BOARD:

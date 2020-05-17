@@ -184,7 +184,7 @@ const updateBoardScopeResolver = {
 					// if we found a PUBLIC PERMISSION & the new scope = private -> delete permission and update board
 					} else if (permissions.length >= 1 && args.scope == 'private') {
 
-						console.log(permissions, 'remove permission & private');
+						console.log('remove permission & go private');
 
 						Permission.findByIdAndRemove(permissions[0].id) // remove PUBLIC PERMISSION
 						.then(p => {

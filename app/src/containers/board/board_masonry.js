@@ -722,8 +722,6 @@ function mapStateToProps (state) {
 
     if (state.boards !== null && !_.isEmpty(state.boards) && !_.isEmpty(state.boards.groups)){ // only if groups exist, and result is NOT EMPTY
 
-        console.log("state.boards", state.boards);
-
         return {
             board_id: state.boards.id,
             board_scope: state.boards.scope,
