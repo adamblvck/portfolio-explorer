@@ -107,12 +107,17 @@ class Board extends Component {
                         </Button>
                     </Link>
 
+                    {/* have a private scope, add badge */}
+                    {
+                        isAuthenticated() && <Chip variant="outlined" label={this.props.board !== undefined ? this.props.board.scope : '...'} />
+                    }
+
                     {/* <div className="board-name-container"> */}
                         <Typography variant="h1" className="menubar-header">
                             {this.boardID}
                         </Typography>
 
-                        <MenuGroup 
+                        { isAuthenticated() && <MenuGroup 
                             className="groupmenu-btn"
                             isAuthenticated={isAuthenticated}
                             components={ [
@@ -167,7 +172,7 @@ class Board extends Component {
                                     }
                                 }
                             ]}
-                        />
+                        />}
                     {/* </div> */}
 
                     {/* <Button onClick={this.handleNewNote}> New Note </Button> */}
