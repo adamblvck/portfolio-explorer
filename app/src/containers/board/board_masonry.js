@@ -169,6 +169,7 @@ class BoardMasonry extends Component {
 
         const group_form_params = {
             mode: "new",
+            type: "subgroup",
             initialValues: {name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}
         };
 
@@ -184,10 +185,11 @@ class BoardMasonry extends Component {
     }
 
     renderFormEditGroup(component) {
-        const { label, group } = component;
+        const { label, group, type } = component;
 
         const group_form_params = {
             mode: "update",
+            type: type,
             initialValues: group
         };
 
@@ -265,6 +267,7 @@ class BoardMasonry extends Component {
                                     label: "Edit Subgroup",
                                     needAuth: true,
                                     group: subgroup,
+                                    type: 'subgroup',
                                     render: this.renderFormEditGroup
                                 },
                                 // {
@@ -378,6 +381,7 @@ class BoardMasonry extends Component {
                                     label: "Edit Group",
                                     needAuth: true,
                                     group: group,
+                                    type: 'group',
                                     render: this.renderFormEditGroup
                                 },
                                 {
@@ -605,6 +609,7 @@ class BoardMasonry extends Component {
                     <Button onClick={() => {
                             const params = {
                                 mode: "new",
+                                type: "group",
                                 initialValues: {
                                     board_id: this.props.boardID,
                                     _boardId: this.props.board_id,
@@ -662,6 +667,7 @@ class BoardMasonry extends Component {
                     {  <Button onClick={() => {
                             const params = {
                                 mode: "new",
+                                type: "group",
                                 initialValues: {
                                     board_id: this.props.boardID,
                                     _boardId: this.props.board_id,
@@ -690,22 +696,6 @@ class BoardMasonry extends Component {
                 {/* Holds the overview of all concepts, with concept-basic at it's most granular level */}
                 <Grid align="center">
                     { this.renderGrid() }
-                    {/* <Button onClick={() => {
-                            const params = {
-                                mode: "new",
-                                initialValues: {
-                                    board_id: this.props.board_name,
-                                    _boardId: this.props.board_id,
-                                    background: gradients[0].value,
-                                    n_depth:0,
-                                    parent_groupId:null}
-                            };
-
-                            this.props.openGroupForm(params)
-                        }}>
-                            <AddIcon />
-                            Add Group
-                    </Button> */}
                 </Grid>
 
                 {/* This is the colored bar at the top of the browser */}

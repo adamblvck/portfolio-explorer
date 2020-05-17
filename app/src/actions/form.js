@@ -12,10 +12,9 @@ export const CLOSE_PUBLISH_FORM = "close_publish_form";
 
 export function openGroupForm(params) {
     const payload = {
-        mode: params.mode,
         open: true,
         form_type: "group",
-        initialValues: params.initialValues
+        ...params
     };
 
     return {
