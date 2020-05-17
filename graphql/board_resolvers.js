@@ -19,10 +19,8 @@ const {
 } = graphql;
 
 // mongoose schemas
-const Group = require('../models/group');
-const Concept = require('../models/concept');
 const Board = require('../models/board');
-const User = require('../models/user');
+const Permission = require('../models/permission');
 
 // GraphQL Schemas
 const {
@@ -161,7 +159,7 @@ const updateBoardScopeResolver = {
 		}
 
 		return new Promise((resolve, reject) => {
-			// gather which action is being asked for
+			// check if is allowed to edit
 			checkPermission(credentials, 'admin', args.id).then( user => {
 				const { allowed } = user;
 				
@@ -169,11 +167,79 @@ const updateBoardScopeResolver = {
 					throw new Error('No permissions to update publish settings of this board');
 				}
 
-				// query resolve
-				let mod = {scope: args.scope};
+				// retrieve matching PUBLIC PERMISSION for this board
+				Permission.find( {subject: args.id, action: 'public', object: '*'})
+				.then( permissions => {
 
-				Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true})
-				.then(board => {resolve(board)});
+					console.log(permissions);
+
+					// if we found a PUBLIC PERMISION & the new scope = public -> just return
+					if ( permissions.length >= 1 && args.scope == 'public') {
+
+						console.log(permissions, 'public');
+
+						let mod = {scope: args.scope}; // update board
+						Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true})
+						.then(board => {resolve(board)});
+					// if we found a PUBLIC PERMISSION & the new scope = private -> delete permission and update board
+					} else if (permissions.length >= 1 && args.scope == 'private') {
+
+						console.log(permissions, 'remove permission & private');
+
+						Permission.findByIdAndRemove(permissions[0].id) // remove PUBLIC PERMISSION
+						.then(p => {
+							let mod = {scope: args.scope}; // update board
+							Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true})
+							.then(board => {resolve(board)});
+						})
+						.catch(err => reject(err));
+
+					// if we NOT FOUND a PUBLIC PERMISION & the new scope = public -> create permission and update board
+					} else if (permissions.length < 1 && args.scope == 'public') {
+
+						console.log("new permission to be created", 'public');
+
+						let new_permission = new Permission({ subject: args.id, action: 'public', object: '*', object_type: 'user' });
+						new_permission.save()
+						.then(p => {
+							let mod = {scope: args.scope}; // update board
+							Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true})
+							.then(board => {resolve(board)});
+						})
+						.catch(err => reject(err));
+
+					// if we NOT FOUND a PUBLIC PERMISION & the new scope = private -> just return the board
+					} else if (permissions.length < 1 && args.scope == 'private') {
+
+						console.log("no permission exists and it's good", 'private');
+
+						let mod = {scope: args.scope}; // update board
+						Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true})
+						.then(board => {resolve(board)});
+					}
+				})
+				.catch( err => {
+					console.log("Error when retrieving user permission for object", user_id, " with error:", err);
+					reject(err);
+				});
+
+				// Permission.find( {subject: args.id, action: 'scope', object: '*'})
+				// .then( permissions => {
+				// 	if ( permissions.length >= 1)
+				// 		resolve( {...user._doc, allowed:true} );
+				// 	else
+				// 		resolve( {...user._doc, allowed:false} );
+				// })
+				// .catch( err => {
+				// 	console.log("Error when retrieving user permission for object", user_id, " with error:", err);
+				// 	reject(err);
+				// });
+
+
+				// update board scope
+				// let mod = {scope: args.scope};
+				// Board.findByIdAndUpdate( args.id, { $set: mod}, { new: true})
+				// .then(board => {resolve(board)});
 			})
 			.catch( err => {
 				console.log(err);
