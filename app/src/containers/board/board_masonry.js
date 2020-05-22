@@ -313,6 +313,75 @@ class BoardMasonry extends Component {
         );
     }
 
+    render_subgroup_markdown(subgroup, headerColor, concepts, background) {
+
+        console.log("subgroup markdown", subgroup);
+
+        return (
+            <div>
+                <CardHeader
+                    action={
+                        this.props.isAuthenticated && // if authenticated
+                        <MenuGroup 
+                            className="groupmenu-btn"
+                            isAuthenticated={this.props.isAuthenticated}
+                            components={ [
+                                {
+                                    label: "Add Concept",
+                                    needAuth: true,
+                                    group: subgroup,
+                                    render: this.renderFormAddConcept
+                                },
+                                {
+                                    label: "Edit Subgroup",
+                                    needAuth: true,
+                                    group: subgroup,
+                                    type: 'subgroup',
+                                    render: this.renderFormEditGroup
+                                },
+                                // {
+                                //     label: "Re-Arrange Icons",
+                                //     needAuth: true,
+                                //     group: subgroup,
+                                //     toggle: toggle,
+                                //     render: this.renderToggleDnD
+                                // },
+                                {
+                                    label: "Delete Subgroup",
+                                    needAuth: true,
+                                    group: subgroup,
+                                    render: this.renderDeleteGroup
+                                }
+                            ]}
+                        />
+                    }
+                    subheader={subgroup.name}
+                    // title={group.name}
+                    component="h3"
+                    className="subgroup-header"
+                    style={{
+                        '--parent-color': headerColor
+                    }}
+                />
+
+                {subgroup.description}
+
+                {/* <ConceptMasonry
+                    groupId={subgroup.id} // used in D&D
+                    parent_groupId={subgroup.parent_groupId} // used in D&D
+                    dnd_enabled={this.props.dnd_enabled}
+                    dnd_onDropConcept={this.dnd_onDropConcept}
+                    dnd_getConcept={this.dnd_getConcept}
+                    concept_layouts={subgroup.concept_layouts}
+                    conceptIDs={subgroup.concepts}
+                    concepts={concepts}
+                    background={background}
+                    isAuthenticated={this.props.isAuthenticated}
+                /> */}
+            </div>
+        );
+    }
+
     renderSubgroups(group) {
         const { classes, concepts } = this.props;
 
@@ -341,18 +410,22 @@ class BoardMasonry extends Component {
                 return (<div key={`subgroup_render_${subgroup_id}`}> {subgroup_id} missing subgroup</div>);
             }
 
-            // console.log("dragndropstate", dragndrop, "for subgroupid", subgroup_id);
+            console.log("subgroup.display_option", subgroup.name, "for subgroupid", subgroup.display_option);
 
             if (this.props.dnd_enabled)
                 return (
                     <Draggable key={`subgroup_render_${subgroup.id}`}>
-                        {this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                        {subgroup.display_option == undefined && this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                        {subgroup.display_option == "header_with_icons" && this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                        {subgroup.display_option == "markdown" && this.render_subgroup_markdown(subgroup, headerColor, concepts, background)}
                     </Draggable>
                 );
             else
                 return (
                     <div key={`subgroup_render_${subgroup.id}`}>
-                        {this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                        {subgroup.display_option == undefined && this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                        {subgroup.display_option == "header_with_icons" && this.render_subgroup_headerWithConcepts(subgroup, headerColor, concepts, background)}
+                        {subgroup.display_option == "markdown" && this.render_subgroup_markdown(subgroup, headerColor, concepts, background)}
                     </div>
                 );
         });
