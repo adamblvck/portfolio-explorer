@@ -23,11 +23,13 @@ class FormEditGroup extends Component {
         super(props);
 
         this.state = {
-            open: false
+            open: false,
+            display_option: "header_with_icons"
         }
 
-        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handle_sectionTypeChange = this.handle_sectionTypeChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     componentWillReceiveProps(nextProps){
@@ -36,23 +38,31 @@ class FormEditGroup extends Component {
                 open: nextProps.open
             });
         }
-    }
 
-    handleOpen = () => {
-        // this.setState({ open: true });
-    };
+        if (nextProps.initialValues !== undefined && nextProps.initialValues.display_option !== undefined){ // if form receives props and this turns true
+            // if display_type equals to null, then use the default value of `header_with_icon`
+            const { display_option } = nextProps.initialValues;
+            console.log("initialValues.display_option", nextProps.initialValues.display_option);
+            this.setState({ display_option: display_option == null ? "header_with_icons" : display_option });
+        }
+    }
     
     handleClose = () => {
         this.props.closeGroupForm();
     };
 
-    onSubmit(values){
+    onSubmit(values) {
+
+        // const {display_option} = this.state;
+        const submit_object = { ...values, display_option: this.state.display_option };
+
         // if this is an "Update Form", call below
         if (this.props.mode == "new") {
-            this.props.addGroup({ ...values });
+            this.props.addGroup(submit_object);
         }
-        else if (this.props.mode == "update") {
-            this.props.editGroup({ ...values });
+        else
+        if (this.props.mode == "update") {
+            this.props.editGroup( submit_object );
         }
 
         // and close form
@@ -121,24 +131,34 @@ class FormEditGroup extends Component {
         );
     };
 
-    handle_sectionTypeChange () {
-
+    handle_sectionTypeChange (event) {
+        const { value } = event.target;
+        this.setState({
+            display_option: value
+        });
     }
 
     render_conceptForm () {
+
+        console.log("this.state.display_option", this.state.display_option);
+
         return (
             <Grid>
                 <Row>
                     <Col xs={12} md={12}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Choose Section Type</FormLabel>
-                            <RadioGroup aria-label="section-type" name="section-type" onChange={this.handle_sectionTypeChange}>
-                                <FormControlLabel value="female" control={<Radio />} label="Header + Icon Grid" />
-                                <FormControlLabel value="male" control={<Radio />} label="Markdown" />
+                            <RadioGroup value={this.state.display_option} aria-label="section-type" name="section-type" onChange={this.handle_sectionTypeChange}>
+                                <FormControlLabel value="header_with_icons" control={<Radio />} label="Header + Icon Grid" />
+                                <FormControlLabel value="markdown" control={<Radio />} label="Markdown" />
                             </RadioGroup>
                         </FormControl>
                     </Col>
+                </Row>
 
+                {/* Allow user to fill in header if he chose this option */}
+                { this.state.display_option == "header_with_icons" &&
+                <Row>
                     <Col xs={12} md={12}>
                         <Field
                             label="Header"
@@ -147,6 +167,10 @@ class FormEditGroup extends Component {
                         />
                     </Col>
                 </Row>
+                }
+                
+                {/* Allow user to fill in markdown if he chose this option */}
+                { this.state.display_option == "markdown" &&
                 <Row>
                     <Col xs={12} md={12}>
                         <Field
@@ -156,6 +180,8 @@ class FormEditGroup extends Component {
                         />
                     </Col>
                 </Row>
+                }
+                
             </Grid>
         );
     };
@@ -192,6 +218,7 @@ class FormEditGroup extends Component {
                             />
                             <form onSubmit={ handleSubmit( (values)=>{this.onSubmit(values)} ) }>
 
+                                {/* render different card content depending on type (value passeed through from invoker) */}
                                 <CardContent>
                                     { this.props.type == "group" && this.render_groupForm()}
                                     { this.props.type == "subgroup" && this.render_conceptForm()}

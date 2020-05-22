@@ -10,7 +10,12 @@ const Schema = mongoose.Schema;
 var GroupSchema = new Schema({ 
     name: String,
     sector: String,
-    description: String,
+    description: String, // rename to `markdown`
+
+    // if `markdown`, only description is considered
+    // if `header_with_icons`, name and sub-query 'concepts' are considered (sub-query part of graphQL)
+    display_option: String, // `header_with_icons` or `markdown`
+
     background: String,
     color: String,
     n_depth: { type: Number, min: 0, max: 3 }, // specifies group depth

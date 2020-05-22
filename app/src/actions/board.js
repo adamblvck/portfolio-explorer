@@ -132,6 +132,7 @@ export function fetchBoard(boardId, scope) { // pass board id, as stored in data
                     name
                     color # used for subgroup-title color
                     description
+                    display_option
                     n_depth # needed for group editing, in case when needed
                     parent_groupId # needed for group editing, in case when needed
                     board_id # used for board hierarchy

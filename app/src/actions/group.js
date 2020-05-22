@@ -86,21 +86,23 @@ export function editGroup(groupInfo) {
         $sector:String,
         $color:String,
         $background:String,
+        $display_option:String,
         $description:String,
         $n_depth:Int,
         $parent_groupId:ID,
         $board_id:ID,
         $_boardId:ID
     ){
-        updateGroup(id:$id,name:$name,color:$color, 
+        updateGroup(id:$id, name:$name, color:$color, 
             background:$background, sector:$sector, 
-            description:$description,n_depth:$n_depth,
+            description:$description, display_option:$display_option, n_depth:$n_depth,
             parent_groupId:$parent_groupId,
             board_id:$board_id, _boardId:$_boardId){
                 id
                 name
                 background
                 description
+                display_option
                 n_depth # needed for group editing, in case when needed
                 parent_groupId # needed for group editing, in case when needed
                 board_id # needed for board hierarchymn

@@ -46,12 +46,13 @@ const addGroupResolver = {
 	args: {
 		name: { type: GraphQLString },
 		description: { type: GraphQLString },
+		display_option: { type: GraphQLString },
 		n_depth: { type: GraphQLInt},
 		parent_groupId: { type: GraphQLID},
 		board_id: { type: GraphQLID},
 		_boardId: { type: GraphQLID},
 		color: {type: GraphQLString},
-		background: {type: GraphQLString}
+		background: {type: GraphQLString},
 	},
 	resolve(parent, args, {isAuthenticated, credentials}){
 		// authentication check
@@ -65,13 +66,13 @@ const addGroupResolver = {
 		let group = new Group({
 			name: args.name,
 			description: args.description,
+			display_option: args.display_option,
 			n_depth: args.n_depth,
 			parent_groupId: args.parent_groupId,
 			board_id: args.board_id,
 			_boardId: args._boardId,
 			color: args.color,
 			background: args.background,
-
 			scope: 'private',
 			type: 'group'
 		});
@@ -91,6 +92,7 @@ const addGroupResolver = {
 				const { allowed } = user;
 				if ( !allowed == true ) throw new Error( 'No permissions to add boards' );
 
+				// save the group
 				group.save()
 				.then( savedGroup => {
 					// 1. get list of layouts of board in Board group
@@ -249,10 +251,11 @@ const updateGroupResolver = {
 	args: {
 		id: { type: new GraphQLNonNull(GraphQLID)},
 		name: { type: GraphQLString},
+		description: { type: GraphQLString },
+		display_option: { type: GraphQLString },
 		sector: { type: GraphQLString },
 		color:  { type: GraphQLString },
 		background:  { type: GraphQLString },
-		description: { type: GraphQLString },
 		n_depth: { type: GraphQLInt },
 		parent_groupId: { type: GraphQLID },
 		board_id: { type: GraphQLID },
@@ -276,9 +279,11 @@ const updateGroupResolver = {
 				// query resolve
 				let mod = {}
 				if (args.name) mod.name = args.name;
+				if (args.background) mod.background = args.background;
+				if (args.display_option) mod.display_option = args.display_option;
+
 				if (args.sector) mod.sector = args.sector;
 				if (args.color) mod.color = args.color;
-				if (args.background) mod.background = args.background;
 				if (args.description) mod.description = args.description;
 				if (args.n_depth) mod.n_depth = args.n_depth;
 				if (args.parent_groupId) mod.parent_groupId = args.parent_groupId;

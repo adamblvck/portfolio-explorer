@@ -170,7 +170,12 @@ class BoardMasonry extends Component {
         const group_form_params = {
             mode: "new",
             type: "subgroup",
-            initialValues: {name: "New Subgroup", n_depth: 1, parent_groupId: parent_groupId}
+            initialValues: {
+                name: "New Subgroup",
+                n_depth: 1,
+                parent_groupId: parent_groupId,
+                display_option: "header_with_icons"
+            }
         };
 
         return (
@@ -225,8 +230,6 @@ class BoardMasonry extends Component {
 
     renderDeleteGroup(component) {
         const { group, label } = component;
-
-        console.log(group);
 
         return (
             <MenuItem

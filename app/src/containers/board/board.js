@@ -262,7 +262,7 @@ function mapStateToProps (state) {
 
     if (state.boards !== null && !_.isEmpty(state.boards) ){ // only if groups exist, and result is NOT EMPTY
 
-        console.log("state.boards", state.boards);
+        // console.log("state.boards", state.boards);
 
         return {
             board: state.boards // WHY THE FUCK DOES THIS IS CALLED BOARDS IF ITS ONLY ONE BOARD?!

@@ -162,6 +162,7 @@ const GroupType = new GraphQLObjectType({
         name: { type: GraphQLString },
         sector: { type: GraphQLString },
         description: { type: GraphQLString },
+        display_option: { type: GraphQLString },
         background: { type: GraphQLString },
         color: { type: GraphQLString },
         n_depth: { type: GraphQLInt },
