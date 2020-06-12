@@ -25,8 +25,9 @@ class ConceptMasonry extends Component {
 
         // read the "1" layout (1D - default line)
         const layout = concept_layouts['1'] ? concept_layouts['1'].layout[0] : [];
-        // console.log(layout, concept_layouts);
-        
+
+        console.log("rendering layout:", concept_layouts);
+
         if (dnd_enabled) {
 
             return _.map(layout, (conceptID) => {
@@ -38,8 +39,7 @@ class ConceptMasonry extends Component {
                 } 
                 else
                     return (
-                        <Draggable classname="holon-lvl-4" key={`${conceptID}-drg-btn`}>
-                            {console.log("wtf")}
+                        <Draggable className="holon-lvl-4" key={`${conceptID}-drg-btn`}>
                             <ConceptMasonryButton
                                 className="concept-masonry-item"
                                 concept={concept}
@@ -52,6 +52,8 @@ class ConceptMasonry extends Component {
             return _.map(layout, (conceptID) => {
                 const concept = concepts[conceptID]
     
+                console.log("Rendering this concept:", concept);
+
                 if (concept == undefined){
                     console.log(conceptID);
                     return (<div style={{'fontSize':'10px'}}>{conceptID} concept missing in {groupId}</div>);

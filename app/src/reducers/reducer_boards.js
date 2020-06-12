@@ -238,7 +238,8 @@ export default function (state = {}, action) {
                     // update the group by taking the previous states, and adding the changes of `updateGroup`
                     newState.groups.groups[id] = {
                         ...newState.groups.groups[id], 
-                        ...updateGroup
+                        ...updateGroup,
+                        group_layouts: _.mapKeys(updateGroup.group_layouts, 'name')
                     };
 
                 }
@@ -249,8 +250,11 @@ export default function (state = {}, action) {
                     // update nesState with the group that's a subgroup, and add the parameters which we got returned from the API
                     newState.groups.groups[parent_groupId].groups[id] = {
                         ...newState.groups.groups[parent_groupId].groups[id],
-                        ...updateGroup
+                        ...updateGroup,
+                        concept_layouts: _.mapKeys(updateGroup.concept_layouts, 'name')
                     };
+
+                    // console.log("Reducer UPDATE GROUP", updateGroup);
 
                 }
 

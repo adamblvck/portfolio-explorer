@@ -251,6 +251,7 @@ class BoardMasonry extends Component {
     */
 
     render_subgroup_headerWithConcepts = (subgroup, headerColor, concepts, background) => {
+
         return (
             <div>
                 <CardHeader
@@ -409,8 +410,6 @@ class BoardMasonry extends Component {
                 console.log("subgroup", subgroup);
                 return (<div key={`subgroup_render_${subgroup_id}`}> {subgroup_id} missing subgroup</div>);
             }
-
-            console.log("subgroup.display_option", subgroup.name, "for subgroupid", subgroup.display_option);
 
             if (this.props.dnd_enabled)
                 return (

@@ -377,9 +377,9 @@ const updateConceptLayoutResolver = {
 										} else {
 											
 											// now return a list of updated groups
-											Group.find().where('_id').in(returnGroupIds).exec((err, groups) => {
+											Group.find().where('_id').in(groupIds).exec((err, groups) => {
 												if (err) {
-													console.log("Error when getting result groups", returnGroupIds, ":", err);
+													console.log("Error when getting result groups", groupIds, ":", err);
 													reject(err);
 												} else {
 													console.log(groups);
