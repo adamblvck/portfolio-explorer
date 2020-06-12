@@ -442,7 +442,7 @@ class ConceptModalMD extends Component {
                     </Button> 
                 } */}
                 <Button
-                    type="Back" 
+                    type="reset" 
                     onClick={this.handleClose}
                 >
                     Back
