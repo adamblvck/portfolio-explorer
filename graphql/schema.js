@@ -123,18 +123,18 @@ const RootQuery = new GraphQLObjectType({
 
                     return new Promise((resolve, reject) => {
 
-                        // fetch public ones
+                        // fetch public board
                         Board.find({scope:"public"})
                         .then( boards => {
                             
-                            // fetch user's boards
+                            // then fetch user's boards
                             getUserObjects(credentials, 'board')
                             .then( user_boards => {
 
                                 // console.log(boards);
                                 // console.log(user_boards);
 
-                                // concatenate public boards with the user boards
+                                // thenconcatenate public boards with the user boards
                                 resolve ( boards.concat(user_boards));
                             })
                             .catch(err => {

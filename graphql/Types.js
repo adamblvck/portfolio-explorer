@@ -238,6 +238,59 @@ const BoardType = new GraphQLObjectType({
             }
         },
 
+        icons: {
+            type: new GraphQLList(GraphQLString),
+            resolve(parent, args) {
+
+                return new Promise((resolve, reject) => {
+                    // arguments to find groups which have concept layouts beneath them (meaning they have icons).
+                    const groups_with_concepts_args = {
+                        n_depth:0,
+                        board_id:parent.board_id,
+                        // concept_layouts: { $exists: true, $not: {$size: 0} }
+                    };
+
+                    Group
+                    .find(groups_with_concepts_args)
+                    .then(groups_1 => {
+                        let concept_icons = [];
+                        groups_1.forEach(b => {
+                            const group_1_id = b._id;
+                            console.log(group_1_id);
+
+                            // level 2 group search
+                            return Group.find( {parent_groupId: group_1_id, concept_layouts: { $exists: true, $ne: []}} );
+                        });
+                    })
+                    .then(groups_2 => {
+                        groups_2.forEach(b2 => {
+                            const group_2_id = b2._id;
+                            console.log(group_2_id);
+
+                            // Through all concepts in board_id
+                            return Concept.find( {groupIds: group_2_id} ).then(cs =>{
+                                
+                                
+                            });
+
+                            resolve(concept_icons);
+                        });
+                    })
+                    .then (css => {
+                        // console.log(cs);
+                        css.forEach(c => {
+                            concept_icons.push(c.logo_url);
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+
+                
+                });
+            }
+        },
+
         scope: { type: GraphQLString}
     })
 });
