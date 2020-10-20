@@ -234,7 +234,9 @@ const BoardType = new GraphQLObjectType({
         groups: {
             type: new GraphQLList(GroupType),
             resolve(parent, args){
-                return Group.find({n_depth:0, board_id:parent.board_id});
+                const p = {n_depth:0, _boardId:parent.id};
+                console.log(p);
+                return Group.find(p);
             }
         },
 

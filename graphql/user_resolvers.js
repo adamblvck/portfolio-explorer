@@ -63,9 +63,7 @@ const addUserResolver = {
 
 		// if we didn't find a user, create a new one
 		else{
-
 			// Here we create a user
-
 			// Create new user
 			let user = new User({
 				email: email,
