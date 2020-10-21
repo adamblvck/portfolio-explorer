@@ -24,11 +24,13 @@ class ConceptMasonryButton extends Component {
     }
 
     render(){
+        const classN = `concept-item ${this.props.className}`;
+
         return (
             <Card 
                 //style={{zIndex:zIndex, position:'relative'}}
                 elevation={0}
-                className="concept-item"
+                className={classN}
             >
                     <CardContent
                         className="concept-item-content"

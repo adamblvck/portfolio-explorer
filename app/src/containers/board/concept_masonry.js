@@ -41,7 +41,7 @@ class ConceptMasonry extends Component {
                     return (
                         <Draggable className="holon-lvl-4" key={`${conceptID}-drg-btn`}>
                             <ConceptMasonryButton
-                                className="concept-masonry-item"
+                                className="concept-masonry-item slow-shake"
                                 concept={concept}
                                 background={background}
                             />

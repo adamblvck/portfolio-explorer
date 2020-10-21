@@ -430,15 +430,17 @@ class BoardMasonry extends Component {
         });
     }
 
-    renderGroup(group){
+    renderGroup(group, wiggle=false){
         const { classes } = this.props;
 
         const {id, name, description, background } = group;
         console.log('background', background);
         const text_color = getTextColor(background);
 
+        const elevation = wiggle ? 8 : 3;
+
         return (
-            <Card className={`${classes.card} board_group_card`} elevation={3}>
+            <Card className={`${classes.card} board_group_card`} elevation={elevation}>
                 <CardHeader
                     action={
                         this.props.isAuthenticated && // if authenticated
@@ -512,8 +514,9 @@ class BoardMasonry extends Component {
 
             if (this.props.dnd_enabled)
                 return (
+                    // className='slow-shake'
                     <Draggable key={`draggable_g_${g.id}`}>
-                        {this.renderGroup(g)}
+                        {this.renderGroup(g, true)}
                     </Draggable>
                 );
             else
