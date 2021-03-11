@@ -73,7 +73,7 @@ class HomeOverview extends Component {
                     </Link>
 
                     <Typography variant="h1" className="menubar-header">
-                        Boards
+                        Enterprise Ecosystem Explorer
                     </Typography>
 
                     {/* <Button> New Note </Button> */}
