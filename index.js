@@ -16,7 +16,9 @@ const jwksRSA = require('jwks-rsa');
 
 const dbuser = 'admin';
 const dbpwd = '***REMOVED***';
-const MONGO_URI = `mongodb://${dbuser}:${dbpwd}@ds237192.mlab.com:37192/concept-db`;
+// const MONGO_URI = `mongodb://${dbuser}:${dbpwd}@ds237192.mlab.com:37192/concept-db`;
+
+const MONGO_URI = `mongodb+srv://${dbuser}:${dbpwd}@main.rrdrg.mongodb.net/concept-db?retryWrites=true&w=majority`
 
 const publicuser = 'public'
 const publicpwd = '***REMOVED***'
