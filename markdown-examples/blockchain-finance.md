@@ -8,12 +8,14 @@
 - [[Ripple]]
 - [[Ploymath]]
 
+
 ## Liquidity Services [masonry]
 
 - [[Bancor]]
 - [[ShapeShift]]
 - [[Binance]]
 - [[Coinbase]]
+
 
 ## Lending [masonry]
 
@@ -22,5 +24,4 @@
 - [[WeTrust]]
 - [[bitsugar]]
 - [[EVEREX]]
-
 

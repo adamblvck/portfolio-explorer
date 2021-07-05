@@ -8,7 +8,7 @@ import store from '../store';
 const isLOCALHOST = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
 const CALLBACK_URL = isLOCALHOST
     ? 'http://localhost:8080/callback'
-    : 'https://blockchain-ecosystem-explorer.herokuapp.com/callback';
+    : 'https://blockchain--ecosystem-explorer.herokuapp.com/callback';
 
 const shallowCompare = (obj1, obj2) =>
     Object.keys(obj1).length === Object.keys(obj2).length &&
