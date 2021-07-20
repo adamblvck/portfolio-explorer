@@ -20,10 +20,10 @@ require('dotenv').config();
 const host = process.env.DB_HOST;
 const usr = process.env.DB_USER;
 const pwd = process.env.DB_PASS;
-const MONGO_URI = `mongodb+srv://${usr}:${pwd}@${host}/concept-db?retryWrites=true&w=majority`
+const collection = 'concept-db';
+const MONGO_URI = `mongodb+srv://${usr}:${pwd}@${host}/${collection}?retryWrites=true&w=majority`;
 
 const Path = require('path');
-
 const server = hapi.server({
     port: process.env.PORT || 4000
 });
