@@ -1,10 +1,14 @@
+Portfolio Explorer        |  Interactive Ecosystem Explorer
+:-------------------------:|:-------------------------:
+![](./docs/screenshot.png)  |  ![](./docs/screenshot_2.png)
+
 # Portfolio Explorer - Interactive Ecosystem Explorer & Platform
 
 Document, organize, and share ideas in a way that goes beyond lists and bulletpoints.
 
-Portfolio Explorer is an interactive 2D tool to visually represent a company, ecosystem, or a project, allowing public and private metadata sharing across many different domains.
+Portfolio Explorer is an interactive 2D tool to visually represent a company, ecosystem, or a project, allowing public and private metadata sharing across many different domains. This project started as a way to visualize the blockchain ecosystem in a beautiful, interactive, and clear way.
 
-![](./docs/DizzyUnawareEnglishpointer-mobile.mp4)
+https://user-images.githubusercontent.com/22320876/126351803-4ee756fb-5d80-4186-97bb-57e8b4d44209.mp4
 
 [Demo on Heroku here!](https://blockchain--ecosystem-explorer.herokuapp.com/)
 
@@ -81,7 +85,7 @@ The markdown-syntax, which honestly needs some tweaking, supports **square tags*
 
 The implementation features a drag-and-drop feature for customizable layouts. Check out the video below to learn more.
 
-![](./docs/InfamousDisgustingIberiannase-mobile.mp4)
+https://user-images.githubusercontent.com/22320876/126352421-193c6bcd-b203-4433-816c-1a244d03dc0e.mp4
 
 ### Publish Board
 
@@ -124,11 +128,5 @@ This application is suitable for deployment in Heroku. Simple run the following 
 ~~~
 git push heroku master
 ~~~
-
-## Repository contents
-
-
-
-## Future Work
 
 
