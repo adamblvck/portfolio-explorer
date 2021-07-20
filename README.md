@@ -5,6 +5,7 @@ Give yourself the chance to document, organize, and share ideas in a way that go
 Portfolio Explorer is an interactive 2D tool to visually represent a company, ecosystem, or project, allowing public and private metadata sharing across, many different domains.
 
 ![](./docs/screenshot.png)
+![](./docs/screenshot_2.png)
 
 [Demo on Heroku here!](https://blockchain--ecosystem-explorer.herokuapp.com/)
 
