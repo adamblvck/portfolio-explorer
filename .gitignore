@@ -8,8 +8,4 @@ npm-debug.log
 *.iml
 /.idea
 .vscode
-<<<<<<< HEAD
 .env
-=======
-.env
->>>>>>> 8365223e8e63f9c2aa7c36230c98c5e9451bcd4e
