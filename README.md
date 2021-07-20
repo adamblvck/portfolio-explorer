@@ -15,15 +15,14 @@ On the internet we're often presented with a set of icons or images representing
 These images are usually still images, where one needs to click away from the page to read more details, making the user lose context.
 On other occasions, the image representing an ecosystem of companies or products, is followed by a boring blogpost, where the details are not clearly linked to the presented 2d-view of an ecosystem.
 
-The need for an interactive 2D-masonry for logos and images, behind which more information gets revealed after I click them, started during my blockchain architecture period, where an overview of the "blockchain ecosystem" was required, but all I could find were still images, and not-so helpful text.
+The need for an interactive 2D-masonry for logos and images, behind which more information gets revealed after I click them, started during my blockchain architecture period, where an overview of the "blockchain ecosystem" was required, but all I could find were still images, and not-so helpful blogposts.
 
 I needed the following:
 - A way to organize complex information in a simple 2D-visualization, without refraining to photoshop or powerpoint sofware.
 - A way to show detailed information without leaving the context.
 - A platform to share gathered information and research in a structured and presentable way.
 
-This is how Portfolio Explorer was born (previously called "Project Blockchain Explorer" for the last 3 years or so).
-
+This is how Portfolio Explorer was born (previously called "Project Blockchain Explorer").
 
 ## Features
 
@@ -49,7 +48,7 @@ This is how Portfolio Explorer was born (previously called "Project Blockchain E
 
 ### Deployment on heroku
 
-For a new heroku, you need to 
+For a new heroku, you need to execute the following command:
 
 ~~~
 git push heroku master
