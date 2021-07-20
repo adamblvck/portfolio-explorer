@@ -4,7 +4,7 @@ Document, organize, and share ideas in a way that goes beyond lists and bulletpo
 
 Portfolio Explorer is an interactive 2D tool to visually represent a company, ecosystem, or a project, allowing public and private metadata sharing across many different domains.
 
-!()[./docs/DizzyUnawareEnglishpointer-mobile.mp4]
+![](./docs/DizzyUnawareEnglishpointer-mobile.mp4)
 
 [Demo on Heroku here!](https://blockchain--ecosystem-explorer.herokuapp.com/)
 
@@ -81,7 +81,7 @@ The markdown-syntax, which honestly needs some tweaking, supports **square tags*
 
 The implementation features a drag-and-drop feature for customizable layouts. Check out the video below to learn more.
 
-![](InfamousDisgustingIberiannase-mobile.mp4)
+![](./docs/InfamousDisgustingIberiannase-mobile.mp4)
 
 ### Publish Board
 
@@ -93,11 +93,11 @@ Once your board is ready, you can publish it for public sharing. You do so easil
 
 ### Application Architecture
 
-![]("./docs/portfolio_explorer-AppArchitecture.png")
+![](./docs/portfolio_explorer-AppArchitecture.png)
 
 ### Data Architecture
 
-![]("./docs/portfolio_explorer-DataStructure.png")
+![](./docs/portfolio_explorer-DataStructure.png)
 
 ### Permission Model
 
