@@ -14,15 +14,13 @@ const schema = require('./graphql/schema');
 const hapiJWTAuth = require('hapi-auth-jwt2');
 const jwksRSA = require('jwks-rsa');
 
-const dbuser = 'admin';
-const dbpwd = '***REMOVED***';
-// const MONGO_URI = `mongodb://${dbuser}:${dbpwd}@ds237192.mlab.com:37192/concept-db`;
+// load env file (containing credentials)
+require('dotenv').config();
 
-const MONGO_URI = `mongodb+srv://${dbuser}:${dbpwd}@main.rrdrg.mongodb.net/concept-db?retryWrites=true&w=majority`
-
-const publicuser = 'public'
-const publicpwd = '***REMOVED***'
-const MONGO_PUBLIC_URI = `mongodb://${publicuser}:${publicpwd}@ds237192.mlab.com:37192/concept-db`;
+const host = process.env.DB_HOST;
+const usr = process.env.DB_USER;
+const pwd = process.env.DB_PASS;
+const MONGO_URI = `mongodb+srv://${usr}:${pwd}@${host}/concept-db?retryWrites=true&w=majority`
 
 const Path = require('path');
 
